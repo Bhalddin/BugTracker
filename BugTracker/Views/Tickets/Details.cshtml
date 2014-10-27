@@ -1,0 +1,98 @@
+﻿@model BugTracker.Models.Ticket
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Ticket</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Created_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Resolution)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Resolution)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.Project_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.Project_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ticket_Priorities.Priority)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ticket_Priorities.Priority)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ticket_Statuses.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ticket_Statuses.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ticket_Types.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ticket_Types.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ticket1.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ticket1.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.First_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.First_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User1.First_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User1.First_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
