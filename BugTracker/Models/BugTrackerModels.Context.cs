@@ -35,7 +35,5 @@ namespace BugTracker.Models
         public virtual DbSet<TicketStatus> TicketStatuses { get; set; }
         public virtual DbSet<TicketType> TicketTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
-
-        public System.Data.Entity.DbSet<BugTracker.Models.TicketViewModel> TicketViewModels { get; set; }
     }
 }

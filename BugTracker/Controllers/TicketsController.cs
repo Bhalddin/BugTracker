@@ -30,14 +30,16 @@ namespace BugTracker.Controllers
         /// <returns>ActionResult</returns>
         public ActionResult TicketTable([Bind(Include = "CreatedDate,TicketSubmitterID,AssignedToID,ProjectID,TicketPriorityID,TicketStatusID,TicketTypeID,RelatedTicketID,DateLastUpdated")]TicketViewModel search, int page = 1, int pageSize = 10)
         {
+            // was worrying about how the controller was going to pass the paramaters from the starting action to this action but the paramaters will always be given explicit from ajax call.
+
             // Check to only allow ajax and child actions.
             var notPartialRequest = !(Request.IsAjaxRequest() || ControllerContext.IsChildAction);
             if (notPartialRequest)
                 return View("Error");
 
 
-            // Check your inputs.
-
+            // Check your inputs!!
+            // 
 
             var tickets = db.Tickets
                 .Include(t => t.Project)
@@ -58,7 +60,7 @@ namespace BugTracker.Controllers
                 User1 = t.User1,
                 Comments = t.Comments,
                 CreatedDate = t.CreatedDate,
-                DateLastUpdated = t.DateLastUpdated,
+                DateLastUpdated = (DateTime)t.DateLastUpdated,
                 Description = t.Description,
                 Notifications = t.Notifications,
                 Project = t.Project,

@@ -30,8 +30,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Project_Name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Project_Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ProjectName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ProjectDescription" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -87,7 +87,7 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
           <Property Name="TicketStatusID" Type="int" />
           <Property Name="TicketTypeID" Type="int" />
           <Property Name="RelatedTicketID" Type="int" />
-          <Property Name="DateLastUpdated" Type="date" Nullable="false" />
+          <Property Name="DateLastUpdated" Type="date" />
         </EntityType>
         <EntityType Name="TicketStatuses">
           <Key>
@@ -437,8 +437,8 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Project_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Project_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProjectName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProjectDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Project" FromRole="Projects" ToRole="Tickets" />
           <NavigationProperty Name="Users" Relationship="Self.ProjectUsers" FromRole="Projects" ToRole="Users" />
         </EntityType>
@@ -491,7 +491,7 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
           <Property Name="TicketStatusID" Type="Int32" />
           <Property Name="TicketTypeID" Type="Int32" />
           <Property Name="RelatedTicketID" Type="Int32" />
-          <Property Name="DateLastUpdated" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateLastUpdated" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Ticket" FromRole="Tickets" ToRole="Comments" />
           <NavigationProperty Name="Notifications" Relationship="Self.FK_Notifications_Ticket" FromRole="Tickets" ToRole="Notifications" />
           <NavigationProperty Name="Project" Relationship="Self.FK_Ticket_Project" FromRole="Tickets" ToRole="Projects" />
@@ -722,7 +722,7 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
           <End Role="Projects" Type="Self.Project" Multiplicity="*" />
           <End Role="Users" Type="Self.User" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="BugTrackerEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Notifications" EntityType="Self.Notification" />
           <EntitySet Name="Projects" EntityType="Self.Project" />
@@ -803,7 +803,7 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="Entities">
+        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="BugTrackerEntities">
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="BugTrackerModel.Comment">
               <MappingFragment StoreEntitySet="Comments">
@@ -830,8 +830,8 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
             <EntityTypeMapping TypeName="BugTrackerModel.Project">
               <MappingFragment StoreEntitySet="Projects">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Project_Name" ColumnName="Project_Name" />
-                <ScalarProperty Name="Project_Description" ColumnName="Project_Description" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ProjectDescription" ColumnName="ProjectDescription" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

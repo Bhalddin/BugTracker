@@ -221,13 +221,13 @@
     <Compile Include="Models\TicketPriority.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TicketViewModel.cs" />
     <Compile Include="Models\TicketStatus.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TicketType.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TicketViewModel.cs" />
     <Compile Include="Models\User.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>

@@ -21,8 +21,8 @@ namespace BugTracker.Models
         }
     
         public int ID { get; set; }
-        public string Project_Name { get; set; }
-        public string Project_Description { get; set; }
+        public string ProjectName { get; set; }
+        public string ProjectDescription { get; set; }
     
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<User> Users { get; set; }
