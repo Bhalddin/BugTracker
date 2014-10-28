@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BugTracker.Models.TicketViewModel>
+
+<p>
+    I SHOULD PROBABLY PUT A BREAD CRUMB RIGHT HERE!
+</p>
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Project.Project_Name)</th>
+        <th>@Html.DisplayNameFor(model => model.TicketPriority.Priority)</th>
+        <th>@Html.DisplayNameFor(model => model.TicketStatus.Status)</th>
+        <th>@Html.DisplayNameFor(model => model.TicketType.Type)</th>
+        <th>@Html.DisplayNameFor(model => model.Title)</th>
+        <th>@Html.DisplayNameFor(model => model.Description)</th>
+        <th>@Html.DisplayNameFor(model => model.TicketSubmitterID)</th>
+        <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
+        <th>@Html.DisplayNameFor(model => model.DateLastUpdated)</th>
+        <th>@Html.DisplayNameFor(model => model.AssignedToID)</th>
+        <th>@Html.DisplayNameFor(model => model.RelatedTicketID)</th>
+        <th>@Html.DisplayNameFor(model => model.Resolution)</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Project.Project_Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.TicketPriority.Priority)</td>
+            <td>@Html.DisplayFor(modelItem => item.TicketStatus.Status)</td>
+            <td>@Html.DisplayFor(modelItem => item.TicketType.Type)</td>
+            <td>@Html.DisplayFor(modelItem => item.Title)</td>
+            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+            <td>@Html.DisplayFor(modelItem => item.TicketSubmitterID)</td>
+            <td>@item.CreatedDate.Date.ToShortDateString()<br /><i>(@((DateTime.Now - item.CreatedDate).Days) days ago)</i></td>
+            <td>@Html.DisplayFor(modelItem => item.DateLastUpdated)</td>
+            <td>@Html.DisplayFor(modelItem => item.AssignedToID)</td>
+            <td>@Html.DisplayFor(modelItem => item.RelatedTicketID)</td>
+            <td>@Html.DisplayFor(modelItem => item.Resolution)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID })
+                @Html.ActionLink("Details", "Details", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>

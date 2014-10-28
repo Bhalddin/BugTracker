@@ -12,16 +12,16 @@ namespace BugTracker.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Ticket_Priorities
+    public partial class TicketAttachment
     {
-        public Ticket_Priorities()
-        {
-            this.Tickets = new HashSet<Ticket>();
-        }
-    
         public int ID { get; set; }
-        public string Priority { get; set; }
+        public int TicketID { get; set; }
+        public int SubmitterID { get; set; }
+        public string AttachmentFilePath { get; set; }
+        public string OriginalName { get; set; }
+        public string Description { get; set; }
     
-        public virtual ICollection<Ticket> Tickets { get; set; }
+        public virtual Ticket Ticket { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -11,11 +11,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Created_Date)
+            @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Created_Date)
+            @Html.DisplayFor(model => model.CreatedDate)
         </dd>
 
         <dt>
@@ -35,6 +35,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.DateLastUpdated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateLastUpdated)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Project.Project_Name)
         </dt>
 
@@ -43,27 +51,27 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Ticket_Priorities.Priority)
+            @Html.DisplayNameFor(model => model.TicketPriority.Priority)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Ticket_Priorities.Priority)
+            @Html.DisplayFor(model => model.TicketPriority.Priority)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Ticket_Statuses.Status)
+            @Html.DisplayNameFor(model => model.TicketStatus.Status)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Ticket_Statuses.Status)
+            @Html.DisplayFor(model => model.TicketStatus.Status)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Ticket_Types.Type)
+            @Html.DisplayNameFor(model => model.TicketType.Type)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Ticket_Types.Type)
+            @Html.DisplayFor(model => model.TicketType.Type)
         </dd>
 
         <dt>
@@ -75,19 +83,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User.First_Name)
+            @Html.DisplayNameFor(model => model.User.FirstName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User.First_Name)
+            @Html.DisplayFor(model => model.User.FirstName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User1.First_Name)
+            @Html.DisplayNameFor(model => model.User1.FirstName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User1.First_Name)
+            @Html.DisplayFor(model => model.User1.FirstName)
         </dd>
 
     </dl>

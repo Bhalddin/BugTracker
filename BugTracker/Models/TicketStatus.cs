@@ -12,15 +12,16 @@ namespace BugTracker.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Ticket_History
+    public partial class TicketStatus
     {
-        public System.DateTime ID { get; set; }
-        public int TicketID { get; set; }
-        public int Ticket_EditorID { get; set; }
-        public System.DateTime Date_Of_Change { get; set; }
-        public string Ticket_Alteration { get; set; }
+        public TicketStatus()
+        {
+            this.Tickets = new HashSet<Ticket>();
+        }
     
-        public virtual Ticket Ticket { get; set; }
-        public virtual User User { get; set; }
+        public int ID { get; set; }
+        public string Status { get; set; }
+    
+        public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }

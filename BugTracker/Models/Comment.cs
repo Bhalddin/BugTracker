@@ -17,7 +17,7 @@ namespace BugTracker.Models
         public int ID { get; set; }
         public int TicketID { get; set; }
         public int CommentorID { get; set; }
-        public System.DateTime Comment_Date { get; set; }
+        public System.DateTime CommentDate { get; set; }
         public string Comment1 { get; set; }
     
         public virtual Ticket Ticket { get; set; }

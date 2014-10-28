@@ -12,9 +12,9 @@ namespace BugTracker.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Ticket_Types
+    public partial class TicketType
     {
-        public Ticket_Types()
+        public TicketType()
         {
             this.Tickets = new HashSet<Ticket>();
         }

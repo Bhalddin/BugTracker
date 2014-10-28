@@ -18,23 +18,23 @@ namespace BugTracker.Models
         {
             this.Comments = new HashSet<Comment>();
             this.Notifications = new HashSet<Notification>();
-            this.Ticket_Attachments = new HashSet<Ticket_Attachments>();
-            this.Ticket_History = new HashSet<Ticket_History>();
+            this.TicketAttachments = new HashSet<TicketAttachment>();
+            this.TicketHistories = new HashSet<TicketHistory>();
             this.Tickets = new HashSet<Ticket>();
             this.Tickets1 = new HashSet<Ticket>();
             this.Projects = new HashSet<Project>();
         }
     
         public int ID { get; set; }
-        public string First_Name { get; set; }
-        public string Last_Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
-        public int ASPUserID { get; set; }
+        public string ASPUserName { get; set; }
     
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
-        public virtual ICollection<Ticket_Attachments> Ticket_Attachments { get; set; }
-        public virtual ICollection<Ticket_History> Ticket_History { get; set; }
+        public virtual ICollection<TicketAttachment> TicketAttachments { get; set; }
+        public virtual ICollection<TicketHistory> TicketHistories { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Ticket> Tickets1 { get; set; }
         public virtual ICollection<Project> Projects { get; set; }

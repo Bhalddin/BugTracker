@@ -4,17 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a40fea3507084f67a0786c95097f611e" Name="Diagram1">
-        <EntityTypeShape EntityType="BugTrackerModel.Comment" Width="1.5" PointX="7.5" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BugTrackerModel.Notification" Width="1.5" PointX="10.5" PointY="12.75" IsExpanded="true" />
+      <Diagram DiagramId="5207796695494dab9a624ffa2e6ce9f7" Name="Diagram1">
+        <EntityTypeShape EntityType="BugTrackerModel.Comment" Width="1.5" PointX="7.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BugTrackerModel.Notification" Width="1.5" PointX="10.5" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="BugTrackerModel.Project" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="BugTrackerModel.Ticket_Attachments" Width="1.5" PointX="7.5" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BugTrackerModel.Ticket_History" Width="1.5" PointX="7.5" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BugTrackerModel.Ticket_Priorities" Width="1.5" PointX="3" PointY="10" IsExpanded="true" />
-        <EntityTypeShape EntityType="BugTrackerModel.Ticket_Statuses" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="BugTrackerModel.Ticket_Types" Width="1.5" PointX="3" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BugTrackerModel.TicketAttachment" Width="1.5" PointX="7.5" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BugTrackerModel.TicketHistory" Width="1.5" PointX="7.5" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BugTrackerModel.TicketPriority" Width="1.5" PointX="3" PointY="10.125" IsExpanded="true" />
         <EntityTypeShape EntityType="BugTrackerModel.Ticket" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="BugTrackerModel.User" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BugTrackerModel.TicketStatus" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BugTrackerModel.TicketType" Width="1.5" PointX="3" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BugTrackerModel.User" Width="1.5" PointX="3" PointY="14.5" IsExpanded="true" />
         <AssociationConnector Association="BugTrackerModel.FK_Comments_Ticket" ManuallyRouted="false" />
         <AssociationConnector Association="BugTrackerModel.FK_Comments_User" ManuallyRouted="false" />
         <AssociationConnector Association="BugTrackerModel.FK_Notifications_Ticket" ManuallyRouted="false" />
@@ -30,7 +30,7 @@
         <AssociationConnector Association="BugTrackerModel.FK_Ticket_Ticket1" ManuallyRouted="false" />
         <AssociationConnector Association="BugTrackerModel.FK_Ticket_User" ManuallyRouted="false" />
         <AssociationConnector Association="BugTrackerModel.FK_Ticket_User1" ManuallyRouted="false" />
-        <AssociationConnector Association="BugTrackerModel.User_to_Project_Map" ManuallyRouted="false" />
+        <AssociationConnector Association="BugTrackerModel.ProjectUsers" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

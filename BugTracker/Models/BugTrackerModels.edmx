@@ -12,7 +12,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TicketID" Type="int" Nullable="false" />
           <Property Name="CommentorID" Type="int" Nullable="false" />
-          <Property Name="Comment_Date" Type="date" Nullable="false" />
+          <Property Name="CommentDate" Type="date" Nullable="false" />
           <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Notifications">
@@ -22,7 +22,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TicketID" Type="int" Nullable="false" />
           <Property Name="ToID" Type="int" Nullable="false" />
-          <Property Name="On_Date" Type="date" Nullable="false" />
+          <Property Name="OnDate" Type="date" Nullable="false" />
           <Property Name="Notification" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Projects">
@@ -33,68 +33,9 @@
           <Property Name="Project_Name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Project_Description" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
-        <EntityType Name="Ticket_Attachments">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TicketID" Type="int" Nullable="false" />
-          <Property Name="SubmitterID" Type="int" Nullable="false" />
-          <Property Name="Attachment_File_Path" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Original_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Ticket_History">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="date" Nullable="false" />
-          <Property Name="TicketID" Type="int" Nullable="false" />
-          <Property Name="Ticket_EditorID" Type="int" Nullable="false" />
-          <Property Name="Date_Of_Change" Type="datetime" Nullable="false" />
-          <Property Name="Ticket_Alteration" Type="nvarchar(max)" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Ticket_Priorities">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Priority" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Ticket_Statuses">
-          <Key>
-            <PropertyRef Name="StatusID" />
-          </Key>
-          <Property Name="StatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Ticket_Types">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Tickets">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Created_Date" Type="date" Nullable="false" />
-          <Property Name="Ticket_SubmitterID" Type="int" Nullable="false" />
-          <Property Name="Assigned_ToID" Type="int" />
-          <Property Name="ProjectID" Type="int" Nullable="false" />
-          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Resolution" Type="nvarchar(max)" />
-          <Property Name="Ticket_PriorityID" Type="int" />
-          <Property Name="Ticket_StatusID" Type="int" />
-          <Property Name="Ticket_TypeID" Type="int" />
-          <Property Name="Related_TicketID" Type="int" />
-          <Property Name="Date_Last_Updated" Type="date" Nullable="false" />
-        </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="User_to_Project_Map">
+warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ProjectUsers">
           <Key>
             <PropertyRef Name="UserID" />
             <PropertyRef Name="ProjectID" />
@@ -102,15 +43,75 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="ProjectID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="TicketAttachments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TicketID" Type="int" Nullable="false" />
+          <Property Name="SubmitterID" Type="int" Nullable="false" />
+          <Property Name="AttachmentFilePath" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="OriginalName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TicketHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="date" Nullable="false" />
+          <Property Name="TicketID" Type="int" Nullable="false" />
+          <Property Name="TicketEditorID" Type="int" Nullable="false" />
+          <Property Name="DateOfChange" Type="datetime" Nullable="false" />
+          <Property Name="Ticket_Alteration" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TicketPriorities">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Priority" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tickets">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedDate" Type="date" Nullable="false" />
+          <Property Name="TicketSubmitterID" Type="int" Nullable="false" />
+          <Property Name="AssignedToID" Type="int" />
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Resolution" Type="nvarchar(max)" />
+          <Property Name="TicketPriorityID" Type="int" />
+          <Property Name="TicketStatusID" Type="int" />
+          <Property Name="TicketTypeID" Type="int" />
+          <Property Name="RelatedTicketID" Type="int" />
+          <Property Name="DateLastUpdated" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TicketStatuses">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TicketTypes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="First_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Last_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="ASPUserID" Type="int" Nullable="false" />
+          <Property Name="ASPUserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <Association Name="FK_Comments_Ticket">
           <End Role="Tickets" Type="Self.Tickets" Multiplicity="1" />
@@ -162,73 +163,73 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
         </Association>
         <Association Name="FK_Project Member_Project">
           <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
-          <End Role="User_to_Project_Map" Type="Self.User_to_Project_Map" Multiplicity="*" />
+          <End Role="ProjectUsers" Type="Self.ProjectUsers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Projects">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="User_to_Project_Map">
+            <Dependent Role="ProjectUsers">
               <PropertyRef Name="ProjectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Project Member_User">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="User_to_Project_Map" Type="Self.User_to_Project_Map" Multiplicity="*" />
+          <End Role="ProjectUsers" Type="Self.ProjectUsers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="User_to_Project_Map">
+            <Dependent Role="ProjectUsers">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Attachment_Ticket">
           <End Role="Tickets" Type="Self.Tickets" Multiplicity="1" />
-          <End Role="Ticket_Attachments" Type="Self.Ticket_Attachments" Multiplicity="*" />
+          <End Role="TicketAttachments" Type="Self.TicketAttachments" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tickets">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Ticket_Attachments">
+            <Dependent Role="TicketAttachments">
               <PropertyRef Name="TicketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Attachments_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="Ticket_Attachments" Type="Self.Ticket_Attachments" Multiplicity="*" />
+          <End Role="TicketAttachments" Type="Self.TicketAttachments" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Ticket_Attachments">
+            <Dependent Role="TicketAttachments">
               <PropertyRef Name="SubmitterID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_History_Ticket">
           <End Role="Tickets" Type="Self.Tickets" Multiplicity="1" />
-          <End Role="Ticket_History" Type="Self.Ticket_History" Multiplicity="*" />
+          <End Role="TicketHistory" Type="Self.TicketHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tickets">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Ticket_History">
+            <Dependent Role="TicketHistory">
               <PropertyRef Name="TicketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_History_User">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="Ticket_History" Type="Self.Ticket_History" Multiplicity="*" />
+          <End Role="TicketHistory" Type="Self.TicketHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Ticket_History">
-              <PropertyRef Name="Ticket_EditorID" />
+            <Dependent Role="TicketHistory">
+              <PropertyRef Name="TicketEditorID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -245,38 +246,38 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Ticket_Priority">
-          <End Role="Ticket_Priorities" Type="Self.Ticket_Priorities" Multiplicity="0..1" />
+          <End Role="TicketPriorities" Type="Self.TicketPriorities" Multiplicity="0..1" />
           <End Role="Tickets" Type="Self.Tickets" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ticket_Priorities">
+            <Principal Role="TicketPriorities">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Ticket_PriorityID" />
+              <PropertyRef Name="TicketPriorityID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Ticket_Status">
-          <End Role="Ticket_Statuses" Type="Self.Ticket_Statuses" Multiplicity="0..1" />
+          <End Role="TicketStatuses" Type="Self.TicketStatuses" Multiplicity="0..1" />
           <End Role="Tickets" Type="Self.Tickets" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ticket_Statuses">
-              <PropertyRef Name="StatusID" />
+            <Principal Role="TicketStatuses">
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Ticket_StatusID" />
+              <PropertyRef Name="TicketStatusID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Ticket_Type">
-          <End Role="Ticket_Types" Type="Self.Ticket_Types" Multiplicity="0..1" />
+          <End Role="TicketTypes" Type="Self.TicketTypes" Multiplicity="0..1" />
           <End Role="Tickets" Type="Self.Tickets" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ticket_Types">
+            <Principal Role="TicketTypes">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Ticket_TypeID" />
+              <PropertyRef Name="TicketTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -288,7 +289,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets1">
-              <PropertyRef Name="Related_TicketID" />
+              <PropertyRef Name="RelatedTicketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -300,7 +301,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Ticket_SubmitterID" />
+              <PropertyRef Name="TicketSubmitterID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -312,7 +313,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Assigned_ToID" />
+              <PropertyRef Name="AssignedToID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -320,18 +321,18 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notifications" EntityType="Self.Notifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ticket_Attachments" EntityType="Self.Ticket_Attachments" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ticket_History" EntityType="Self.Ticket_History" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ticket_Priorities" EntityType="Self.Ticket_Priorities" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ticket_Statuses" EntityType="Self.Ticket_Statuses" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ticket_Types" EntityType="Self.Ticket_Types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketAttachments" EntityType="Self.TicketAttachments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketHistory" EntityType="Self.TicketHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketPriorities" EntityType="Self.TicketPriorities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tickets" EntityType="Self.Tickets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketStatuses" EntityType="Self.TicketStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketTypes" EntityType="Self.TicketTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="User_to_Project_Map" EntityType="Self.User_to_Project_Map" store:Type="Tables" store:Schema="dbo">
+          <EntitySet Name="ProjectUsers" EntityType="Self.ProjectUsers" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
-    [User_to_Project_Map].[UserID] AS [UserID], 
-    [User_to_Project_Map].[ProjectID] AS [ProjectID]
-    FROM [dbo].[User_to_Project_Map] AS [User_to_Project_Map]</DefiningQuery>
+    [ProjectUsers].[UserID] AS [UserID], 
+    [ProjectUsers].[ProjectID] AS [ProjectID]
+    FROM [dbo].[ProjectUsers] AS [ProjectUsers]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Comments_Ticket" Association="Self.FK_Comments_Ticket">
             <End Role="Tickets" EntitySet="Tickets" />
@@ -351,42 +352,42 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           </AssociationSet>
           <AssociationSet Name="FK_Project Member_Project" Association="Self.FK_Project Member_Project">
             <End Role="Projects" EntitySet="Projects" />
-            <End Role="User_to_Project_Map" EntitySet="User_to_Project_Map" />
+            <End Role="ProjectUsers" EntitySet="ProjectUsers" />
           </AssociationSet>
           <AssociationSet Name="FK_Project Member_User" Association="Self.FK_Project Member_User">
             <End Role="Users" EntitySet="Users" />
-            <End Role="User_to_Project_Map" EntitySet="User_to_Project_Map" />
+            <End Role="ProjectUsers" EntitySet="ProjectUsers" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Attachment_Ticket" Association="Self.FK_Ticket_Attachment_Ticket">
             <End Role="Tickets" EntitySet="Tickets" />
-            <End Role="Ticket_Attachments" EntitySet="Ticket_Attachments" />
+            <End Role="TicketAttachments" EntitySet="TicketAttachments" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Attachments_Users" Association="Self.FK_Ticket_Attachments_Users">
             <End Role="Users" EntitySet="Users" />
-            <End Role="Ticket_Attachments" EntitySet="Ticket_Attachments" />
+            <End Role="TicketAttachments" EntitySet="TicketAttachments" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_History_Ticket" Association="Self.FK_Ticket_History_Ticket">
             <End Role="Tickets" EntitySet="Tickets" />
-            <End Role="Ticket_History" EntitySet="Ticket_History" />
+            <End Role="TicketHistory" EntitySet="TicketHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_History_User" Association="Self.FK_Ticket_History_User">
             <End Role="Users" EntitySet="Users" />
-            <End Role="Ticket_History" EntitySet="Ticket_History" />
+            <End Role="TicketHistory" EntitySet="TicketHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Project" Association="Self.FK_Ticket_Project">
             <End Role="Projects" EntitySet="Projects" />
             <End Role="Tickets" EntitySet="Tickets" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Ticket_Priority" Association="Self.FK_Ticket_Ticket_Priority">
-            <End Role="Ticket_Priorities" EntitySet="Ticket_Priorities" />
+            <End Role="TicketPriorities" EntitySet="TicketPriorities" />
             <End Role="Tickets" EntitySet="Tickets" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Ticket_Status" Association="Self.FK_Ticket_Ticket_Status">
-            <End Role="Ticket_Statuses" EntitySet="Ticket_Statuses" />
+            <End Role="TicketStatuses" EntitySet="TicketStatuses" />
             <End Role="Tickets" EntitySet="Tickets" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Ticket_Type" Association="Self.FK_Ticket_Ticket_Type">
-            <End Role="Ticket_Types" EntitySet="Ticket_Types" />
+            <End Role="TicketTypes" EntitySet="TicketTypes" />
             <End Role="Tickets" EntitySet="Tickets" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Ticket1" Association="Self.FK_Ticket_Ticket1">
@@ -414,7 +415,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TicketID" Type="Int32" Nullable="false" />
           <Property Name="CommentorID" Type="Int32" Nullable="false" />
-          <Property Name="Comment_Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CommentDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Comment1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_Comments_Ticket" FromRole="Comments" ToRole="Tickets" />
           <NavigationProperty Name="User" Relationship="Self.FK_Comments_User" FromRole="Comments" ToRole="Users" />
@@ -426,7 +427,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TicketID" Type="Int32" Nullable="false" />
           <Property Name="ToID" Type="Int32" Nullable="false" />
-          <Property Name="On_Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OnDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Notification1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_Notifications_Ticket" FromRole="Notifications" ToRole="Tickets" />
           <NavigationProperty Name="User" Relationship="Self.FK_Notifications_User" FromRole="Notifications" ToRole="Users" />
@@ -439,102 +440,103 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           <Property Name="Project_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Project_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Project" FromRole="Projects" ToRole="Tickets" />
-          <NavigationProperty Name="Users" Relationship="Self.User_to_Project_Map" FromRole="Projects" ToRole="Users" />
+          <NavigationProperty Name="Users" Relationship="Self.ProjectUsers" FromRole="Projects" ToRole="Users" />
         </EntityType>
-        <EntityType Name="Ticket_Attachments">
+        <EntityType Name="TicketAttachment">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TicketID" Type="Int32" Nullable="false" />
           <Property Name="SubmitterID" Type="Int32" Nullable="false" />
-          <Property Name="Attachment_File_Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Original_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AttachmentFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OriginalName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_Attachment_Ticket" FromRole="Ticket_Attachments" ToRole="Tickets" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Ticket_Attachments_Users" FromRole="Ticket_Attachments" ToRole="Users" />
+          <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_Attachment_Ticket" FromRole="TicketAttachments" ToRole="Tickets" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Ticket_Attachments_Users" FromRole="TicketAttachments" ToRole="Users" />
         </EntityType>
-        <EntityType Name="Ticket_History">
+        <EntityType Name="TicketHistory">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="TicketID" Type="Int32" Nullable="false" />
-          <Property Name="Ticket_EditorID" Type="Int32" Nullable="false" />
-          <Property Name="Date_Of_Change" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TicketEditorID" Type="Int32" Nullable="false" />
+          <Property Name="DateOfChange" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Ticket_Alteration" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_History_Ticket" FromRole="Ticket_History" ToRole="Tickets" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Ticket_History_User" FromRole="Ticket_History" ToRole="Users" />
+          <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_History_Ticket" FromRole="TicketHistory" ToRole="Tickets" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Ticket_History_User" FromRole="TicketHistory" ToRole="Users" />
         </EntityType>
-        <EntityType Name="Ticket_Priorities">
+        <EntityType Name="TicketPriority">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Priority" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Ticket_Priority" FromRole="Ticket_Priorities" ToRole="Tickets" />
-        </EntityType>
-        <EntityType Name="Ticket_Statuses">
-          <Key>
-            <PropertyRef Name="StatusID" />
-          </Key>
-          <Property Name="StatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Ticket_Status" FromRole="Ticket_Statuses" ToRole="Tickets" />
-        </EntityType>
-        <EntityType Name="Ticket_Types">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Ticket_Type" FromRole="Ticket_Types" ToRole="Tickets" />
+          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Ticket_Priority" FromRole="TicketPriorities" ToRole="Tickets" />
         </EntityType>
         <EntityType Name="Ticket">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Created_Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Ticket_SubmitterID" Type="Int32" Nullable="false" />
-          <Property Name="Assigned_ToID" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TicketSubmitterID" Type="Int32" Nullable="false" />
+          <Property Name="AssignedToID" Type="Int32" />
           <Property Name="ProjectID" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Resolution" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Ticket_PriorityID" Type="Int32" />
-          <Property Name="Ticket_StatusID" Type="Int32" />
-          <Property Name="Ticket_TypeID" Type="Int32" />
-          <Property Name="Related_TicketID" Type="Int32" />
-          <Property Name="Date_Last_Updated" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TicketPriorityID" Type="Int32" />
+          <Property Name="TicketStatusID" Type="Int32" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="RelatedTicketID" Type="Int32" />
+          <Property Name="DateLastUpdated" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Ticket" FromRole="Tickets" ToRole="Comments" />
           <NavigationProperty Name="Notifications" Relationship="Self.FK_Notifications_Ticket" FromRole="Tickets" ToRole="Notifications" />
           <NavigationProperty Name="Project" Relationship="Self.FK_Ticket_Project" FromRole="Tickets" ToRole="Projects" />
-          <NavigationProperty Name="Ticket_Attachments" Relationship="Self.FK_Ticket_Attachment_Ticket" FromRole="Tickets" ToRole="Ticket_Attachments" />
-          <NavigationProperty Name="Ticket_History" Relationship="Self.FK_Ticket_History_Ticket" FromRole="Tickets" ToRole="Ticket_History" />
-          <NavigationProperty Name="Ticket_Priorities" Relationship="Self.FK_Ticket_Ticket_Priority" FromRole="Tickets" ToRole="Ticket_Priorities" />
-          <NavigationProperty Name="Ticket_Statuses" Relationship="Self.FK_Ticket_Ticket_Status" FromRole="Tickets" ToRole="Ticket_Statuses" />
-          <NavigationProperty Name="Ticket_Types" Relationship="Self.FK_Ticket_Ticket_Type" FromRole="Tickets" ToRole="Ticket_Types" />
+          <NavigationProperty Name="TicketAttachments" Relationship="Self.FK_Ticket_Attachment_Ticket" FromRole="Tickets" ToRole="TicketAttachments" />
+          <NavigationProperty Name="TicketHistories" Relationship="Self.FK_Ticket_History_Ticket" FromRole="Tickets" ToRole="TicketHistory" />
+          <NavigationProperty Name="TicketPriority" Relationship="Self.FK_Ticket_Ticket_Priority" FromRole="Tickets" ToRole="TicketPriorities" />
+          <NavigationProperty Name="TicketStatus" Relationship="Self.FK_Ticket_Ticket_Status" FromRole="Tickets" ToRole="TicketStatuses" />
+          <NavigationProperty Name="TicketType" Relationship="Self.FK_Ticket_Ticket_Type" FromRole="Tickets" ToRole="TicketTypes" />
           <NavigationProperty Name="Tickets1" Relationship="Self.FK_Ticket_Ticket1" FromRole="Tickets" ToRole="Tickets1" />
           <NavigationProperty Name="Ticket1" Relationship="Self.FK_Ticket_Ticket1" FromRole="Tickets1" ToRole="Tickets" />
           <NavigationProperty Name="User" Relationship="Self.FK_Ticket_User" FromRole="Tickets" ToRole="Users" />
           <NavigationProperty Name="User1" Relationship="Self.FK_Ticket_User1" FromRole="Tickets" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="TicketStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Ticket_Status" FromRole="TicketStatuses" ToRole="Tickets" />
+        </EntityType>
+        <EntityType Name="TicketType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Ticket_Type" FromRole="TicketTypes" ToRole="Tickets" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="First_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Last_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ASPUserID" Type="Int32" Nullable="false" />
+          <Property Name="ASPUserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_User" FromRole="Users" ToRole="Comments" />
           <NavigationProperty Name="Notifications" Relationship="Self.FK_Notifications_User" FromRole="Users" ToRole="Notifications" />
-          <NavigationProperty Name="Ticket_Attachments" Relationship="Self.FK_Ticket_Attachments_Users" FromRole="Users" ToRole="Ticket_Attachments" />
-          <NavigationProperty Name="Ticket_History" Relationship="Self.FK_Ticket_History_User" FromRole="Users" ToRole="Ticket_History" />
+          <NavigationProperty Name="TicketAttachments" Relationship="Self.FK_Ticket_Attachments_Users" FromRole="Users" ToRole="TicketAttachments" />
+          <NavigationProperty Name="TicketHistories" Relationship="Self.FK_Ticket_History_User" FromRole="Users" ToRole="TicketHistory" />
           <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_User" FromRole="Users" ToRole="Tickets" />
           <NavigationProperty Name="Tickets1" Relationship="Self.FK_Ticket_User1" FromRole="Users" ToRole="Tickets" />
-          <NavigationProperty Name="Projects" Relationship="Self.User_to_Project_Map" FromRole="Users" ToRole="Projects" />
+          <NavigationProperty Name="Projects" Relationship="Self.ProjectUsers" FromRole="Users" ToRole="Projects" />
         </EntityType>
         <Association Name="FK_Comments_Ticket">
           <End Role="Tickets" Type="Self.Ticket" Multiplicity="1" />
@@ -598,85 +600,85 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
         </Association>
         <Association Name="FK_Ticket_Attachment_Ticket">
           <End Role="Tickets" Type="Self.Ticket" Multiplicity="1" />
-          <End Role="Ticket_Attachments" Type="Self.Ticket_Attachments" Multiplicity="*" />
+          <End Role="TicketAttachments" Type="Self.TicketAttachment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tickets">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Ticket_Attachments">
+            <Dependent Role="TicketAttachments">
               <PropertyRef Name="TicketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Attachments_Users">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Ticket_Attachments" Type="Self.Ticket_Attachments" Multiplicity="*" />
+          <End Role="TicketAttachments" Type="Self.TicketAttachment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Ticket_Attachments">
+            <Dependent Role="TicketAttachments">
               <PropertyRef Name="SubmitterID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_History_Ticket">
           <End Role="Tickets" Type="Self.Ticket" Multiplicity="1" />
-          <End Role="Ticket_History" Type="Self.Ticket_History" Multiplicity="*" />
+          <End Role="TicketHistory" Type="Self.TicketHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tickets">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Ticket_History">
+            <Dependent Role="TicketHistory">
               <PropertyRef Name="TicketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_History_User">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Ticket_History" Type="Self.Ticket_History" Multiplicity="*" />
+          <End Role="TicketHistory" Type="Self.TicketHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Ticket_History">
-              <PropertyRef Name="Ticket_EditorID" />
+            <Dependent Role="TicketHistory">
+              <PropertyRef Name="TicketEditorID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Ticket_Priority">
-          <End Role="Ticket_Priorities" Type="Self.Ticket_Priorities" Multiplicity="0..1" />
+          <End Role="TicketPriorities" Type="Self.TicketPriority" Multiplicity="0..1" />
           <End Role="Tickets" Type="Self.Ticket" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ticket_Priorities">
+            <Principal Role="TicketPriorities">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Ticket_PriorityID" />
+              <PropertyRef Name="TicketPriorityID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Ticket_Status">
-          <End Role="Ticket_Statuses" Type="Self.Ticket_Statuses" Multiplicity="0..1" />
+          <End Role="TicketStatuses" Type="Self.TicketStatus" Multiplicity="0..1" />
           <End Role="Tickets" Type="Self.Ticket" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ticket_Statuses">
-              <PropertyRef Name="StatusID" />
+            <Principal Role="TicketStatuses">
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Ticket_StatusID" />
+              <PropertyRef Name="TicketStatusID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Ticket_Ticket_Type">
-          <End Role="Ticket_Types" Type="Self.Ticket_Types" Multiplicity="0..1" />
+          <End Role="TicketTypes" Type="Self.TicketType" Multiplicity="0..1" />
           <End Role="Tickets" Type="Self.Ticket" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ticket_Types">
+            <Principal Role="TicketTypes">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Ticket_TypeID" />
+              <PropertyRef Name="TicketTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -688,7 +690,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets1">
-              <PropertyRef Name="Related_TicketID" />
+              <PropertyRef Name="RelatedTicketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -700,7 +702,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Ticket_SubmitterID" />
+              <PropertyRef Name="TicketSubmitterID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -712,24 +714,24 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Tickets">
-              <PropertyRef Name="Assigned_ToID" />
+              <PropertyRef Name="AssignedToID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="User_to_Project_Map">
+        <Association Name="ProjectUsers">
           <End Role="Projects" Type="Self.Project" Multiplicity="*" />
           <End Role="Users" Type="Self.User" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="BugTrackerEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Notifications" EntityType="Self.Notification" />
           <EntitySet Name="Projects" EntityType="Self.Project" />
-          <EntitySet Name="Ticket_Attachments" EntityType="Self.Ticket_Attachments" />
-          <EntitySet Name="Ticket_History" EntityType="Self.Ticket_History" />
-          <EntitySet Name="Ticket_Priorities" EntityType="Self.Ticket_Priorities" />
-          <EntitySet Name="Ticket_Statuses" EntityType="Self.Ticket_Statuses" />
-          <EntitySet Name="Ticket_Types" EntityType="Self.Ticket_Types" />
+          <EntitySet Name="TicketAttachments" EntityType="Self.TicketAttachment" />
+          <EntitySet Name="TicketHistories" EntityType="Self.TicketHistory" />
+          <EntitySet Name="TicketPriorities" EntityType="Self.TicketPriority" />
           <EntitySet Name="Tickets" EntityType="Self.Ticket" />
+          <EntitySet Name="TicketStatuses" EntityType="Self.TicketStatus" />
+          <EntitySet Name="TicketTypes" EntityType="Self.TicketType" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <AssociationSet Name="FK_Comments_Ticket" Association="Self.FK_Comments_Ticket">
             <End Role="Tickets" EntitySet="Tickets" />
@@ -753,30 +755,30 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Attachment_Ticket" Association="Self.FK_Ticket_Attachment_Ticket">
             <End Role="Tickets" EntitySet="Tickets" />
-            <End Role="Ticket_Attachments" EntitySet="Ticket_Attachments" />
+            <End Role="TicketAttachments" EntitySet="TicketAttachments" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Attachments_Users" Association="Self.FK_Ticket_Attachments_Users">
             <End Role="Users" EntitySet="Users" />
-            <End Role="Ticket_Attachments" EntitySet="Ticket_Attachments" />
+            <End Role="TicketAttachments" EntitySet="TicketAttachments" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_History_Ticket" Association="Self.FK_Ticket_History_Ticket">
             <End Role="Tickets" EntitySet="Tickets" />
-            <End Role="Ticket_History" EntitySet="Ticket_History" />
+            <End Role="TicketHistory" EntitySet="TicketHistories" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_History_User" Association="Self.FK_Ticket_History_User">
             <End Role="Users" EntitySet="Users" />
-            <End Role="Ticket_History" EntitySet="Ticket_History" />
+            <End Role="TicketHistory" EntitySet="TicketHistories" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Ticket_Priority" Association="Self.FK_Ticket_Ticket_Priority">
-            <End Role="Ticket_Priorities" EntitySet="Ticket_Priorities" />
+            <End Role="TicketPriorities" EntitySet="TicketPriorities" />
             <End Role="Tickets" EntitySet="Tickets" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Ticket_Status" Association="Self.FK_Ticket_Ticket_Status">
-            <End Role="Ticket_Statuses" EntitySet="Ticket_Statuses" />
+            <End Role="TicketStatuses" EntitySet="TicketStatuses" />
             <End Role="Tickets" EntitySet="Tickets" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Ticket_Type" Association="Self.FK_Ticket_Ticket_Type">
-            <End Role="Ticket_Types" EntitySet="Ticket_Types" />
+            <End Role="TicketTypes" EntitySet="TicketTypes" />
             <End Role="Tickets" EntitySet="Tickets" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Ticket1" Association="Self.FK_Ticket_Ticket1">
@@ -791,7 +793,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
             <End Role="Users" EntitySet="Users" />
             <End Role="Tickets" EntitySet="Tickets" />
           </AssociationSet>
-          <AssociationSet Name="User_to_Project_Map" Association="Self.User_to_Project_Map">
+          <AssociationSet Name="ProjectUsers" Association="Self.ProjectUsers">
             <End Role="Projects" EntitySet="Projects" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
@@ -801,14 +803,14 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="BugTrackerEntities">
+        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="BugTrackerModel.Comment">
               <MappingFragment StoreEntitySet="Comments">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TicketID" ColumnName="TicketID" />
                 <ScalarProperty Name="CommentorID" ColumnName="CommentorID" />
-                <ScalarProperty Name="Comment_Date" ColumnName="Comment_Date" />
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
                 <ScalarProperty Name="Comment1" ColumnName="Comment" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -819,7 +821,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TicketID" ColumnName="TicketID" />
                 <ScalarProperty Name="ToID" ColumnName="ToID" />
-                <ScalarProperty Name="On_Date" ColumnName="On_Date" />
+                <ScalarProperty Name="OnDate" ColumnName="OnDate" />
                 <ScalarProperty Name="Notification1" ColumnName="Notification" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -833,50 +835,34 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Ticket_Attachments">
-            <EntityTypeMapping TypeName="BugTrackerModel.Ticket_Attachments">
-              <MappingFragment StoreEntitySet="Ticket_Attachments">
+          <EntitySetMapping Name="TicketAttachments">
+            <EntityTypeMapping TypeName="BugTrackerModel.TicketAttachment">
+              <MappingFragment StoreEntitySet="TicketAttachments">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TicketID" ColumnName="TicketID" />
                 <ScalarProperty Name="SubmitterID" ColumnName="SubmitterID" />
-                <ScalarProperty Name="Attachment_File_Path" ColumnName="Attachment_File_Path" />
-                <ScalarProperty Name="Original_Name" ColumnName="Original_Name" />
+                <ScalarProperty Name="AttachmentFilePath" ColumnName="AttachmentFilePath" />
+                <ScalarProperty Name="OriginalName" ColumnName="OriginalName" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Ticket_History">
-            <EntityTypeMapping TypeName="BugTrackerModel.Ticket_History">
-              <MappingFragment StoreEntitySet="Ticket_History">
+          <EntitySetMapping Name="TicketHistories">
+            <EntityTypeMapping TypeName="BugTrackerModel.TicketHistory">
+              <MappingFragment StoreEntitySet="TicketHistory">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TicketID" ColumnName="TicketID" />
-                <ScalarProperty Name="Ticket_EditorID" ColumnName="Ticket_EditorID" />
-                <ScalarProperty Name="Date_Of_Change" ColumnName="Date_Of_Change" />
+                <ScalarProperty Name="TicketEditorID" ColumnName="TicketEditorID" />
+                <ScalarProperty Name="DateOfChange" ColumnName="DateOfChange" />
                 <ScalarProperty Name="Ticket_Alteration" ColumnName="Ticket_Alteration" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Ticket_Priorities">
-            <EntityTypeMapping TypeName="BugTrackerModel.Ticket_Priorities">
-              <MappingFragment StoreEntitySet="Ticket_Priorities">
+          <EntitySetMapping Name="TicketPriorities">
+            <EntityTypeMapping TypeName="BugTrackerModel.TicketPriority">
+              <MappingFragment StoreEntitySet="TicketPriorities">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Ticket_Statuses">
-            <EntityTypeMapping TypeName="BugTrackerModel.Ticket_Statuses">
-              <MappingFragment StoreEntitySet="Ticket_Statuses">
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Ticket_Types">
-            <EntityTypeMapping TypeName="BugTrackerModel.Ticket_Types">
-              <MappingFragment StoreEntitySet="Ticket_Types">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -884,17 +870,34 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
             <EntityTypeMapping TypeName="BugTrackerModel.Ticket">
               <MappingFragment StoreEntitySet="Tickets">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
-                <ScalarProperty Name="Ticket_SubmitterID" ColumnName="Ticket_SubmitterID" />
-                <ScalarProperty Name="Assigned_ToID" ColumnName="Assigned_ToID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="TicketSubmitterID" ColumnName="TicketSubmitterID" />
+                <ScalarProperty Name="AssignedToID" ColumnName="AssignedToID" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Resolution" ColumnName="Resolution" />
-                <ScalarProperty Name="Ticket_PriorityID" ColumnName="Ticket_PriorityID" />
-                <ScalarProperty Name="Ticket_StatusID" ColumnName="Ticket_StatusID" />
-                <ScalarProperty Name="Ticket_TypeID" ColumnName="Ticket_TypeID" />
-                <ScalarProperty Name="Related_TicketID" ColumnName="Related_TicketID" />
-                <ScalarProperty Name="Date_Last_Updated" ColumnName="Date_Last_Updated" />
+                <ScalarProperty Name="TicketPriorityID" ColumnName="TicketPriorityID" />
+                <ScalarProperty Name="TicketStatusID" ColumnName="TicketStatusID" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="RelatedTicketID" ColumnName="RelatedTicketID" />
+                <ScalarProperty Name="DateLastUpdated" ColumnName="DateLastUpdated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TicketStatuses">
+            <EntityTypeMapping TypeName="BugTrackerModel.TicketStatus">
+              <MappingFragment StoreEntitySet="TicketStatuses">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TicketTypes">
+            <EntityTypeMapping TypeName="BugTrackerModel.TicketType">
+              <MappingFragment StoreEntitySet="TicketTypes">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -902,14 +905,14 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
             <EntityTypeMapping TypeName="BugTrackerModel.User">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="First_Name" ColumnName="First_Name" />
-                <ScalarProperty Name="Last_Name" ColumnName="Last_Name" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="ASPUserID" ColumnName="ASPUserID" />
+                <ScalarProperty Name="ASPUserName" ColumnName="ASPUserName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="User_to_Project_Map" TypeName="BugTrackerModel.User_to_Project_Map" StoreEntitySet="User_to_Project_Map">
+          <AssociationSetMapping Name="ProjectUsers" TypeName="BugTrackerModel.ProjectUsers" StoreEntitySet="ProjectUsers">
             <EndProperty Name="Projects">
               <ScalarProperty Name="ID" ColumnName="ProjectID" />
             </EndProperty>

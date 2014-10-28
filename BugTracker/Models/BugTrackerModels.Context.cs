@@ -28,12 +28,14 @@ namespace BugTracker.Models
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
-        public virtual DbSet<Ticket_Attachments> Ticket_Attachments { get; set; }
-        public virtual DbSet<Ticket_History> Ticket_History { get; set; }
-        public virtual DbSet<Ticket_Priorities> Ticket_Priorities { get; set; }
-        public virtual DbSet<Ticket_Statuses> Ticket_Statuses { get; set; }
-        public virtual DbSet<Ticket_Types> Ticket_Types { get; set; }
+        public virtual DbSet<TicketAttachment> TicketAttachments { get; set; }
+        public virtual DbSet<TicketHistory> TicketHistories { get; set; }
+        public virtual DbSet<TicketPriority> TicketPriorities { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
+        public virtual DbSet<TicketStatus> TicketStatuses { get; set; }
+        public virtual DbSet<TicketType> TicketTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
+
+        public System.Data.Entity.DbSet<BugTracker.Models.TicketViewModel> TicketViewModels { get; set; }
     }
 }

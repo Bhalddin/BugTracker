@@ -177,6 +177,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TicketsController.cs" />
+    <Compile Include="Controllers\TicketsOLDController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -211,21 +212,20 @@
     <Compile Include="Models\Ticket.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TicketSavingModel.cs" />
-    <Compile Include="Models\TicketViewingModel.cs" />
-    <Compile Include="Models\Ticket_Attachments.cs">
+    <Compile Include="Models\TicketAttachment.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Ticket_History.cs">
+    <Compile Include="Models\TicketHistory.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Ticket_Priorities.cs">
+    <Compile Include="Models\TicketPriority.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Ticket_Statuses.cs">
+    <Compile Include="Models\TicketViewModel.cs" />
+    <Compile Include="Models\TicketStatus.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Ticket_Types.cs">
+    <Compile Include="Models\TicketType.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
@@ -330,6 +330,7 @@
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Tickets\Edit.cshtml" />
     <Content Include="Views\Tickets\Index.cshtml" />
+    <Content Include="Views\Tickets\_TicketTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
