@@ -16,7 +16,7 @@ namespace BugTracker.Models
     public partial class BugTrackerEntities : DbContext
     {
         public BugTrackerEntities()
-            : base("name=Entities")
+            : base("name=BugTrackerEntities")
         {
         }
     

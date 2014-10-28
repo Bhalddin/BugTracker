@@ -10,17 +10,17 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Comment_Date" Type="date" Nullable="false" />
           <Property Name="TicketID" Type="int" Nullable="false" />
-          <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CommentorID" Type="int" Nullable="false" />
+          <Property Name="Comment_Date" Type="date" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Notifications">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Related_TicketID" Type="int" Nullable="false" />
+          <Property Name="TicketID" Type="int" Nullable="false" />
           <Property Name="ToID" Type="int" Nullable="false" />
           <Property Name="On_Date" Type="date" Nullable="false" />
           <Property Name="Notification" Type="nvarchar(max)" Nullable="false" />
@@ -39,8 +39,10 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TicketID" Type="int" Nullable="false" />
-          <Property Name="Attachment_SubmitterID" Type="int" Nullable="false" />
+          <Property Name="SubmitterID" Type="int" Nullable="false" />
           <Property Name="Attachment_File_Path" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Original_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Ticket_History">
           <Key>
@@ -142,7 +144,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Notifications">
-              <PropertyRef Name="Related_TicketID" />
+              <PropertyRef Name="TicketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -202,7 +204,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Ticket_Attachments">
-              <PropertyRef Name="Attachment_SubmitterID" />
+              <PropertyRef Name="SubmitterID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -410,10 +412,10 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Comment_Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="TicketID" Type="Int32" Nullable="false" />
-          <Property Name="Comment1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CommentorID" Type="Int32" Nullable="false" />
+          <Property Name="Comment_Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Comment1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_Comments_Ticket" FromRole="Comments" ToRole="Tickets" />
           <NavigationProperty Name="User" Relationship="Self.FK_Comments_User" FromRole="Comments" ToRole="Users" />
         </EntityType>
@@ -422,7 +424,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Related_TicketID" Type="Int32" Nullable="false" />
+          <Property Name="TicketID" Type="Int32" Nullable="false" />
           <Property Name="ToID" Type="Int32" Nullable="false" />
           <Property Name="On_Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Notification1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
@@ -445,8 +447,10 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TicketID" Type="Int32" Nullable="false" />
-          <Property Name="Attachment_SubmitterID" Type="Int32" Nullable="false" />
+          <Property Name="SubmitterID" Type="Int32" Nullable="false" />
           <Property Name="Attachment_File_Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Original_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_Attachment_Ticket" FromRole="Ticket_Attachments" ToRole="Tickets" />
           <NavigationProperty Name="User" Relationship="Self.FK_Ticket_Attachments_Users" FromRole="Ticket_Attachments" ToRole="Users" />
         </EntityType>
@@ -564,7 +568,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Notifications">
-              <PropertyRef Name="Related_TicketID" />
+              <PropertyRef Name="TicketID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -612,7 +616,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Ticket_Attachments">
-              <PropertyRef Name="Attachment_SubmitterID" />
+              <PropertyRef Name="SubmitterID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -716,7 +720,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
           <End Role="Projects" Type="Self.Project" Multiplicity="*" />
           <End Role="Users" Type="Self.User" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="BugTrackerEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Notifications" EntityType="Self.Notification" />
           <EntitySet Name="Projects" EntityType="Self.Project" />
@@ -797,15 +801,15 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="Entities">
+        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="BugTrackerEntities">
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="BugTrackerModel.Comment">
               <MappingFragment StoreEntitySet="Comments">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Comment_Date" ColumnName="Comment_Date" />
                 <ScalarProperty Name="TicketID" ColumnName="TicketID" />
-                <ScalarProperty Name="Comment1" ColumnName="Comment" />
                 <ScalarProperty Name="CommentorID" ColumnName="CommentorID" />
+                <ScalarProperty Name="Comment_Date" ColumnName="Comment_Date" />
+                <ScalarProperty Name="Comment1" ColumnName="Comment" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -813,7 +817,7 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
             <EntityTypeMapping TypeName="BugTrackerModel.Notification">
               <MappingFragment StoreEntitySet="Notifications">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Related_TicketID" ColumnName="Related_TicketID" />
+                <ScalarProperty Name="TicketID" ColumnName="TicketID" />
                 <ScalarProperty Name="ToID" ColumnName="ToID" />
                 <ScalarProperty Name="On_Date" ColumnName="On_Date" />
                 <ScalarProperty Name="Notification1" ColumnName="Notification" />
@@ -834,8 +838,10 @@ warning 6002: The table/view 'BugTracker.dbo.User_to_Project_Map' does not have 
               <MappingFragment StoreEntitySet="Ticket_Attachments">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TicketID" ColumnName="TicketID" />
-                <ScalarProperty Name="Attachment_SubmitterID" ColumnName="Attachment_SubmitterID" />
+                <ScalarProperty Name="SubmitterID" ColumnName="SubmitterID" />
                 <ScalarProperty Name="Attachment_File_Path" ColumnName="Attachment_File_Path" />
+                <ScalarProperty Name="Original_Name" ColumnName="Original_Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

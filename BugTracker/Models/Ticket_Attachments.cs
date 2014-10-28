@@ -16,8 +16,10 @@ namespace BugTracker.Models
     {
         public int ID { get; set; }
         public int TicketID { get; set; }
-        public int Attachment_SubmitterID { get; set; }
+        public int SubmitterID { get; set; }
         public string Attachment_File_Path { get; set; }
+        public string Original_Name { get; set; }
+        public string Description { get; set; }
     
         public virtual Ticket Ticket { get; set; }
         public virtual User User { get; set; }

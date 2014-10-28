@@ -15,10 +15,10 @@ namespace BugTracker.Models
     public partial class Comment
     {
         public int ID { get; set; }
-        public System.DateTime Comment_Date { get; set; }
         public int TicketID { get; set; }
-        public string Comment1 { get; set; }
         public int CommentorID { get; set; }
+        public System.DateTime Comment_Date { get; set; }
+        public string Comment1 { get; set; }
     
         public virtual Ticket Ticket { get; set; }
         public virtual User User { get; set; }

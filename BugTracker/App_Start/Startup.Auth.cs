@@ -78,16 +78,17 @@ namespace BugTracker
 
         protected void Seed(ApplicationDbContext context)
         {
+
             // make Mangers for Roles and User stuff
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-
             // action to help Create Roles
             Action<string> SeedRole = role =>
             {
-                if (!roleManager.RoleExists(role)) 
+                if (!roleManager.RoleExists(role)) { 
                     roleManager.Create(new IdentityRole(role));
+                }
             };
 
 

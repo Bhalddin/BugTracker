@@ -15,7 +15,7 @@ namespace BugTracker.Models
     public partial class Notification
     {
         public int ID { get; set; }
-        public int Related_TicketID { get; set; }
+        public int TicketID { get; set; }
         public int ToID { get; set; }
         public System.DateTime On_Date { get; set; }
         public string Notification1 { get; set; }
