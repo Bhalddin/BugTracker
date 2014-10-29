@@ -1,5 +1,20 @@
 ﻿@model IEnumerable<BugTracker.Models.TicketViewModel>
 
+@using BugTracker.Models;
+@using System.Dynamic;
+
+@{
+    Ticket currentSearch = ViewBag.MyTicket ?? new Ticket();
+    ViewBag.CurrentSearch = ViewBag.CurrentSearch ?? new TicketViewModel();
+    
+}
+
+@helper a(string prop, int value)
+{
+    @*@Url.Action("TicketTable", ViewBag.CurrentSearch.ToSearchObj(prop, value))*@
+}
+
+
 <p>
     I SHOULD PROBABLY PUT A BREAD CRUMB RIGHT HERE!
 </p>
@@ -17,26 +32,23 @@
         <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
         <th>@Html.DisplayNameFor(model => model.TicketSubmitterID)</th>
         <th>@Html.DisplayNameFor(model => model.TicketPriority.Priority)</th>
-        @*<th>@Html.DisplayNameFor(model => model.Resolution)</th>*@
         <th></th>@*buttom column*@
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
-
-            <td>@Html.DisplayFor(modelItem => item.Title)</td>
-            <td>@Html.DisplayFor(modelItem => item.TicketStatus.Status)</td>
-            <td>@Html.DisplayFor(modelItem => item.User1.ASPUserName)</td>
+            <td>@item.Title</td>
+            <td><a href="@a("TicketStatusID", item.TicketStatus.ID)">@item.TicketStatus.Status</a></td>
+            <td><a href="@a("AssignedToID", item.User1.ID)">@item.User1.ASPUserName</a></td>
             <td>@item.DateLastUpdated.ToShortDateString()<br /><i>(@((DateTime.Now - item.DateLastUpdated).Days) days ago)</i></td>
-            <td>@Html.DisplayFor(modelItem => item.TicketType.Type)</td>
-            <td>@Html.DisplayFor(modelItem => item.Description)</td>
-            <td>@Html.DisplayFor(modelItem => item.RelatedTicketID)</td>
-            <td>@Html.DisplayFor(modelItem => item.Project.ProjectName)</td>
+            <td><a href="@a("TicketTypeID", item.TicketType.ID)">@item.TicketType.Type</a></td>
+            <td>@item.Description</td>
+            <td><a href="@a("ID", item.Ticket1.ID)">@item.RelatedTicketID</a></td>
+            <td><a href="@a("ProjectID", item.Project.ID)">@item.Project.ProjectName</a></td>
             <td>@item.CreatedDate.ToShortDateString()<br /><i>(@((DateTime.Now - item.CreatedDate).Days) days ago)</i></td>
-            <td>@item.User.ASPUserName</td>
-            <td>@Html.DisplayFor(modelItem => item.TicketPriority.Priority)</td>
-            @*<td>@Html.DisplayFor(modelItem => item.Resolution)</td>*@
+            <td><a href="@a("TicketSubmitterID", item.User.ID)">@item.User.ASPUserName</a></td>
+            <td><a href="@a("TicketPriorityID", item.TicketPriority.ID)">@item.TicketPriority.Priority</a></td>
             <td>
                 <div class="btn-group-vertical">
                     @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default"})

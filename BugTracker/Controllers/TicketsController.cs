@@ -23,23 +23,24 @@ namespace BugTracker.Controllers
         //Func<HttpRequestBase, bool> NotPartialRequest = (_request) => !(_request.IsAjaxRequest() || ControllerContext.IsChildAction);
 
 
-
+        #region Partials
         /// <summary>
         /// Returns a partialView, a table of filtered Tickets.
         /// </summary>
         /// <returns>ActionResult</returns>
-        public ActionResult TicketTable([Bind(Include = "CreatedDate,TicketSubmitterID,AssignedToID,ProjectID,TicketPriorityID,TicketStatusID,TicketTypeID,RelatedTicketID,DateLastUpdated")]TicketViewModel search, int page = 1, int pageSize = 10)
+        public ActionResult TicketTable([Bind(Include = "TicketSubmitterID,AssignedToID,ProjectID,TicketPriorityID,TicketStatusID,TicketTypeID,RelatedTicketID,CreatedDate,DateLastUpdated,Title")]TicketViewModel search, int page = 1, int pageSize = 10)
         {
             // was worrying about how the controller was going to pass the paramaters from the starting action to this action but the paramaters will always be given explicit from ajax call.
 
             // Check to only allow ajax and child actions.
-            var notPartialRequest = !(Request.IsAjaxRequest() || ControllerContext.IsChildAction);
-            if (notPartialRequest)
-                return View("Error");
+            //var notPartialRequest = !(Request.IsAjaxRequest() || ControllerContext.IsChildAction);
+            //if (notPartialRequest)
+            //    return View("Error");
 
+            //var stuf = ViewBag.GetType();
 
             // Check your inputs!!
-            // 
+            //search.Decode();
 
             var tickets = db.Tickets
                 .Include(t => t.Project)
@@ -99,10 +100,11 @@ namespace BugTracker.Controllers
             return PartialView("_TicketFilterForm");
         }
 
+        #endregion
 
 
 
-
+        #region Index
         // GET: Tickets
         public ActionResult Index()
         {
@@ -118,7 +120,10 @@ namespace BugTracker.Controllers
             //return View(await tickets.ToListAsync());
             return View();
         }
+#endregion
 
+
+        #region Details
         // GET: Tickets/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -134,6 +139,10 @@ namespace BugTracker.Controllers
             return View(ticket);
         }
 
+        #endregion
+
+
+        #region Create
         // GET: Tickets/Create
         public ActionResult Create()
         {
@@ -171,6 +180,10 @@ namespace BugTracker.Controllers
             return View(ticket);
         }
 
+        #endregion
+
+
+        #region Edit
         // GET: Tickets/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
@@ -192,6 +205,8 @@ namespace BugTracker.Controllers
             ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName", ticket.AssignedToID);
             return View(ticket);
         }
+        
+
 
         // POST: Tickets/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -215,7 +230,10 @@ namespace BugTracker.Controllers
             ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName", ticket.AssignedToID);
             return View(ticket);
         }
+        #endregion
 
+
+        #region Delete
         // GET: Tickets/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
@@ -241,6 +259,8 @@ namespace BugTracker.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+        #endregion
 
         protected override void Dispose(bool disposing)
         {
