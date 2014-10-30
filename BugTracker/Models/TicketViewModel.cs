@@ -16,18 +16,18 @@ namespace BugTracker.Models
         // NOT NULLS on the database.
         // Required is used here to check User input.
         [Required(ErrorMessage = "Must select a project the bug relates to.")]
-        public int ProjectID { get; set; }
+        public Nullable<int> ProjectID { get; set; }
 
         [Required(ErrorMessage = "Must select a ticket type")]
         [Display(Name = "Type of ticket")]
-        public int TicketTypeID { get; set; }
+        public Nullable<int> TicketTypeID { get; set; }
 
         // -- props to be automatically generated(initially) --
         [Display(Name = "Ticket submitter")]
-        public int TicketSubmitterID { get; set; }
+        public Nullable<int> TicketSubmitterID { get; set; }
 
         // Props made by SQLServer??
-        public int ID { get; set; }
+        public Nullable<int> ID { get; set; }
 
         // auto's that can be hand altered.
         [Display(Name = "Priority Level")]
@@ -91,17 +91,25 @@ namespace BugTracker.Models
 
 
         // func to help me chose the correct value for my toSearchObj function.
-        Func<string, string, int, int?, int?> Chose = 
-            (_prop, _check, _value, _default) => 
-                (_prop == _check) ? _value : 
-                (_default != 0) ? _default : null;
+        //Func<string, string, int, int?, int?> Chose =
+        //    (_prop, _check, _value, _default) =>
+        //        (_prop == _check) ? _value :
+        //        (_default != 0) ? _default : null;
 
+
+        // func to help me chose the correct value for my toSearchObj function.
+        private int? Chose(string _prop, string _check, int _value, int? _default)
+        {
+            // if the property string name is correct, use the given value, Also if the default(viewbag) value isn't 0, use the defaults value.(desire nulls over 0 b/c then won't appear in the querystring)
+            return (_prop == _check) ? _value : 
+                   (_default != 0) ? _default : null;
+        }
 
         // Method to create an anonymous object to be passed as the search values in a query string.
-        public object ToSearchObj(string prop, int value)
+        public object ToSearchObj(string prop, int value, string sort, string orderA)
         {
-           // create an anonymous object. If a value is null it won't be passed back in the query string, which is what we want
-            var searchObject = new 
+            // create an anonymous object. If a value is null it won't be passed back in the query string, which is what we want
+            var searchObject = new
             {
                 ID = Chose(prop, "ID", value, this.ID),
                 TicketPriorityID = Chose(prop, "TicketPriorityID", value, this.TicketPriorityID),
@@ -109,11 +117,14 @@ namespace BugTracker.Models
                 AssignedToID = Chose(prop, "AssignedToID", value, this.AssignedToID),
                 ProjectID = Chose(prop, "ProjectID", value, this.ProjectID),
                 TicketSubmitterID = Chose(prop, "TicketSubmitterID", value, this.TicketSubmitterID),
-                TicketTypeID = Chose(prop, "TicketTypeID", value, this.TicketTypeID)
+                TicketTypeID = Chose(prop, "TicketTypeID", value, this.TicketTypeID),
+                sort = sort,
+                orderAscending = orderA
             };
 
             return searchObject;
         }
+
 
         internal void Decode()
         {

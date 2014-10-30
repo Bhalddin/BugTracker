@@ -8,6 +8,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
+using System.Linq.Dynamic;
+using PagedList;
 
 namespace BugTracker.Controllers
 {
@@ -28,53 +30,74 @@ namespace BugTracker.Controllers
         /// Returns a partialView, a table of filtered Tickets.
         /// </summary>
         /// <returns>ActionResult</returns>
-        public ActionResult TicketTable([Bind(Include = "TicketSubmitterID,AssignedToID,ProjectID,TicketPriorityID,TicketStatusID,TicketTypeID,RelatedTicketID,CreatedDate,DateLastUpdated,Title")]TicketViewModel search, int page = 1, int pageSize = 10)
+        public ActionResult TicketTable(
+            [Bind(Include = "TicketSubmitterID,AssignedToID,ProjectID,TicketPriorityID,TicketStatusID,TicketTypeID,RelatedTicketID")]TicketViewModel filters,
+            string sort,
+            string orderAscending,
+            int page = 1,
+            int pageSize = 10
+        )
         {
             // was worrying about how the controller was going to pass the paramaters from the starting action to this action but the paramaters will always be given explicit from ajax call.
 
             // Check to only allow ajax and child actions.
-            //var notPartialRequest = !(Request.IsAjaxRequest() || ControllerContext.IsChildAction);
-            //if (notPartialRequest)
-            //    return View("Error");
+            var notPartialRequest = !(Request.IsAjaxRequest() || ControllerContext.IsChildAction);
+            if (notPartialRequest)
+                return View("Error");
 
-            //var stuf = ViewBag.GetType();
 
-            // Check your inputs!!
-            //search.Decode();
+            // save filter paramaters in viewbag.
+            // Saving of inputs is happening before checking of inputs b/c we want to save nulls if thats what we are given, but we cannot use nulls.
+            ViewBag.CurrentFilters = filters;
+            ViewBag.Sort = sort;
+            ViewBag.OrderA = orderAscending;
 
+
+            // Check your inputs!
+            //(b/c our inputs are mostly numbers, which won't have spaces to convert,we don't have to check those inputs)
+            orderAscending = orderAscending ?? "true"; // default is set to be true.
+            sort = sort ?? "false";
+
+
+            // get the tickets with all of their data.
             var tickets = db.Tickets
-                .Include(t => t.Project)
-                .Include(t => t.TicketPriority)
-                .Include(t => t.TicketStatus)
-                .Include(t => t.TicketType)
-                .Include(t => t.Ticket1)
-                .Include(t => t.User)
-                .Include(t => t.User1);
+                                .Include(t => t.Project)
+                                .Include(t => t.TicketPriority)
+                                .Include(t => t.TicketStatus)
+                                .Include(t => t.TicketType)
+                                .Include(t => t.Ticket1)
+                                .Include(t => t.User)
+                                .Include(t => t.User1);
 
-            // FIGURE OUT HOW TO DO A DYNAMIC SEARCH.
+            // add filtering to tickets.
+            tickets = tickets
+                        .Where(t => filters.ID == null || t.ID == filters.ID)
+                        .Where(t => filters.TicketPriorityID == null || t.TicketPriorityID == filters.TicketPriorityID)
+                        .Where(t => filters.TicketStatusID == null || t.TicketStatusID == filters.TicketStatusID)
+                        .Where(t => filters.AssignedToID == null || t.AssignedToID == filters.AssignedToID)
+                        .Where(t => filters.ProjectID == null || t.ProjectID == filters.ProjectID)
+                        .Where(t => filters.TicketSubmitterID == null || t.TicketSubmitterID == filters.TicketSubmitterID)
+                        .Where(t => filters.TicketTypeID == null || t.TicketTypeID == filters.TicketTypeID);
 
-            // select everything to a the ViewModel
-            var model = tickets.Select(t => new TicketViewModel
+            // apply ordering only if we need to.
+            // by default it should be ascending, ONLY when we are passed false should it be descending.
+            if (sort != "false")
             {
-                ID = t.ID,
-                User = t.User,
-                User1 = t.User1,
-                Comments = t.Comments,
-                CreatedDate = t.CreatedDate,
-                DateLastUpdated = (DateTime)t.DateLastUpdated,
-                Description = t.Description,
-                Notifications = t.Notifications,
-                Project = t.Project,
-                Resolution = t.Resolution,
-                Ticket1 = t.Ticket1,
-                TicketPriority = t.TicketPriority,
-                TicketStatus = t.TicketStatus,
-                Title = t.Title,
-                TicketType = t.TicketType
-            });
+                if (orderAscending == "false")
+                {
+                    tickets = tickets.OrderBy(sort);
+                }
+                else
+                {
+                    // the view reverses our order, so "ascending" is orderbyDescending here.
+                    var reversedTickets = tickets.OrderBy(sort).ToList();
+                    reversedTickets.Reverse();
 
+                    return PartialView("_TicketTable", reversedTickets.ToPagedList(page, pageSize));
+                }
+            }
 
-            return PartialView("_TicketTable", model.ToList());
+            return PartialView("_TicketTable", tickets.OrderBy(t => false).ToPagedList(page, pageSize));
         }
 
 
@@ -120,7 +143,7 @@ namespace BugTracker.Controllers
             //return View(await tickets.ToListAsync());
             return View();
         }
-#endregion
+        #endregion
 
 
         #region Details
@@ -205,7 +228,7 @@ namespace BugTracker.Controllers
             ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName", ticket.AssignedToID);
             return View(ticket);
         }
-        
+
 
 
         // POST: Tickets/Edit/5
@@ -261,6 +284,7 @@ namespace BugTracker.Controllers
         }
 
         #endregion
+
 
         protected override void Dispose(bool disposing)
         {

@@ -87,7 +87,7 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
           <Property Name="TicketStatusID" Type="int" />
           <Property Name="TicketTypeID" Type="int" />
           <Property Name="RelatedTicketID" Type="int" />
-          <Property Name="DateLastUpdated" Type="date" />
+          <Property Name="DateLastUpdated" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="TicketStatuses">
           <Key>
@@ -491,7 +491,7 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
           <Property Name="TicketStatusID" Type="Int32" />
           <Property Name="TicketTypeID" Type="Int32" />
           <Property Name="RelatedTicketID" Type="Int32" />
-          <Property Name="DateLastUpdated" Type="DateTime" Precision="0" />
+          <Property Name="DateLastUpdated" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Ticket" FromRole="Tickets" ToRole="Comments" />
           <NavigationProperty Name="Notifications" Relationship="Self.FK_Notifications_Ticket" FromRole="Tickets" ToRole="Notifications" />
           <NavigationProperty Name="Project" Relationship="Self.FK_Ticket_Project" FromRole="Tickets" ToRole="Projects" />
@@ -722,7 +722,7 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
           <End Role="Projects" Type="Self.Project" Multiplicity="*" />
           <End Role="Users" Type="Self.User" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="BugTrackerEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Notifications" EntityType="Self.Notification" />
           <EntitySet Name="Projects" EntityType="Self.Project" />
@@ -803,7 +803,7 @@ warning 6002: The table/view 'BugTracker.dbo.ProjectUsers' does not have a prima
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="BugTrackerEntities">
+        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="BugTrackerModel.Comment">
               <MappingFragment StoreEntitySet="Comments">

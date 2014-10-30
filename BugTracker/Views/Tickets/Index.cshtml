@@ -7,13 +7,19 @@
 <h2>Index</h2>
 
 <p>
+    Put Cool Navigation form here.
+</p>
+
+
+<p>
     @Html.ActionLink("Create New", "Create")
 </p>
 
 @* Ticket Table *@
-@Html.Action("TicketTable")
-
+<div id="ticket-table">
+    @Html.Action("TicketTable")
+</div>
 
 @section Scripts {
-
+    <script src="~/Scripts/IndexJS.js"></script>
 }

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f829b7099df2417198b6de1c6268cdce" Name="Diagram1">
+      <Diagram DiagramId="213c95599d5341f1861ab7ea26f579db" Name="Diagram1">
         <EntityTypeShape EntityType="BugTrackerModel.Comment" Width="1.5" PointX="7.5" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="BugTrackerModel.Notification" Width="1.5" PointX="10.5" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="BugTrackerModel.Project" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />

@@ -1,37 +1,99 @@
-﻿@model IEnumerable<BugTracker.Models.TicketViewModel>
+﻿@model PagedList.IPagedList<BugTracker.Models.Ticket>
 
 @using BugTracker.Models;
-@using System.Dynamic;
+@using PagedList;
+@using PagedList.Mvc;
 
-@{
-    Ticket currentSearch = ViewBag.MyTicket ?? new Ticket();
-    ViewBag.CurrentSearch = ViewBag.CurrentSearch ?? new TicketViewModel();
-    
-}
-
-@helper a(string prop, int value)
+@helper  AFilter(string prop, int? value, string sort = null, string orderA = null)
 {
-    @*@Url.Action("TicketTable", ViewBag.CurrentSearch.ToSearchObj(prop, value))*@
+    // want sort to be the viewbag sort if nothing is passed in, which chould still be null.
+    sort = sort ?? ViewBag.Sort;
+    orderA = orderA ?? ViewBag.OrderA;
+
+    // this has to accept nullable ints b/c some of the values can be null. but the function should only accept number.
+    if (value != null)
+    {
+        @Url.Action("TicketTable", ViewBag.CurrentFilters.ToSearchObj(prop, (int)value, sort, orderA))
+    }
 }
 
+@helper  ASort(string prop)
+{
+    // helper to create the sorting url.
+    @Url.Action("TicketTable", ViewBag.CurrentFilters.ToSearchObj(null, 0, prop, PickOrder(prop).ToString().Trim()))
+}
+
+@helper  PickOrder(string prop)
+{
+    // function should return "Descending"(false) if I click on a property that's already being sorted Ascendingly.
+    if (ViewBag.Sort == prop && ViewBag.OrderA != "false")
+    {
+        <text>false</text>
+    }
+}
+
+@helper  AddArrow(string column)
+{
+    // Helper to add an appropriate arrow if sorting ascending or descending
+    if (column == ViewBag.Sort)
+    {
+        if (ViewBag.OrderA == "false")
+        {
+            <span class="caret"></span>
+        }
+        else
+        {
+            <span class="dropup">
+                <span class="caret"></span>
+            </span>
+        }
+    }
+}
+
+@helper MyPager()
+{
+    <div class="text-center">
+        @Html.PagedListPager(
+    Model,
+    (i) => Url.Action("TicketTable", new
+    {
+        ID = ViewBag.CurrentFilters.ID,
+        TicketPriorityID = ViewBag.CurrentFilters.TicketPriorityID,
+        TicketStatusID = ViewBag.CurrentFilters.TicketStatusID,
+        AssignedToID = ViewBag.CurrentFilters.AssignedToID,
+        ProjectID = ViewBag.CurrentFilters.ProjectID,
+        TicketSubmitterID = ViewBag.CurrentFilters.TicketSubmitterID,
+        TicketTypeID = ViewBag.CurrentFilters.TicketTypeID,
+        sort = ViewBag.sort,
+        orderAscending = ViewBag.orderA,
+        page = i,
+        pageSize = ViewBag.PageSize
+    }),
+    PagedListRenderOptions.MinimalWithItemCountText
+    )
+    </div>
+}
+@* ------------------------------------------------------------------------------------------------------------------------- *@
 
 <p>
     I SHOULD PROBABLY PUT A BREAD CRUMB RIGHT HERE!
 </p>
+
+@MyPager()
+
 <table class="table">
     <tr>
-
-        <th>@Html.DisplayNameFor(model => model.Title)</th>
-        <th>@Html.DisplayNameFor(model => model.TicketStatus.Status)</th>
-        <th>@Html.DisplayNameFor(model => model.AssignedToID)</th>
-        <th>@Html.DisplayNameFor(model => model.DateLastUpdated)</th>
-        <th>@Html.DisplayNameFor(model => model.TicketType.Type)</th>
-        <th>@Html.DisplayNameFor(model => model.Description)</th>
-        <th>@Html.DisplayNameFor(model => model.RelatedTicketID)</th>
-        <th>Project</th>
-        <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
-        <th>@Html.DisplayNameFor(model => model.TicketSubmitterID)</th>
-        <th>@Html.DisplayNameFor(model => model.TicketPriority.Priority)</th>
+        <th><a href="">Title</a></th>
+        <th><a href="@ASort("TicketStatusID")">Status @AddArrow("TicketStatusID")</a></th>
+        <th><a href="@ASort("AssignedToID")">Assigned developer @AddArrow("AssignedToID")</a></th>
+        <th><a href="@ASort("DateLastUpdated")">Date Last updated @AddArrow("DateLastUpdated")</a></th>
+        <th><a href="@ASort("TicketTypeID")">Type @AddArrow("TicketTypeID")</a></th>
+        <th><a href="">Description</a></th>
+        <th><a href="@ASort("ID")">Related ticket @AddArrow("ID")</a></th>
+        <th><a href="@ASort("ProjectID")">Project @AddArrow("ProjectID")</a></th>
+        <th><a href="@ASort("CreatedDate")">Date submitted @AddArrow("CreatedDate")</a></th>
+        <th><a href="@ASort("TicketSubmitterID")">Submitter @AddArrow("TicketSubmitterID")</a></th>
+        <th><a href="@ASort("TicketPriorityID")">Priority level @AddArrow("TicketPriorityID")</a></th>
         <th></th>@*buttom column*@
     </tr>
 
@@ -39,19 +101,19 @@
     {
         <tr>
             <td>@item.Title</td>
-            <td><a href="@a("TicketStatusID", item.TicketStatus.ID)">@item.TicketStatus.Status</a></td>
-            <td><a href="@a("AssignedToID", item.User1.ID)">@item.User1.ASPUserName</a></td>
+            <td><a href="@AFilter("TicketStatusID", item.TicketStatus.ID)">@item.TicketStatus.Status</a></td>
+            <td><a href="@AFilter("AssignedToID", item.AssignedToID)">@item.User1.ASPUserName</a></td>
             <td>@item.DateLastUpdated.ToShortDateString()<br /><i>(@((DateTime.Now - item.DateLastUpdated).Days) days ago)</i></td>
-            <td><a href="@a("TicketTypeID", item.TicketType.ID)">@item.TicketType.Type</a></td>
+            <td><a href="@AFilter("TicketTypeID", item.TicketType.ID)">@item.TicketType.Type</a></td>
             <td>@item.Description</td>
-            <td><a href="@a("ID", item.Ticket1.ID)">@item.RelatedTicketID</a></td>
-            <td><a href="@a("ProjectID", item.Project.ID)">@item.Project.ProjectName</a></td>
+            <td><a href="@AFilter("ID", item.RelatedTicketID)">@item.RelatedTicketID</a></td>
+            <td><a href="@AFilter("ProjectID", item.Project.ID)">@item.Project.ProjectName</a></td>
             <td>@item.CreatedDate.ToShortDateString()<br /><i>(@((DateTime.Now - item.CreatedDate).Days) days ago)</i></td>
-            <td><a href="@a("TicketSubmitterID", item.User.ID)">@item.User.ASPUserName</a></td>
-            <td><a href="@a("TicketPriorityID", item.TicketPriority.ID)">@item.TicketPriority.Priority</a></td>
+            <td><a href="@AFilter("TicketSubmitterID", item.User.ID)">@item.User.ASPUserName</a></td>
+            <td><a href="@AFilter("TicketPriorityID", item.TicketPriority.ID)">@item.TicketPriority.Priority</a></td>
             <td>
                 <div class="btn-group-vertical">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default"})
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default" })
                     @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary" })
                 </div>
             </td>
@@ -59,3 +121,5 @@
     }
 
 </table>
+
+@MyPager()

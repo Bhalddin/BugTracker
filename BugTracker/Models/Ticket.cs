@@ -35,7 +35,7 @@ namespace BugTracker.Models
         public Nullable<int> TicketStatusID { get; set; }
         public Nullable<int> TicketTypeID { get; set; }
         public Nullable<int> RelatedTicketID { get; set; }
-        public Nullable<System.DateTime> DateLastUpdated { get; set; }
+        public System.DateTime DateLastUpdated { get; set; }
     
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
