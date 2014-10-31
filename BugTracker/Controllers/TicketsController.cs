@@ -38,15 +38,13 @@ namespace BugTracker.Controllers
             int pageSize = 10
         )
         {
-            // was worrying about how the controller was going to pass the paramaters from the starting action to this action but the paramaters will always be given explicit from ajax call.
-
-            // Check to only allow ajax and child actions.
+            // Only allow ajax and child actions.
             var notPartialRequest = !(Request.IsAjaxRequest() || ControllerContext.IsChildAction);
             if (notPartialRequest)
                 return View("Error");
 
 
-            // save filter paramaters in viewbag.
+            // Save filter paramaters in viewbag.
             // Saving of inputs is happening before checking of inputs b/c we want to save nulls if thats what we are given, but we cannot use nulls.
             ViewBag.CurrentFilters = filters;
             ViewBag.Sort = sort;
@@ -56,7 +54,7 @@ namespace BugTracker.Controllers
             // Check your inputs!
             //(b/c our inputs are mostly numbers, which won't have spaces to convert,we don't have to check those inputs)
             orderAscending = orderAscending ?? "true"; // default is set to be true.
-            sort = sort ?? "false";
+            sort = (sort == null || sort == "") ? "false" : sort;
 
 
             // get the tickets with all of their data.
@@ -79,24 +77,24 @@ namespace BugTracker.Controllers
                         .Where(t => filters.TicketSubmitterID == null || t.TicketSubmitterID == filters.TicketSubmitterID)
                         .Where(t => filters.TicketTypeID == null || t.TicketTypeID == filters.TicketTypeID);
 
-            // apply ordering only if we need to.
+            // apply sorting only if we need to.
             // by default it should be ascending, ONLY when we are passed false should it be descending.
             if (sort != "false")
             {
-                if (orderAscending == "false")
+                if (orderAscending == "false") // sort descending if orderA is false.
                 {
-                    tickets = tickets.OrderBy(sort);
+                    return PartialView("_TicketTable", tickets.OrderBy(sort).ToPagedList(page, pageSize));
                 }
-                else
+                else // sort ascending otherwise.
                 {
-                    // the view reverses our order, so "ascending" is orderbyDescending here.
-                    var reversedTickets = tickets.OrderBy(sort).ToList();
+                    var reversedTickets = tickets.OrderBy(sort);
                     reversedTickets.Reverse();
 
                     return PartialView("_TicketTable", reversedTickets.ToPagedList(page, pageSize));
                 }
             }
 
+            // no sorting.
             return PartialView("_TicketTable", tickets.OrderBy(t => false).ToPagedList(page, pageSize));
         }
 
@@ -124,7 +122,6 @@ namespace BugTracker.Controllers
         }
 
         #endregion
-
 
 
         #region Index
@@ -169,13 +166,13 @@ namespace BugTracker.Controllers
         // GET: Tickets/Create
         public ActionResult Create()
         {
-            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "Project_Name");
-            ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority");
-            ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "StatusID", "Status");
+            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName");
+            //ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority");
+            //ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "ID", "Status");
             ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type");
             ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description");
-            ViewBag.TicketSubmitterID = new SelectList(db.Users, "ID", "FirstName");
-            ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName");
+            //ViewBag.TicketSubmitterID = new SelectList(db.Users, "ID", "FirstName");
+            //ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName");
             return View();
         }
 
@@ -184,23 +181,29 @@ namespace BugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,CreatedDate,TicketSubmitterID,AssignedToID,ProjectID,Description,Resolution,TicketPriorityID,TicketStatusID,TicketTypeID,RelatedTicketID,DateLastUpdated")] Ticket ticket)
+        public async Task<ActionResult> Create([Bind(Include = "TicketSubmitterID,ProjectID,Title,Description,TicketTypeID,RelatedTicketID")] TicketViewModel ticketVM)
         {
             if (ModelState.IsValid)
             {
+                var a = Request.UserHostAddress;
+
+                // HOPEFULLY can set the Submitter name here, so that it's safer.
+                
+                Ticket ticket = new Ticket(ticketVM);
+
                 db.Tickets.Add(ticket);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "Project_Name", ticket.ProjectID);
-            ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticket.TicketPriorityID);
-            ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "StatusID", "Status", ticket.TicketStatusID);
-            ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type", ticket.TicketTypeID);
-            ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description", ticket.RelatedTicketID);
-            ViewBag.TicketSubmitterID = new SelectList(db.Users, "ID", "FirstName", ticket.TicketSubmitterID);
-            ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName", ticket.AssignedToID);
-            return View(ticket);
+            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", ticketVM.ProjectID);
+            ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticketVM.TicketPriorityID);
+            ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "StatusID", "Status", ticketVM.TicketStatusID);
+            ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type", ticketVM.TicketTypeID);
+            ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description", ticketVM.RelatedTicketID);
+            ViewBag.TicketSubmitterID = new SelectList(db.Users, "ID", "FirstName", ticketVM.TicketSubmitterID);
+            ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName", ticketVM.AssignedToID);
+            return View(ticketVM);
         }
 
         #endregion
@@ -219,7 +222,7 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "Project_Name", ticket.ProjectID);
+            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", ticket.ProjectID);
             ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticket.TicketPriorityID);
             ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "StatusID", "Status", ticket.TicketStatusID);
             ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type", ticket.TicketTypeID);
@@ -244,7 +247,7 @@ namespace BugTracker.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "Project_Name", ticket.ProjectID);
+            ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", ticket.ProjectID);
             ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticket.TicketPriorityID);
             ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "StatusID", "Status", ticket.TicketStatusID);
             ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type", ticket.TicketTypeID);

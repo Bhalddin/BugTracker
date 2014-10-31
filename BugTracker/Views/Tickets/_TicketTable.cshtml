@@ -50,7 +50,7 @@
     }
 }
 
-@helper MyPager()
+@helper  MyPager() // helper to easily create a pager group, and not clutter up the page.
 {
     <div class="text-center">
         @Html.PagedListPager(
@@ -81,44 +81,47 @@
 
 @MyPager()
 
-<table class="table">
-    <tr>
-        <th><a href="">Title</a></th>
-        <th><a href="@ASort("TicketStatusID")">Status @AddArrow("TicketStatusID")</a></th>
-        <th><a href="@ASort("AssignedToID")">Assigned developer @AddArrow("AssignedToID")</a></th>
-        <th><a href="@ASort("DateLastUpdated")">Date Last updated @AddArrow("DateLastUpdated")</a></th>
-        <th><a href="@ASort("TicketTypeID")">Type @AddArrow("TicketTypeID")</a></th>
-        <th><a href="">Description</a></th>
-        <th><a href="@ASort("ID")">Related ticket @AddArrow("ID")</a></th>
-        <th><a href="@ASort("ProjectID")">Project @AddArrow("ProjectID")</a></th>
-        <th><a href="@ASort("CreatedDate")">Date submitted @AddArrow("CreatedDate")</a></th>
-        <th><a href="@ASort("TicketSubmitterID")">Submitter @AddArrow("TicketSubmitterID")</a></th>
-        <th><a href="@ASort("TicketPriorityID")">Priority level @AddArrow("TicketPriorityID")</a></th>
-        <th></th>@*buttom column*@
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<table class="table table-hover table-responsive text-center">
+    <thead>
         <tr>
-            <td>@item.Title</td>
-            <td><a href="@AFilter("TicketStatusID", item.TicketStatus.ID)">@item.TicketStatus.Status</a></td>
-            <td><a href="@AFilter("AssignedToID", item.AssignedToID)">@item.User1.ASPUserName</a></td>
-            <td>@item.DateLastUpdated.ToShortDateString()<br /><i>(@((DateTime.Now - item.DateLastUpdated).Days) days ago)</i></td>
-            <td><a href="@AFilter("TicketTypeID", item.TicketType.ID)">@item.TicketType.Type</a></td>
-            <td>@item.Description</td>
-            <td><a href="@AFilter("ID", item.RelatedTicketID)">@item.RelatedTicketID</a></td>
-            <td><a href="@AFilter("ProjectID", item.Project.ID)">@item.Project.ProjectName</a></td>
-            <td>@item.CreatedDate.ToShortDateString()<br /><i>(@((DateTime.Now - item.CreatedDate).Days) days ago)</i></td>
-            <td><a href="@AFilter("TicketSubmitterID", item.User.ID)">@item.User.ASPUserName</a></td>
-            <td><a href="@AFilter("TicketPriorityID", item.TicketPriority.ID)">@item.TicketPriority.Priority</a></td>
-            <td>
-                <div class="btn-group-vertical">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default" })
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary" })
-                </div>
-            </td>
+            <th><a href="">Title</a></th>
+            <th><a href="@ASort("TicketStatusID")">Status @AddArrow("TicketStatusID")</a></th>
+            <th><a href="@ASort("User1.ASPUserName")">Assigned developer @AddArrow("User1.ASPUserName")</a></th>
+            <th><a href="@ASort("DateLastUpdated")">Date Last updated @AddArrow("DateLastUpdated")</a></th>
+            <th><a href="@ASort("TicketTypeID")">Type @AddArrow("TicketTypeID")</a></th>
+            <th><a>Description</a></th>
+            <th><a href="@ASort("ID")">Related ticket @AddArrow("ID")</a></th>
+            <th><a href="@ASort("Project.ProjectName")">Project @AddArrow("Project.ProjectName")</a></th>
+            <th><a href="@ASort("CreatedDate")">Date submitted @AddArrow("CreatedDate")</a></th>
+            <th><a href="@ASort("User.ASPUserName")">Submitter @AddArrow("User.ASPUserName")</a></th>
+            <th><a href="@ASort("TicketPriorityID")">Priority level @AddArrow("TicketPriorityID")</a></th>
+            <th></th>@*buttom column*@
         </tr>
-    }
+    </thead>
+    <tbody class="text-center">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td><a href="@AFilter("TicketStatusID", item.TicketStatus.ID)">@item.TicketStatus.Status</a></td>
+                <td><a href="@AFilter("AssignedToID", item.AssignedToID)">@item.User1.ASPUserName</a></td>
+                <td>@item.DateLastUpdated.ToShortDateString()<br /><i>(@((DateTime.Now - item.DateLastUpdated).Days) days ago)</i></td>
+                <td><a href="@AFilter("TicketTypeID", item.TicketType.ID)">@item.TicketType.Type</a></td>
+                <td>@item.Description</td>
+                <td><a href="@AFilter("ID", item.RelatedTicketID)">@item.RelatedTicketID</a></td>
+                <td><a href="@AFilter("ProjectID", item.Project.ID)">@item.Project.ProjectName</a></td>
+                <td>@item.CreatedDate.ToShortDateString()<br /><i>(@((DateTime.Now - item.CreatedDate).Days) days ago)</i></td>
+                <td><a href="@AFilter("TicketSubmitterID", item.User.ID)">@item.User.ASPUserName</a></td>
+                <td><a href="@AFilter("TicketPriorityID", item.TicketPriority.ID)">@item.TicketPriority.Priority</a></td>
+                <td>
+                    <div class="btn-group-vertical">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary" })
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
 
 </table>
 

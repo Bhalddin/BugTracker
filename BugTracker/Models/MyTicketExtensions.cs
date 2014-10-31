@@ -8,6 +8,22 @@ namespace BugTracker.Models
     public partial class Ticket
     {
 
+        public Ticket(TicketViewModel ticketVM)
+        {
+            // default new ticket settings.
+            this.CreatedDate = DateTime.UtcNow;
+            this.DateLastUpdated = DateTime.UtcNow;
+            this.TicketPriorityID = 1; // undefined
+            this.TicketStatusID = 1; // new
+            this.TicketTypeID = ticketVM.TicketTypeID ?? 1; // undefined
+
+            this.TicketSubmitterID = (int)ticketVM.TicketSubmitterID;
+            this.ProjectID = (int)ticketVM.ProjectID;
+            this.Title = ticketVM.Title;
+            this.Description = ticketVM.Description;
+            this.RelatedTicketID = ticketVM.RelatedTicketID;
+        }
+
         //// func to help me chose the correct value for my toSearchObj function.
         //Func<string, string, int, int?, int?> Chose =
         //    (_prop, _check, _value, _default) =>
