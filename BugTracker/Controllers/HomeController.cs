@@ -15,7 +15,7 @@ namespace BugTracker.Controllers
             //TODO:: create View so that anyone can log in as an admin, developer, or SimpleLogin so they can see 
             // what it will look like to be in those roles.
 
-            return Content("Login as any role coming soon....");
+            return View();
         }
 
         public ActionResult About()

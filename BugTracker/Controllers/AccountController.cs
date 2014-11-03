@@ -127,7 +127,7 @@ namespace BugTracker.Controllers
 
         //
         //GET: /Account/ListRoles
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult ListRoles()
         {
             // Action to view all of the current roles in our db.
@@ -144,7 +144,7 @@ namespace BugTracker.Controllers
 
 
         // GET: /Account/AssignUserRole
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult AssignUserRole(string roleId)
         {
             // CHECK YOUR INPUTS!!
@@ -182,7 +182,7 @@ namespace BugTracker.Controllers
 
         // POST: /Account/AssigneUserRole
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public ActionResult AssignUserRole(UserRoleViewModel model)
         {
@@ -212,7 +212,7 @@ namespace BugTracker.Controllers
 
 
         // GET: /Account/UnassignUserRole
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult UnassignUserRole(string roleId)
         {
             // CHECK YOUR INPUTS!!
@@ -246,7 +246,7 @@ namespace BugTracker.Controllers
 
         // POST: /Account/UnassignUserRole
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public ActionResult UnassignUserRole(UserRoleViewModel model)
         {
