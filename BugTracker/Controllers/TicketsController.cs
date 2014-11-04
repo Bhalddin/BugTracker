@@ -142,7 +142,13 @@ namespace BugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ticket ticket = await db.Tickets.FindAsync(id);
+
+            Ticket ticket = await db.Tickets
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .Include(t => t.TicketPriority)
+                .SingleOrDefaultAsync(t=>t.ID == id);
+
             if (ticket == null)
             {
                 return HttpNotFound();
@@ -232,10 +238,13 @@ namespace BugTracker.Controllers
 
             // fix the view to display info on the tickets using the ticket1 item.
             // and disable fields that shouldn't be edited.
+            var aspUserDb = new ApplicationDbContext();
+            var developerRole = aspUserDb.Roles.Single(r => r.Name == "Developer");
+            var listOfDevelopers = aspUserDb.Users.Where(u => u.Roles.Any(r => r.RoleId == developerRole.Id)).Select(u => u.UserName).ToList();
 
             ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Title", ticket.RelatedTicketID);
-            ViewBag.TicketSubmitterID = new SelectList(db.Users,"ID", "ASPUserName", ticket.TicketSubmitterID);
-            ViewBag.AssignedToID = new SelectList(db.Users, "ID", "ASPUserName", ticket.AssignedToID);
+            ViewBag.TicketSubmitterID = new SelectList(db.Users ,"ID", "ASPUserName", ticket.TicketSubmitterID);
+            ViewBag.AssignedToID = new SelectList(db.Users.Where(u => listOfDevelopers.Any(d => d == u.ASPUserName)), "ID", "ASPUserName", ticket.AssignedToID);
             return View(ticket);
         }
 
@@ -246,13 +255,18 @@ namespace BugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,AssignedToID,ProjectID,Description,Resolution,TicketPriorityID,TicketStatusID,TicketTypeID,RelatedTicketID,DateLastUpdated")] Ticket ticket)
+        public async Task<ActionResult> Edit(TicketViewModel ticketVM)
         {
+            var req = Request.Form;
+
+            // create ticket from ticketViewmodel
+            Ticket ticket = new Ticket(ticketVM);
+
             if (ModelState.IsValid)
             {
                 db.Entry(ticket).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = ticket.ID });
             }
             ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", ticket.ProjectID);
             ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticket.TicketPriorityID);
@@ -261,6 +275,10 @@ namespace BugTracker.Controllers
             ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description", ticket.RelatedTicketID);
             ViewBag.TicketSubmitterID = new SelectList(db.Users, "ID", "FirstName", ticket.TicketSubmitterID);
             ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName", ticket.AssignedToID);
+
+            ViewBag.TicketTitle = ticket.Title;
+            ViewBag.Description = ticket.Description;
+
             return View(ticket);
         }
         #endregion

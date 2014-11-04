@@ -51,7 +51,7 @@ namespace BugTracker.Models
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Must enter a description")]
-        [RegularExpression(@"^\W*(\w\W*){50}.*", ErrorMessage = "Please add more detail to your description. ex: where, what, why, when, etc...")]
+        [RegularExpression(@"^\W*(\w\W*){5}.*", ErrorMessage = "Please add more detail to your description. ex: where, what, why, when, etc...")]
         public string Description { get; set; }
 
         public string Resolution { get; set; }
@@ -125,10 +125,5 @@ namespace BugTracker.Models
             return searchObject;
         }
 
-
-        internal void Decode()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -11,34 +11,37 @@
     <hr />
     <dl class="dl-horizontal">
 
-        <dt>@Html.DisplayNameFor(model => model.User.ASPUserName)</dt>
+        <dt>Ticket Submitter</dt>
         <dd>@Html.DisplayFor(model => model.User.ASPUserName)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.User1.ASPUserName)</dt>
-        <dd>@Html.DisplayFor(model => model.User.ASPUserName)</dd>
+        <dt>Assigned developer</dt>
+        <dd>@Html.DisplayFor(model => model.User1.ASPUserName)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.CreatedDate)</dt>
-        <dd>@Html.DisplayFor(model => model.CreatedDate)</dd>
+        <dt>Date submitted</dt>
+        <dd>@Model.CreatedDate.ToShortDateString()</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dt>Ticket title</dt>
+        <dd>@Html.DisplayFor(model => model.Title)</dd>
+
+        <dt>Description</dt>
         <dd>@Html.DisplayFor(model => model.Description)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Resolution)</dt>
+        <dt>Resolution</dt>
         <dd>@Html.DisplayFor(model => model.Resolution)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.DateLastUpdated)</dt>
-        <dd>@Html.DisplayFor(model => model.DateLastUpdated)</dd>
+        <dt>Date last updated</dt>
+        <dd>@Model.DateLastUpdated.ToShortDateString()</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Project.ProjectName)</dt>
+        <dt>Project</dt>
         <dd>@Html.DisplayFor(model => model.Project.ProjectName)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.TicketPriority.Priority)</dt>
+        <dt>Priority level</dt>
         <dd>@Html.DisplayFor(model => model.TicketPriority.Priority)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.TicketStatus.Status)</dt>
+        <dt>Ticket status</dt>
         <dd>@Html.DisplayFor(model => model.TicketStatus.Status)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.TicketType.Type)</dt>
+        <dt>Ticket type</dt>
         <dd>@Html.DisplayFor(model => model.TicketType.Type)</dd>
 
     </dl>

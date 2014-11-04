@@ -10,12 +10,29 @@ namespace BugTracker.Models
 
         public Ticket(TicketViewModel ticketVM)
         {
-            // default new ticket settings.
-            this.CreatedDate = DateTime.UtcNow;
-            this.DateLastUpdated = DateTime.UtcNow;
-            this.TicketPriorityID = 1; // undefined
-            this.TicketStatusID = 1; // new
-            this.TicketTypeID = ticketVM.TicketTypeID ?? 1; // undefined
+
+            if (ticketVM.ID != null)
+            {
+                this.ID = (int)ticketVM.ID;
+                this.CreatedDate = ticketVM.CreatedDate;
+                this.DateLastUpdated = ticketVM.DateLastUpdated;
+                this.TicketPriorityID = ticketVM.TicketPriorityID;
+                this.TicketStatusID = ticketVM.TicketStatusID;
+                this.TicketTypeID = ticketVM.TicketTypeID;
+            }
+            else
+            {
+                // default new ticket settings.
+                this.CreatedDate = DateTime.UtcNow;
+                this.DateLastUpdated = DateTime.UtcNow;
+                this.TicketPriorityID = 1; // undefined
+                this.TicketStatusID = 1; // new
+                this.TicketTypeID = ticketVM.TicketTypeID ?? 1; // undefined
+            }
+
+            this.AssignedToID = ticketVM.AssignedToID;
+
+
 
             this.TicketSubmitterID = (int)ticketVM.TicketSubmitterID;
             this.ProjectID = (int)ticketVM.ProjectID;
