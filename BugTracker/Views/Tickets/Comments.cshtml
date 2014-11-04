@@ -1,0 +1,11 @@
+﻿@model IEnumerable<BugTracker.Models.Comment>
+
+@{
+    ViewBag.Title = "Comments";
+}
+
+<h2>Comments</h2>
+
+@Html.Action("Index", "Comments", new { id = ViewBag.id })
+
+@Html.Action("Create", "Comments", new { id = ViewBag.id })

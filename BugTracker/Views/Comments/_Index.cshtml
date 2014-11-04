@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BugTracker.Models.Comment>
+
+<table class="table">
+    <tr>
+        <th>
+            Date added
+        </th>
+        <th>
+            Comment
+        </th>
+        <th>
+            Commentor
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @item.CommentDate.ToShortDateString()
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comment1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.ASPUserName)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
+        </td>
+    </tr>
+}
+
+</table>
+
+<p>
+    @Html.ActionLink("Add new comment", "Create", new { id = ViewBag.TicketID }, new { id = ViewBag.TicketID, @class = "btn btn-info" })
+</p>

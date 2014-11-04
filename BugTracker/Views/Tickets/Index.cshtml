@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Index";
+    bool IsAdmin = User.IsInRole("Administrator");
+    bool IsAuth = User.IsInRole("Administrator") || User.IsInRole("Developer");
 }
 
 
@@ -13,51 +15,77 @@
 
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New ticket", "Create", null, new { @class = "btn btn-success" })
 </p>
 
 @* Radios to select which colums are being displayed. *@
 
-<h3><b>COLUMN SELECTOR</b></h3>
+<details class="alert alert-success">
+    <summary class="text-center">
+        <b>COLUMN SELECTOR</b>
+    </summary>
     <table id="col-selector" class="table table-condensed text-center">
         <thead>
             <tr>
                 <th>Title</th>
                 <th>Status</th>
-                <th>Assigned developer</th>
-                <th>Date Last updated</th>
+                @if (IsAdmin)
+                {
+                    <th>Assigned developer</th>
+                }
+                @if (IsAuth)
+                {
+                    <th>Date Last updated</th>
+                }
                 <th>Type</th>
                 <th>Description</th>
                 <th>Related ticket</th>
                 <th>Project</th>
                 <th>Date submitted</th>
-                <th>Submitter</th>
-                <th>Priority level</th>
+                @if (IsAuth)
+                {
+                    <th>Submitter</th>
+                    <th>Priority level</th>
+                }
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td><input type="checkbox" name="c1" value=".col1" checked /></td>
                 <td><input type="checkbox" name="c2" value=".col2" checked /></td>
-                <td><input type="checkbox" name="c3" value=".col3" checked /></td>
-                <td><input type="checkbox" name="c4" value=".col4" checked /></td>
+                @if (IsAdmin)
+                {
+                    <td><input type="checkbox" name="c3" value=".col3" checked /></td>
+                }
+                @if (IsAuth)
+                {
+                    <td><input type="checkbox" name="c4" value=".col4" checked /></td>
+                }
                 <td><input type="checkbox" name="c5" value=".col5" checked /></td>
                 <td><input type="checkbox" name="c6" value=".col6" checked /></td>
                 <td><input type="checkbox" name="c7" value=".col7" /></td>
                 <td><input type="checkbox" name="c8" value=".col8" checked /></td>
                 <td><input type="checkbox" name="c9" value=".col9" checked /></td>
-                <td><input type="checkbox" name="c10" value=".col10" /></td>
-                <td><input type="checkbox" name="c11" value=".col11" /></td>
-            </tr>
-        </tbody>
-    </table>
+                @if (IsAuth)
+                {
+                    <td><input type="checkbox" name="c10" value=".col10" /></td>
+                    <td><input type="checkbox" name="c11" value=".col11" /></td>
+                }
+        </tr>
+    </tbody>
+</table>
+</details>
 
 
-@* Ticket Table *@
-<div id="ticket-table">
-    @Html.Action("TicketTable")
-</div>
 
-@section Scripts {
-    <script src="~/Scripts/IndexJS.js"></script>
-}
+
+
+
+    @* Ticket Table *@
+    <div id="ticket-table">
+        @Html.Action("TicketTable")
+    </div>
+
+    @section Scripts {
+        <script src="~/Scripts/IndexJS.js"></script>
+    }

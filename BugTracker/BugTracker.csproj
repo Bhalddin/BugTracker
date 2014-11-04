@@ -276,7 +276,9 @@
       <DependentUpon>BugTrackerModels.edmx</DependentUpon>
       <LastGenOutput>BugTrackerModels.cs</LastGenOutput>
     </Content>
+    <None Include="Properties\PublishProfiles\RamseyK-BugTracker - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\RamseyK-BugTracker - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\RamseyK-BugTracker - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\RamseyK-BugTracker - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -351,6 +353,8 @@
     <Content Include="Views\Comments\Details.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
     <Content Include="Views\Comments\Index.cshtml" />
+    <Content Include="Views\Tickets\Comments.cshtml" />
+    <Content Include="Views\Comments\_Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

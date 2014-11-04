@@ -96,6 +96,7 @@ namespace BugTracker
             // Create Roles
             SeedRole("Administrator");
             SeedRole("Developer");
+            SeedRole("default");
 
             
             // function to easily and safely seed users.
@@ -127,8 +128,8 @@ namespace BugTracker
             SeedUser("AdminUser", "Administrator", "admin@admin.com", "Password");
             SeedUser("DevUser1", "Developer", "dev1@dev1.com", "Password");
             SeedUser("DevUser2", "Developer", "dev2@dev2.com", "Password");
-            SeedUser("User1", "Administrator", "user1@user1.com", "Password");
-            SeedUser("User2", "Administrator", "user2@user2.com", "Password");
+            SeedUser("User1", "default", "user1@user1.com", "Password");
+            SeedUser("User2", "default", "user2@user2.com", "Password");
 
         }
     }

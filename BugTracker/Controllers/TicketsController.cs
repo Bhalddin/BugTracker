@@ -147,7 +147,7 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
                 .Include(t => t.TicketPriority)
-                .SingleOrDefaultAsync(t=>t.ID == id);
+                .SingleOrDefaultAsync(t => t.ID == id);
 
             if (ticket == null)
             {
@@ -210,7 +210,7 @@ namespace BugTracker.Controllers
 
             ViewBag.TicketTitle = ticketVM.Title;
             ViewBag.Description = ticketVM.Description;
-                
+
             return View(ticketVM);
         }
 
@@ -219,7 +219,7 @@ namespace BugTracker.Controllers
 
         #region Edit
         // GET: Tickets/Edit/5
-        [Authorize(Roles="Administrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -243,7 +243,7 @@ namespace BugTracker.Controllers
             var listOfDevelopers = aspUserDb.Users.Where(u => u.Roles.Any(r => r.RoleId == developerRole.Id)).Select(u => u.UserName).ToList();
 
             ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Title", ticket.RelatedTicketID);
-            ViewBag.TicketSubmitterID = new SelectList(db.Users ,"ID", "ASPUserName", ticket.TicketSubmitterID);
+            ViewBag.TicketSubmitterID = new SelectList(db.Users.Where(u => u.ID == ticket.TicketSubmitterID), "ID", "ASPUserName", ticket.TicketSubmitterID);
             ViewBag.AssignedToID = new SelectList(db.Users.Where(u => listOfDevelopers.Any(d => d == u.ASPUserName)), "ID", "ASPUserName", ticket.AssignedToID);
             return View(ticket);
         }
@@ -312,6 +312,21 @@ namespace BugTracker.Controllers
         }
 
         #endregion
+
+
+        public ActionResult Comments(int? id)
+        {
+            //check your inputs
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewBag.TicketID = id;
+            var comments = db.Comments.Where(c => c.TicketID == id);
+
+            return View(comments.ToList());
+        }
 
 
         protected override void Dispose(bool disposing)

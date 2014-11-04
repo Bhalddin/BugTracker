@@ -20,7 +20,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.CreatedDate, new { htmlAttributes = new { @class = "form-control", readOnly = "true" } })
+                @Html.EditorFor(model => model.CreatedDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.CreatedDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -28,7 +28,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TicketSubmitterID, "Ticket Submitter", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("TicketSubmitterID", null, htmlAttributes: new { @class = "form-control", readOnly = "true" })
+                @Html.DropDownList("TicketSubmitterID", null, htmlAttributes: new { @class = "form-control readonly", @readonly= true})
                 @Html.ValidationMessageFor(model => model.TicketSubmitterID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group"> 
             @Html.LabelFor(model => model.Title, "Title of ticket", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input class="form-control" type="text" name="Title" value="@Model.Title" />

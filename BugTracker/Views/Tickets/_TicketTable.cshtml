@@ -4,6 +4,11 @@
 @using PagedList;
 @using PagedList.Mvc;
 
+@{
+    bool IsAdmin = User.IsInRole("Administrator");
+    bool IsAuth = User.IsInRole("Administrator") || User.IsInRole("Developer");
+}
+
 @helper  AFilter(string prop, int? value, string sort = null, string orderA = null)
 {
     // want sort to be the viewbag sort if nothing is passed in, which chould still be null.
@@ -86,15 +91,24 @@
         <tr>
             <th class="col1"><a href="">Title</a></th>
             <th class="col2"><a href="@ASort("TicketStatusID")">Status @AddArrow("TicketStatusID")</a></th>
-            <th class="col3"><a href="@ASort("User1.ASPUserName")">Assigned developer @AddArrow("User1.ASPUserName")</a></th>
-            <th class="col4"><a href="@ASort("DateLastUpdated")">Date Last updated @AddArrow("DateLastUpdated")</a></th>
+            @if (IsAdmin)
+            {
+                <th class="col3"><a href="@ASort("User1.ASPUserName")">Assigned developer @AddArrow("User1.ASPUserName")</a></th>
+            }
+            @if (IsAuth)
+            {
+                <th class="col4"><a href="@ASort("DateLastUpdated")">Date Last updated @AddArrow("DateLastUpdated")</a></th>
+            }
             <th class="col5"><a href="@ASort("TicketTypeID")">Type @AddArrow("TicketTypeID")</a></th>
             <th class="col6"><a>Description</a></th>
             <th class="col7"><a href="@ASort("ID")">Related ticket @AddArrow("ID")</a></th>
             <th class="col8"><a href="@ASort("Project.ProjectName")">Project @AddArrow("Project.ProjectName")</a></th>
             <th class="col9"><a href="@ASort("CreatedDate")">Date submitted @AddArrow("CreatedDate")</a></th>
-            <th class="col10"><a href="@ASort("User.ASPUserName")">Submitter @AddArrow("User.ASPUserName")</a></th>
-            <th class="col11"><a href="@ASort("TicketPriorityID")">Priority level @AddArrow("TicketPriorityID")</a></th>
+            @if (IsAuth)
+            {
+                <th class="col10"><a href="@ASort("User.ASPUserName")">Submitter @AddArrow("User.ASPUserName")</a></th>
+                <th class="col11"><a href="@ASort("TicketPriorityID")">Priority level @AddArrow("TicketPriorityID")</a></th>
+            }
             <th></th>@*buttom column*@
         </tr>
     </thead>
@@ -104,22 +118,31 @@
             <tr>
                 <td class="col1">@item.Title</td>
                 <td class="col2"><a href="@AFilter("TicketStatusID", item.TicketStatus.ID)">@item.TicketStatus.Status</a></td>
-                <td class="col3"><a href="@AFilter("AssignedToID", item.AssignedToID)">@((item.User1 != null) ? item.User1.ASPUserName : "")</a></td>
-                <td class="col4">@item.DateLastUpdated.ToShortDateString()<br /><i>(@((DateTime.Now - item.DateLastUpdated).Days) days ago)</i></td>
+                @if (IsAdmin)
+                {
+                    <td class="col3"><a href="@AFilter("AssignedToID", item.AssignedToID)">@((item.User1 != null) ? item.User1.ASPUserName : "")</a></td>
+                }
+                @if (IsAuth)
+                {
+                    <td class="col4">@item.DateLastUpdated.ToShortDateString()<br /><i>(@((DateTime.Now - item.DateLastUpdated).Days) days ago)</i></td>
+                }
                 <td class="col5"><a href="@AFilter("TicketTypeID", item.TicketType.ID)">@item.TicketType.Type</a></td>
                 <td class="col6">@item.Description</td>
                 <td class="col7"><a href="@AFilter("ID", item.RelatedTicketID)">@item.RelatedTicketID</a></td>
                 <td class="col8"><a href="@AFilter("ProjectID", item.Project.ID)">@item.Project.ProjectName</a></td>
                 <td class="col9">@item.CreatedDate.ToShortDateString()<br /><i>(@((DateTime.Now - item.CreatedDate).Days) days ago)</i></td>
-                <td class="col10"><a href="@AFilter("TicketSubmitterID", item.User.ID)">@item.User.ASPUserName</a></td>
-                <td class="col11"><a href="@AFilter("TicketPriorityID", item.TicketPriority.ID)">@item.TicketPriority.Priority</a></td>
+                @if (IsAuth)
+                {
+                    <td class="col10"><a href="@AFilter("TicketSubmitterID", item.User.ID)">@item.User.ASPUserName</a></td>
+                    <td class="col11"><a href="@AFilter("TicketPriorityID", item.TicketPriority.ID)">@item.TicketPriority.Priority</a></td>
+                }
                 <td>
                     <div class="btn-group-vertical">
-                        @if (User.IsInRole("Administrator"))
+                        @if (IsAdmin)
                         {
                             @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default ignore" })
                         }
-                            @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary ignore" })
+                        @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary ignore" })
                     </div>
                 </td>
             </tr>
@@ -127,5 +150,4 @@
     </tbody>
 
 </table>
-
 @MyPager()
