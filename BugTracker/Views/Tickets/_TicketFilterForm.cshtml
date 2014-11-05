@@ -1,0 +1,59 @@
+﻿
+@{
+    var IsAuth = User.IsInRole("Administrator") || User.IsInRole("Developer");
+    var IsAdmin = User.IsInRole("Administrator");
+}
+
+@* Ticket Status *@
+<div class="form-group">
+    <label class="control-label col-md-3">By status</label>
+    <div class="col-md-9">
+        @Html.DropDownList("TicketStatusID", ViewBag.Statuses as SelectList, "", new { @class = "form-control" })
+    </div>
+</div>
+
+@* Ticket Type *@
+<div class="form-group">
+    <label class="control-label col-md-3">By type</label>
+    <div class="col-md-9">
+        @Html.DropDownList("TicketTypeID", ViewBag.Types as SelectList, "", new { @class = "form-control" })
+    </div>
+</div>
+
+@* Priority *@
+@if (IsAuth)
+{
+    <div class="form-group">
+        <label class="control-label col-md-3">By priority</label>
+        <div class="col-md-9">
+            @Html.DropDownList("TicketPriorityID", ViewBag.Priorities as SelectList, "", new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@* Project *@
+<div class="form-group">
+    <label class="control-label col-md-3">By project</label>
+    <div class="col-md-9">
+        @Html.DropDownList("ProjectID", ViewBag.Projects as SelectList, "", new { @class = "form-control" })
+    </div>
+</div>
+
+@* Assigned Developer *@
+@if (IsAdmin)
+{
+    <div class="form-group">
+        <label class="control-label col-md-3">By assigned developer</label>
+        <div class="col-md-9">
+            @Html.DropDownList("AssignedToID", ViewBag.AssignedDevs as SelectList, "", new { @class = "form-control" })
+        </div>
+    </div>
+}
+
+@* Create Date Filter *@
+<div class="form-group">
+    <label class="control-label col-md-3">Submitted<wbr /> on or after</label>
+    <div class="col-md-9">
+        <input class="form-control" type="date" name="CreatedDate">
+    </div>
+</div>

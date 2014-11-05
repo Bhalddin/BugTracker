@@ -43,6 +43,7 @@ namespace BugTracker.Controllers
         }
 
 
+        #region Login
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -123,8 +124,9 @@ namespace BugTracker.Controllers
                     return View(model);
             }
         }
+        #endregion
 
-
+        #region Role Managment
         //
         //GET: /Account/ListRoles
         [Authorize(Roles = "Administrator")]
@@ -273,8 +275,9 @@ namespace BugTracker.Controllers
 
             return RedirectToAction("ListRoles");
         }
+        #endregion
 
-
+        #region VerifyCode
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -323,21 +326,21 @@ namespace BugTracker.Controllers
                     return View(model);
             }
         }
+        #endregion
 
-
+        #region Register
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Register()
         {
             return View();
         }
 
-
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles="Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -363,6 +366,7 @@ namespace BugTracker.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+        #endregion
 
 
         //

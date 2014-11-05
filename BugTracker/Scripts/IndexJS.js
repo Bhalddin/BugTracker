@@ -16,6 +16,16 @@ $(function () {
 
     }
 
+    // react to clicks in the col-selector AND porform the initial filtering.
+    $("#col-selector").on("click", "input", FilterColumns);
+    FilterColumns();
+
+
+    function GatherSearchData() {
+        var data = $("#SearchForm, #SearchPartial").find("input, select").serialize();
+        return data;
+    }
+
     function AnchorAjax(e) {
         // grab the anchor clicked
         a = $(this);
@@ -35,7 +45,7 @@ $(function () {
         var target = $("#ticket-table");
 
         target.fadeToggle(250);
-        target.load(ahref, function () {
+        target.load(ahref, GatherSearchData(), function () {
             // run function to persist selection of colums, and to not show the hidden colums initially.
             FilterColumns();
             // now show target.
@@ -50,7 +60,34 @@ $(function () {
     // capture anchors on table to return as partial instead
     $("#ticket-table").on("click", "a", AnchorAjax);
 
-    // react to clicks in the col-selector AND porform the initial filtering.
-    $("#col-selector").on("click", "input", FilterColumns);
-    FilterColumns();
+
+
+    function AdvClick (time) {
+        $("#advSearchForm").slideToggle();
+    }
+
+    // have advanced search button display the #advanced-search div, and perform initial hide.
+    $("#advSearchBtn").click(AdvClick);
+
+    function NewSearch(e) {
+        // get form element and advanced search partial.
+        var form = $("#SearchForm");
+        var target = $("#ticket-table");
+
+        target.fadeToggle(250);
+        target.load(form.attr("action"), GatherSearchData(), function () {
+            // run function to persist selection of colums, and to not show the hidden colums initially.
+            FilterColumns();
+            // now show target.
+            target.fadeToggle(250);
+        });
+
+        // stop default action and propogation
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    // capture the submit of my search form and perform an ajax.
+    $("#SearchForm").submit(NewSearch);
+
 });

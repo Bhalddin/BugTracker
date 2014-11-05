@@ -32,9 +32,11 @@ namespace BugTracker.Controllers
         /// </summary>
         /// <returns>ActionResult</returns>
         public ActionResult TicketTable(
-            [Bind(Include = "TicketSubmitterID,AssignedToID,ProjectID,TicketPriorityID,TicketStatusID,TicketTypeID,RelatedTicketID")]TicketViewModel filters,
+            [Bind(Include = "TicketSubmitterID,AssignedToID,ProjectID,TicketPriorityID,TicketStatusID,TicketTypeID,CreatedDate")]TicketViewModel filters,
             string sort,
             string orderAscending,
+            string textSearchField = "",
+            string textSearchValue = "",
             int page = 1,
             int pageSize = 10
         )
@@ -68,15 +70,19 @@ namespace BugTracker.Controllers
                                 .Include(t => t.User)
                                 .Include(t => t.User1);
 
+
+
             // add filtering to tickets.
             tickets = tickets
-                        .Where(t => filters.ID == null || t.ID == filters.ID)
                         .Where(t => filters.TicketPriorityID == null || t.TicketPriorityID == filters.TicketPriorityID)
                         .Where(t => filters.TicketStatusID == null || t.TicketStatusID == filters.TicketStatusID)
-                        .Where(t => filters.AssignedToID == null || t.AssignedToID == filters.AssignedToID)
+                        .Where(t => filters.TicketTypeID == null || t.TicketTypeID == filters.TicketTypeID)
                         .Where(t => filters.ProjectID == null || t.ProjectID == filters.ProjectID)
-                        .Where(t => filters.TicketSubmitterID == null || t.TicketSubmitterID == filters.TicketSubmitterID)
-                        .Where(t => filters.TicketTypeID == null || t.TicketTypeID == filters.TicketTypeID);
+                        .Where(t => filters.AssignedToID == null || t.AssignedToID == filters.AssignedToID)
+                        .Where(t => t.CreatedDate.CompareTo(filters.CreatedDate) >= 0)
+                        .Where(t => textSearchValue == ""
+                                    || (textSearchField=="Title" && t.Title.Contains(textSearchValue))
+                                    || (textSearchField=="Description" && t.Description.Contains(textSearchValue)));
 
             // apply sorting only if we need to.
             // by default it should be ascending, ONLY when we are passed false should it be descending.
@@ -105,19 +111,30 @@ namespace BugTracker.Controllers
         /// Return partialView, select elements that are filtered according to other inputs.
         /// </summary>
         /// <returns></returns>
-        public ActionResult TicketFilterForm()
+        public ActionResult TicketFilterForm(int? statusId, int? typeId, int? priorityId, int? devId, int? projectId)
         {
 
             // Check to only allow ajax and child actions.
             var notPartialRequest = !(Request.IsAjaxRequest() || ControllerContext.IsChildAction);
             if (notPartialRequest)
+            {
                 return View("Error");
-
+            }
 
             // Check your inputs.
 
-
             // query the db for the filtered version of the tickets
+            ViewBag.Statuses = new SelectList(db.TicketStatuses, "ID", "Status", statusId);
+            ViewBag.Types = new SelectList(db.TicketTypes, "ID", "Type", typeId);
+            ViewBag.Priorities = new SelectList(db.TicketPriorities, "ID", "Priority", priorityId);
+            ViewBag.Projects = new SelectList(db.Projects, "ID", "ProjectName", projectId);
+
+            var aspUserDb = new ApplicationDbContext();
+            var developerRole = aspUserDb.Roles.Single(r => r.Name == "Developer");
+            var listOfDevNames = aspUserDb.Users.Where(u => u.Roles.Any(r => r.RoleId == developerRole.Id)).Select(u => u.UserName).ToList();
+            var listOfDevelopers = db.Users.Where(u => listOfDevNames.Any(n => n == u.ASPUserName));
+
+            ViewBag.AssignedDevs = new SelectList(listOfDevelopers, "ID", "ASPUserName", devId);
 
             return PartialView("_TicketFilterForm");
         }
@@ -129,6 +146,14 @@ namespace BugTracker.Controllers
         // GET: Tickets
         public ActionResult Index()
         {
+            List<SelectListItem> textSearchFields = new List<SelectListItem> {
+                new SelectListItem{Text="Title",Value="Title"},
+                new SelectListItem{Text="Description",Value="Description"},
+            };
+
+            // needed for the text search box.
+            ViewBag.TextSearchFields = new SelectList(textSearchFields, "Value", "Text", "Title");
+
             return View();
         }
         #endregion
@@ -222,15 +247,19 @@ namespace BugTracker.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Edit(int? id)
         {
+            // check your inputs.
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Ticket ticket = await db.Tickets.Include(t => t.Ticket1).SingleAsync(t => t.ID == id);
+
             if (ticket == null)
             {
                 return HttpNotFound();
             }
+
             ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", ticket.ProjectID);
             ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticket.TicketPriorityID);
             ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "ID", "Status", ticket.TicketStatusID);

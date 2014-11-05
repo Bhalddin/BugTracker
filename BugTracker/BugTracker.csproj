@@ -347,7 +347,7 @@
     <Content Include="Views\Tickets\Edit.cshtml" />
     <Content Include="Views\Tickets\Index.cshtml" />
     <Content Include="Views\Tickets\_TicketTable.cshtml" />
-    <Content Include="Views\Tickets\_TicketForm.cshtml" />
+    <Content Include="Views\Tickets\_TicketFilterForm.cshtml" />
     <Content Include="Views\Comments\Create.cshtml" />
     <Content Include="Views\Comments\Delete.cshtml" />
     <Content Include="Views\Comments\Details.cshtml" />

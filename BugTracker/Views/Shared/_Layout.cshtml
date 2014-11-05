@@ -22,13 +22,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @*<li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                     <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Tickets</a>
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Tickets Menu</a>
                         <ul class="dropdown-menu dropdown-menu-left">
                             <li>@Html.ActionLink("Search tickets", "Index", "Tickets")</li>
-                            <li>@Html.ActionLink("Create new", "Create", "Tickets")</li>
+                            <li>@Html.ActionLink("Create new ticket", "Create", "Tickets")</li>
                             <li></li>
                         </ul>
                     </li>

@@ -117,24 +117,24 @@
         {
             <tr>
                 <td class="col1">@item.Title</td>
-                <td class="col2"><a href="@AFilter("TicketStatusID", item.TicketStatus.ID)">@item.TicketStatus.Status</a></td>
+                <td class="col2">@item.TicketStatus.Status</td>
                 @if (IsAdmin)
                 {
-                    <td class="col3"><a href="@AFilter("AssignedToID", item.AssignedToID)">@((item.User1 != null) ? item.User1.ASPUserName : "")</a></td>
+                    <td class="col3">@((item.User1 != null) ? item.User1.ASPUserName : "")</td>
                 }
                 @if (IsAuth)
                 {
                     <td class="col4">@item.DateLastUpdated.ToShortDateString()<br /><i>(@((DateTime.Now - item.DateLastUpdated).Days) days ago)</i></td>
                 }
-                <td class="col5"><a href="@AFilter("TicketTypeID", item.TicketType.ID)">@item.TicketType.Type</a></td>
+                <td class="col5">@item.TicketType.Type</td>
                 <td class="col6">@item.Description</td>
-                <td class="col7"><a href="@AFilter("ID", item.RelatedTicketID)">@item.RelatedTicketID</a></td>
-                <td class="col8"><a href="@AFilter("ProjectID", item.Project.ID)">@item.Project.ProjectName</a></td>
+                <td class="col7">@item.RelatedTicketID</td>
+                <td class="col8">@item.Project.ProjectName</td>
                 <td class="col9">@item.CreatedDate.ToShortDateString()<br /><i>(@((DateTime.Now - item.CreatedDate).Days) days ago)</i></td>
                 @if (IsAuth)
                 {
-                    <td class="col10"><a href="@AFilter("TicketSubmitterID", item.User.ID)">@item.User.ASPUserName</a></td>
-                    <td class="col11"><a href="@AFilter("TicketPriorityID", item.TicketPriority.ID)">@item.TicketPriority.Priority</a></td>
+                    <td class="col10">@item.User.ASPUserName</td>
+                    <td class="col11">@item.TicketPriority.Priority</td>
                 }
                 <td>
                     <div class="btn-group-vertical">

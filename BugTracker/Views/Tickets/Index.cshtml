@@ -9,83 +9,99 @@
 
 <h2><b>TICKER VIEWER</b></h2>
 
-<p>
-    Put Cool Navigation form here.
-</p>
+@* The Search Bar *@
+<form id="SearchForm" class="navbar-form text-center" action="/Tickets/TicketTable" method="get">
+
+    <button id="advSearchBtn" class="btn btn-warning" type="button">Advanced Search</button>
+
+    @* SearchBar for Title or Description *@
+    <span class="input-group">
+        <span class="input-group-btn">
+            <input type="search" class="form-control" name="TextSearchValue" placeholder="Search the tickets...">
+            @Html.DropDownList("TextSearchField", ViewBag.TextSearchFields as SelectList, new { @class = "form-control" })
+        </span>
+    </span>
+    <input class="btn btn-primary" type="submit" value="Search!" />
+
+</form>
+
+@* The advanced filters *@
+<div id="advSearchForm" class="text-center" style="display: none">
+    <div class="row">
+
+        <div id="SearchPartial" class="col-md-offset-3">
+            @Html.Action("TicketFilterForm")
+        </div>
+    </div>
+    <br />
+    @* Radios to select which colums are being displayed. *@
+    <div class="row">
+        <details class="text-center">
+            <summary class="text-center btn btn-success">Column Selector</summary>
+            <div class="alert alert-success">
+                <table id="col-selector" class="table table-condensed text-center">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                            @if (IsAdmin)
+                            {
+                                <th>Assigned developer</th>
+                            }
+                            @if (IsAuth)
+                            {
+                                <th>Date Last updated</th>
+                            }
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Related ticket</th>
+                            <th>Project</th>
+                            <th>Date submitted</th>
+                            @if (IsAuth)
+                            {
+                                <th>Submitter</th>
+                                <th>Priority level</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" name="c1" value=".col1" checked /></td>
+                            <td><input type="checkbox" name="c2" value=".col2" checked /></td>
+                            @if (IsAdmin)
+                            {
+                                <td><input type="checkbox" name="c3" value=".col3" checked /></td>
+                            }
+                            @if (IsAuth)
+                            {
+                                <td><input type="checkbox" name="c4" value=".col4" checked /></td>
+                            }
+                            <td><input type="checkbox" name="c5" value=".col5" checked /></td>
+                            <td><input type="checkbox" name="c6" value=".col6" checked /></td>
+                            <td><input type="checkbox" name="c7" value=".col7" /></td>
+                            <td><input type="checkbox" name="c8" value=".col8" checked /></td>
+                            <td><input type="checkbox" name="c9" value=".col9" checked /></td>
+                            @if (IsAuth)
+                            {
+                                <td><input type="checkbox" name="c10" value=".col10" /></td>
+                                <td><input type="checkbox" name="c11" value=".col11" /></td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
+    </div>
+</div>
 
 
-<p>
-    @Html.ActionLink("Create New ticket", "Create", null, new { @class = "btn btn-success" })
-</p>
-
-@* Radios to select which colums are being displayed. *@
-
-<details class="alert alert-success">
-    <summary class="text-center">
-        <b>COLUMN SELECTOR</b>
-    </summary>
-    <table id="col-selector" class="table table-condensed text-center">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Status</th>
-                @if (IsAdmin)
-                {
-                    <th>Assigned developer</th>
-                }
-                @if (IsAuth)
-                {
-                    <th>Date Last updated</th>
-                }
-                <th>Type</th>
-                <th>Description</th>
-                <th>Related ticket</th>
-                <th>Project</th>
-                <th>Date submitted</th>
-                @if (IsAuth)
-                {
-                    <th>Submitter</th>
-                    <th>Priority level</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="checkbox" name="c1" value=".col1" checked /></td>
-                <td><input type="checkbox" name="c2" value=".col2" checked /></td>
-                @if (IsAdmin)
-                {
-                    <td><input type="checkbox" name="c3" value=".col3" checked /></td>
-                }
-                @if (IsAuth)
-                {
-                    <td><input type="checkbox" name="c4" value=".col4" checked /></td>
-                }
-                <td><input type="checkbox" name="c5" value=".col5" checked /></td>
-                <td><input type="checkbox" name="c6" value=".col6" checked /></td>
-                <td><input type="checkbox" name="c7" value=".col7" /></td>
-                <td><input type="checkbox" name="c8" value=".col8" checked /></td>
-                <td><input type="checkbox" name="c9" value=".col9" checked /></td>
-                @if (IsAuth)
-                {
-                    <td><input type="checkbox" name="c10" value=".col10" /></td>
-                    <td><input type="checkbox" name="c11" value=".col11" /></td>
-                }
-        </tr>
-    </tbody>
-</table>
-</details>
-
-
-
-
-
-
-    @* Ticket Table *@
+@* Ticket Table *@
+<div class="row">
     <div id="ticket-table">
         @Html.Action("TicketTable")
     </div>
+</div>
 
-    @section Scripts {
-        <script src="~/Scripts/IndexJS.js"></script>
-    }
+@section Scripts {
+    <script src="~/Scripts/IndexJS.js"></script>
+}
