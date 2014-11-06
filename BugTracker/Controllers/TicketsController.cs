@@ -11,6 +11,8 @@ using BugTracker.Models;
 using System.Linq.Dynamic;
 using PagedList;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace BugTracker.Controllers
 {
@@ -81,8 +83,8 @@ namespace BugTracker.Controllers
                         .Where(t => filters.AssignedToID == null || t.AssignedToID == filters.AssignedToID)
                         .Where(t => t.CreatedDate.CompareTo(filters.CreatedDate) >= 0)
                         .Where(t => textSearchValue == ""
-                                    || (textSearchField=="Title" && t.Title.Contains(textSearchValue))
-                                    || (textSearchField=="Description" && t.Description.Contains(textSearchValue)));
+                                    || (textSearchField == "Title" && t.Title.Contains(textSearchValue))
+                                    || (textSearchField == "Description" && t.Description.Contains(textSearchValue)));
 
             // apply sorting only if we need to.
             // by default it should be ascending, ONLY when we are passed false should it be descending.
@@ -189,12 +191,8 @@ namespace BugTracker.Controllers
         public ActionResult Create()
         {
             ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName");
-            //ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority");
-            //ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "ID", "Status");
             ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type");
             ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description");
-            //ViewBag.TicketSubmitterID = new SelectList(db.Users, "ID", "FirstName");
-            //ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName");
 
             ViewBag.TicketTitle = "";
             ViewBag.Description = "";
@@ -206,7 +204,7 @@ namespace BugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ProjectID,Title,Description,TicketTypeID,RelatedTicketID")] TicketViewModel ticketVM)
+        public ActionResult Create([Bind(Include = "ProjectID,Title,Description,TicketTypeID,RelatedTicketID")] TicketViewModel ticketVM)
         {
             if (ModelState.IsValid)
             {
@@ -217,9 +215,43 @@ namespace BugTracker.Controllers
                 // create ticket with default values to save.
                 Ticket ticket = new Ticket(ticketVM);
 
+                var asv = Request.Files;
 
                 db.Tickets.Add(ticket);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
+
+                // Ticket is made, now is time to add attachments to the database.
+                foreach (string key in Request.Files)
+                {
+                    // The safest way to safe a file is to NOT use it's given name, b/c names might colide and cause files to be overridden
+                    // it is safer to use the hash of the file and name it according to that, so different files with the same name will be saves seperatly.
+                    using (var md5 = MD5.Create())
+                    {
+                        HttpPostedFileBase attachment = Request.Files[key];
+                        string fileHash = BitConverter.ToString(md5.ComputeHash(attachment.InputStream)).Replace("-", "").ToLower();
+                        string fileExtension = Path.GetExtension(attachment.FileName);
+
+                        // filepath is the full path on the server, this is used for saving and deleting the file.
+                        string saveFileName = fileHash + fileExtension;
+                        string serverFolder = Server.MapPath("~/App_Data/Attachments/");
+                        string filePath = Path.Combine(serverFolder, saveFileName);
+
+                        // make sure that folder exists
+                        if (!Directory.Exists(serverFolder))
+                        {
+                            Directory.CreateDirectory(serverFolder);
+                        }
+
+                        // now save the file
+                        var newAttach = new TicketAttachment( ticket.ID, ticket.TicketSubmitterID, filePath, attachment.FileName, null);
+
+                        db.TicketAttachments.Add(newAttach);
+                        db.SaveChanges();
+
+                        attachment.SaveAs(newAttach.AttachmentFilePath);
+                    }
+                }
+
                 return RedirectToAction("Index");
             }
 
