@@ -264,16 +264,18 @@ namespace BugTracker.Controllers
             ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticket.TicketPriorityID);
             ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "ID", "Status", ticket.TicketStatusID);
             ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type", ticket.TicketTypeID);
+            ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Title", ticket.RelatedTicketID);
 
             // fix the view to display info on the tickets using the ticket1 item.
             // and disable fields that shouldn't be edited.
             var aspUserDb = new ApplicationDbContext();
             var developerRole = aspUserDb.Roles.Single(r => r.Name == "Developer");
-            var listOfDevelopers = aspUserDb.Users.Where(u => u.Roles.Any(r => r.RoleId == developerRole.Id)).Select(u => u.UserName).ToList();
+            var listOfDevNames = aspUserDb.Users.Where(u => u.Roles.Any(r => r.RoleId == developerRole.Id)).Select(u => u.UserName).ToList();
+            var allDevelopers = db.Users.Where(u => listOfDevNames.Any(d => d == u.ASPUserName));
 
-            ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Title", ticket.RelatedTicketID);
+            // Limit Items in the Submitter to just the submitter!
             ViewBag.TicketSubmitterID = new SelectList(db.Users.Where(u => u.ID == ticket.TicketSubmitterID), "ID", "ASPUserName", ticket.TicketSubmitterID);
-            ViewBag.AssignedToID = new SelectList(db.Users.Where(u => listOfDevelopers.Any(d => d == u.ASPUserName)), "ID", "ASPUserName", ticket.AssignedToID);
+            ViewBag.AssignedToID = new SelectList(allDevelopers, "ID", "ASPUserName", ticket.AssignedToID);
             return View(ticket);
         }
 
@@ -286,28 +288,33 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(TicketViewModel ticketVM)
         {
-            var req = Request.Form;
-
             // create ticket from ticketViewmodel
             Ticket ticket = new Ticket(ticketVM);
 
+            // check your inputs
             if (ModelState.IsValid)
             {
                 db.Entry(ticket).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Details", new { id = ticket.ID });
             }
+
             ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", ticket.ProjectID);
             ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticket.TicketPriorityID);
-            ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "StatusID", "Status", ticket.TicketStatusID);
+            ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "ID", "Status", ticket.TicketStatusID);
             ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type", ticket.TicketTypeID);
-            ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description", ticket.RelatedTicketID);
-            ViewBag.TicketSubmitterID = new SelectList(db.Users, "ID", "FirstName", ticket.TicketSubmitterID);
-            ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName", ticket.AssignedToID);
+            ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Title", ticket.RelatedTicketID);
 
-            ViewBag.TicketTitle = ticket.Title;
-            ViewBag.Description = ticket.Description;
+            // fix the view to display info on the tickets using the ticket1 item.
+            // and disable fields that shouldn't be edited.
+            var aspUserDb = new ApplicationDbContext();
+            var developerRole = aspUserDb.Roles.Single(r => r.Name == "Developer");
+            var listOfDevNames = aspUserDb.Users.Where(u => u.Roles.Any(r => r.RoleId == developerRole.Id)).Select(u => u.UserName).ToList();
+            var allDevelopers = db.Users.Where(u => listOfDevNames.Any(d => d == u.ASPUserName));
 
+            // Limit Items in the Submitter to just the submitter!
+            ViewBag.TicketSubmitterID = new SelectList(db.Users.Where(u => u.ID == ticket.TicketSubmitterID), "ID", "ASPUserName", ticket.TicketSubmitterID);
+            ViewBag.AssignedToID = new SelectList(allDevelopers, "ID", "ASPUserName", ticket.AssignedToID);
             return View(ticket);
         }
         #endregion

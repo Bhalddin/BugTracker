@@ -206,6 +206,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BugTrackerModels.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\Comment.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>

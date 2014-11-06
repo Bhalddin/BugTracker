@@ -81,32 +81,23 @@ namespace BugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "TicketID,CommentorID,CommentDate,Comment1")] Comment comment)
+        public async Task<ActionResult> Create([Bind(Include = "TicketID,CommentorID,CommentDate,Comment1")] CommentViewModel commentVM)
         {
             // set commentDate b/c it's not in the view.
-            comment.CommentDate = DateTime.UtcNow;
-
-            // no commentViewModel so need to check the modelState here.
-            // check ticketID
-            // check commenterID
-            // check comment
-            if ( comment.TicketID == 0 || comment.CommentorID == 0 || comment.Comment1 == null )
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
+            commentVM.CommentDate = DateTime.UtcNow;
 
             if (ModelState.IsValid)
             {
-                db.Comments.Add(comment);
+                db.Comments.Add(commentVM.ToComment());
                 await db.SaveChangesAsync();
-                return RedirectToAction("Details", "Tickets", new { id = comment.TicketID });
+                return RedirectToAction("Details", "Tickets", new { id = commentVM.TicketID });
             }
 
-            ViewBag.TicketID = comment.TicketID;
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", comment.TicketID);
-            ViewBag.CommentorID = new SelectList(db.Users, "ID", "FirstName", comment.CommentorID);
-            return View(comment);
+            var username = HttpContext.User.Identity.Name;
+
+            ViewBag.TicketID = new SelectList(db.Tickets.Where(t => t.ID == commentVM.TicketID), "ID", "Title", commentVM.TicketID);
+            ViewBag.CommentorID = new SelectList(db.Users.Where(u => u.ASPUserName == username), "ID", "ASPUserName");
+            return View(commentVM.ToComment());
         }
         #endregion
 

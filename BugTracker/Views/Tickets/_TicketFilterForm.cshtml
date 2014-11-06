@@ -43,7 +43,7 @@
 @if (IsAdmin)
 {
     <div class="form-group">
-        <label class="control-label col-md-3">By assigned developer</label>
+        <label class="control-label col-md-3">By developer</label>
         <div class="col-md-9">
             @Html.DropDownList("AssignedToID", ViewBag.AssignedDevs as SelectList, "", new { @class = "form-control" })
         </div>
@@ -52,7 +52,7 @@
 
 @* Create Date Filter *@
 <div class="form-group">
-    <label class="control-label col-md-3">Submitted<wbr /> on or after</label>
+    <label class="control-label col-md-3">Submitted by date</label>
     <div class="col-md-9">
         <input class="form-control" type="date" name="CreatedDate">
     </div>

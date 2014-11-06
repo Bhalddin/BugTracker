@@ -69,6 +69,7 @@ $(function () {
     // have advanced search button display the #advanced-search div, and perform initial hide.
     $("#advSearchBtn").click(AdvClick);
 
+
     function NewSearch(e) {
         // get form element and advanced search partial.
         var form = $("#SearchForm");

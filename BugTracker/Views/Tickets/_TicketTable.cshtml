@@ -89,7 +89,7 @@
 <table class="table table-hover table-responsive text-center">
     <thead>
         <tr>
-            <th class="col1"><a href="">Title</a></th>
+            <th class="col1"><span class="text-info">Title</span></th>
             <th class="col2"><a href="@ASort("TicketStatusID")">Status @AddArrow("TicketStatusID")</a></th>
             @if (IsAdmin)
             {
@@ -100,7 +100,7 @@
                 <th class="col4"><a href="@ASort("DateLastUpdated")">Date Last updated @AddArrow("DateLastUpdated")</a></th>
             }
             <th class="col5"><a href="@ASort("TicketTypeID")">Type @AddArrow("TicketTypeID")</a></th>
-            <th class="col6"><a>Description</a></th>
+            <th class="col6"><span class="text-info">Description</span></th>
             <th class="col7"><a href="@ASort("ID")">Related ticket @AddArrow("ID")</a></th>
             <th class="col8"><a href="@ASort("Project.ProjectName")">Project @AddArrow("Project.ProjectName")</a></th>
             <th class="col9"><a href="@ASort("CreatedDate")">Date submitted @AddArrow("CreatedDate")</a></th>
