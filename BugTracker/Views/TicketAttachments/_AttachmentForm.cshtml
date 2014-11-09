@@ -1,19 +1,19 @@
 ﻿@* Upload an attachment *@
 <div class="form-group">
-    <label for="attachment@(Model)" class="control-label col-md-2">File attachment</label>
+    <label for="attachment@(ViewBag.Count)" class="control-label col-md-2">File attachment</label>
     <div class="col-md-10">
-        <input type="file" id="attachment" name="attachment@(Model)" />
+        <input type="file" id="attachment" name="attachment@(ViewBag.Count)" />
         @*<img id="car-pic" class="invisible" src="#" alt="your image" />*@
     </div>
 </div>
 
 <div class="form-group">
-    <label for="attachment@(Model)" class="control-label col-md-2">Attachment description</label>
+    <label for="attachment@(ViewBag.Count)" class="control-label col-md-2">Attachment description</label>
     <div class="col-md-10">
-        <input class="form-control" type="text" id="attachment@(Model)" name="attachment@(Model)" />
+        <input class="form-control" type="text" id="attachment@(ViewBag.Count)" name="attachment@(ViewBag.Count)" />
     </div>
 </div>
 
-<p id="attachment@(Model+1)">
-    @Html.ActionLink("Add another attachment", "Create", new { count = Model + 1 }, new { @class = "btn btn-info col-md-offset-2 col-md-2" })
+<p id="attachment@(ViewBag.Count++)">
+    @Html.ActionLink("Add another attachment", "Create", new { count = ViewBag.Count++ }, new { @class = "btn btn-info col-md-offset-2 col-md-2" })
 </p>

@@ -8,100 +8,100 @@
 
 @helper IsAdmin()
 {
-    
+
 }
 
 
-<h2>Details</h2>
+<h2><b>Ticket:</b> @Model.Title</h2>
 
-<div>
-    <h4>Ticket</h4>
-    <hr />
-    <dl class="dl-horizontal">
+<hr />
+<div class="row">
 
-        @if (IsAuth)
-        {
-            <dt>Ticket Submitter</dt>
-            <dd>@Html.DisplayFor(model => model.User.ASPUserName)</dd>
-        }
+    <div class="col-md-6">
+        <dl class="dl-horizontal">
+
+            @if (IsAuth)
+            {
+                <dt>Ticket Submitter</dt>
+                <dd>@Html.DisplayFor(model => model.User.ASPUserName)</dd>
+            }
+
+            @if (IsAdmin)
+            {
+                <dt>Assigned developer</dt>
+                <dd>@Html.DisplayFor(model => model.User1.ASPUserName)</dd>
+            }
+
+            <dt>Date submitted</dt>
+            <dd>@Model.CreatedDate.ToShortDateString()</dd>
+
+            <dt>Description</dt>
+            <dd>@Html.DisplayFor(model => model.Description)</dd>
+
+            <dt>Resolution</dt>
+            <dd>@Html.DisplayFor(model => model.Resolution)</dd>
+
+            @if (IsAuth)
+            {
+                <dt>Date last updated</dt>
+                <dd>@Model.DateLastUpdated.ToShortDateString()</dd>
+            }
+
+            <dt>Project</dt>
+            <dd>@Html.DisplayFor(model => model.Project.ProjectName)</dd>
+
+            <dt>Ticket type</dt>
+            <dd>@Html.DisplayFor(model => model.TicketType.Type)</dd>
+
+            @if (IsAuth)
+            {
+                <dt>Ticket status</dt>
+                <dd>@Html.DisplayFor(model => model.TicketStatus.Status)</dd>
+
+                <dt>Priority level</dt>
+                <dd>@Html.DisplayFor(model => model.TicketPriority.Priority)</dd>
+            }
+        </dl>
 
         @if (IsAdmin)
         {
-            <dt>Assigned developer</dt>
-            <dd>@Html.DisplayFor(model => model.User1.ASPUserName)</dd>
+            <p>
+                @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary" })
+            </p>
         }
 
-        <dt>Date submitted</dt>
-        <dd>@Model.CreatedDate.ToShortDateString()</dd>
-
-        <dt>Ticket title</dt>
-        <dd>@Html.DisplayFor(model => model.Title)</dd>
-
-        <dt>Description</dt>
-        <dd>@Html.DisplayFor(model => model.Description)</dd>
-
-        <dt>Resolution</dt>
-        <dd>@Html.DisplayFor(model => model.Resolution)</dd>
-
-        @if (IsAuth)
-        {
-            <dt>Date last updated</dt>
-            <dd>@Model.DateLastUpdated.ToShortDateString()</dd>
-        }
-
-        <dt>Project</dt>
-        <dd>@Html.DisplayFor(model => model.Project.ProjectName)</dd>
-
-        <dt>Ticket type</dt>
-        <dd>@Html.DisplayFor(model => model.TicketType.Type)</dd>
-
-        @if (IsAuth)
-        {
-            <dt>Ticket status</dt>
-            <dd>@Html.DisplayFor(model => model.TicketStatus.Status)</dd>
-
-            <dt>Priority level</dt>
-            <dd>@Html.DisplayFor(model => model.TicketPriority.Priority)</dd>
-        }
-    </dl>
-
-    @if (IsAdmin)
-    {
         <p>
-            @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" })
         </p>
-    }
+
+    </div>
+
+    <div class="col-md-6">
+        @if (IsAuth)
+        {
+
+
+            <details class="alert alert-info">
+                <summary class="text-center"><b>Comments </b><span class="badge">0</span></summary>
+                @(Html.Action("Index", "Comments", new { id = Model.ID }))
+            </details>
+
+            <details class="alert alert-success">
+                <summary class="text-center"><b>Attachments </b><span class="badge">0</span></summary>
+                @{ Html.RenderAction("Index", "TicketAttachments", new { id = Model.ID }); }
+            </details>
+
+            <details class="alert alert-info">
+                <summary class="text-center"><b>Notifications </b><span class="badge">0</span></summary>
+                @*@(Html.Action("Index", "Comments", new { id = Model.ID }))*@
+            </details>
+
+            <details class="alert alert-success">
+                <summary class="text-center"><b>History </b><span class="badge">0</span></summary>
+                @*@(Html.Action("Index", "Comments", new { id = Model.ID }))*@
+            </details>
+
+        }
+
+    </div>
 </div>
-
-@*<p>
-        @Html.ActionLink("View Comments", "Index", "Comments", new { id = Model.ID }, new { @class = "btn btn-info" })
-    </p>*@
-
-
-@if (IsAuth)
-{
-    <details class="alert alert-info">
-        <summary><b>Comments</b></summary>
-        @(Html.Action("Index", "Comments", new { id = Model.ID }))
-    </details>
-
-    <details class="alert alert-success">
-        <summary><b>Attachments</b></summary>
-        @*@(Html.Action("Index", "Comments", new { id = Model.ID }))*@
-    </details>
-
-    <details class="alert alert-info">
-        <summary><b>Notifications</b></summary>
-        @*@(Html.Action("Index", "Comments", new { id = Model.ID }))*@
-    </details>
-
-    <details class="alert alert-success">
-        <summary><b>History</b></summary>
-        @*@(Html.Action("Index", "Comments", new { id = Model.ID }))*@
-    </details>
-
-}
-
-<p>
-    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" })
-</p>

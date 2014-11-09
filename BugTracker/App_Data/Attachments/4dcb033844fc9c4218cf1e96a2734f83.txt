@@ -1,0 +1,79 @@
+-- minimum design, can add to or alter.
+
+
+--- employee exclusive system
+--- these 3 are just like Users, Roles, UserRoles relationship
+users
+projects
+projectUsers
+
+tickets - item(call) being entered. (log files, documents, screenshots, description of problem, caller?)
+	
+ticetkattachments
+ticketcomments - developer comments
+tickethistories - changes every time the ticket, proproites, notification changes. (time changed, previous value , new values)
+ticketnotification
+
+-- lookup tables --
+tickt priorities
+ticket statuses
+tickttypes - (bug?, feature?, alteration?)
+
+
+--------------------------------------
+--------------------------------------
+
+
+
+
+PRIORITIES(-DONE-)
+------------
+Undefined
+Low
+Medium
+High
+
+
+
+STATUSES
+-----------
+New (UnAttended or tobeReviewed)
+WorkingOn? (assigned to some one)
+Resolved
+
+
+
+TYPES  - to help determine who should get it.
+-----------
+Back-End
+Front-End
+Security	
+New Feature
+
+Lost Password Or Username??
+DB??
+C#??
+
+
+
+PROJECTS
+-----------
+CarLister
+BugTracker
+ProjectWebsiteOnMoon
+
+
+
+
+USERS
+-----------
+(AND )
+
+
+
+ROLES
+-----------
+Admin
+Dev
+Submitter==LoggedIn ( default role )
+Allow Anonymous?? (only on home page.)

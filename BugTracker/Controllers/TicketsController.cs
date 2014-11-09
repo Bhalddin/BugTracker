@@ -215,46 +215,19 @@ namespace BugTracker.Controllers
                 // create ticket with default values to save.
                 Ticket ticket = new Ticket(ticketVM);
 
-                var asv = Request.Files;
-
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
 
                 // Ticket is made, now is time to add attachments to the database.
                 foreach (string key in Request.Files)
                 {
-                    // The safest way to safe a file is to NOT use it's given name, b/c names might colide and cause files to be overridden
-                    // it is safer to use the hash of the file and name it according to that, so different files with the same name will be saves seperatly.
-                    using (var md5 = MD5.Create())
-                    {
-                        HttpPostedFileBase attachment = Request.Files[key];
-                        string fileHash = BitConverter.ToString(md5.ComputeHash(attachment.InputStream)).Replace("-", "").ToLower();
-                        string fileExtension = Path.GetExtension(attachment.FileName);
-
-                        // filepath is the full path on the server, this is used for saving and deleting the file.
-                        string saveFileName = fileHash + fileExtension;
-                        string serverFolder = Server.MapPath("~/App_Data/Attachments/");
-                        string filePath = Path.Combine(serverFolder, saveFileName);
-
-                        // make sure that folder exists
-                        if (!Directory.Exists(serverFolder))
-                        {
-                            Directory.CreateDirectory(serverFolder);
-                        }
-
-                        // now save the file
-                        var newAttach = new TicketAttachment( ticket.ID, ticket.TicketSubmitterID, filePath, attachment.FileName, null);
-
-                        db.TicketAttachments.Add(newAttach);
-                        db.SaveChanges();
-
-                        attachment.SaveAs(newAttach.AttachmentFilePath);
-                    }
+                    string currentDesc = Request.Form[key];
+                    string serverFolderPath = Server.MapPath("~/App_Data/Attachments/");
+                    TicketAttachment.SaveAsAttachment(Request.Files[key], serverFolderPath, db, ticket.ID, ticket.TicketSubmitterID, currentDesc);
                 }
 
                 return RedirectToAction("Index");
             }
-
 
             // FIX WHEN YOU HAVE TIME.
             ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", ticketVM.ProjectID);

@@ -6,7 +6,7 @@ $(function () {
         // get the link from the anchor.
         var aHref = $(this).attr("href");
 
-        // get the latest p element with an id.
+        // get the latest p element with an id. It will be the container for our new incoming partial.
         var p = $("p[id]").last();
 
         // load the new form.

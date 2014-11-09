@@ -1,0 +1,25 @@
+﻿@model IEnumerable<BugTracker.Models.TicketAttachment>
+
+<table class="table">
+    <tr>
+        <th>File Name</th>
+        <th>Description</th>
+        <th>Uploader</th>
+        @*<th></th>*@
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.ActionLink(item.OriginalName, "Download", "TicketAttachments", new { id = item.ID }, null)</td>
+            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+            <td>@Html.DisplayFor(modelItem => item.User.ASPUserName)</td>
+            @*<td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>*@
+        </tr>
+    }
+
+</table>
+
+@Html.ActionLink("Add attachment", "Create", "TicketAttachments", new { id = ViewBag.TicketID }, new { @class = "btn btn-success" })

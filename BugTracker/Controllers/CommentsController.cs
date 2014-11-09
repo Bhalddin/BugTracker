@@ -28,7 +28,7 @@ namespace BugTracker.Controllers
 
             ViewBag.TicketID = id;
             ViewBag.TicketTitle = db.Tickets.Find(id).Title;
-            var comments = db.Comments.Include(c => c.Ticket).Include(c => c.User).Where(c=>c.TicketID == id).OrderBy(c=>c.ID);
+            var comments = db.Comments.Include(c => c.Ticket).Include(c => c.User).Where(c=>c.TicketID == id).OrderBy(c => c.ID);
 
             if (ControllerContext.IsChildAction)
             {

@@ -8,19 +8,38 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
+using System.IO;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class TicketAttachmentsController : Controller
     {
         private BugTrackerEntities db = new BugTrackerEntities();
 
         #region Index
         // GET: TicketAttachments
-        public async Task<ActionResult> Index()
+        [Authorize(Roles = "Administrator,Developer")]
+        public ActionResult Index(int? id)
         {
-            var ticketAttachments = db.TicketAttachments.Include(t => t.Ticket).Include(t => t.User);
-            return View(await ticketAttachments.ToListAsync());
+            // save params
+            ViewBag.TicketID = id;
+
+            // filter attachments if id is there.
+            var ticketAttachments = db.TicketAttachments
+                                        .Include(t => t.Ticket)
+                                        .Include(t => t.User)
+                                        .Where(a => id == null || a.TicketID == id)
+                                        .OrderBy(a => a.ID);
+
+            // if this is an ajax request or child action return a partial.
+            if (Request.IsAjaxRequest() || ControllerContext.IsChildAction)
+            {
+                return PartialView("_Index", ticketAttachments.ToList());
+            }
+
+            return View( ticketAttachments.ToList());
+
         }
         #endregion
 
@@ -32,28 +51,33 @@ namespace BugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             TicketAttachment ticketAttachment = await db.TicketAttachments.FindAsync(id);
+
             if (ticketAttachment == null)
             {
                 return HttpNotFound();
             }
+
             return View(ticketAttachment);
         }
         #endregion
 
         #region create
         // GET: TicketAttachments/Create
-        public ActionResult Create(int? count)
+        public ActionResult Create(int? count, int id)
         {
+            // content both views need.
+            ViewBag.Count = count ?? 0;
+
             if(count != null)
             {
-                return PartialView("_AttachmentForm", count);
+                return PartialView("_AttachmentForm");
             }
 
-            count = 0;
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title");
-            ViewBag.SubmitterID = new SelectList(db.Users, "ID", "FirstName");
-            return View(count);
+            ViewBag.TicketID = id;
+
+            return View();
         }
 
         // POST: TicketAttachments/Create
@@ -61,18 +85,25 @@ namespace BugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,TicketID,SubmitterID,AttachmentFilePath,OriginalName,Description")] TicketAttachment ticketAttachment)
+        public ActionResult Create(int TicketID)
         {
-            if (ModelState.IsValid)
+            if (Request.Form.Count > 0)
             {
-                db.TicketAttachments.Add(ticketAttachment);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                // get Summiter's ID
+                var SubmitterID = db.Users.Single(u => u.ASPUserName == HttpContext.User.Identity.Name).ID;
+
+                // save attachments to db.
+                foreach (string key in Request.Files)
+                {
+                    string currentDesc = Request.Form[key];
+                    string serverFolderPath = Server.MapPath("~/App_Data/Attachments/");
+                    TicketAttachment.SaveAsAttachment(Request.Files[key], serverFolderPath, db, TicketID, SubmitterID, currentDesc);
+                }
+
+                return RedirectToAction("Details", "Tickets", new { id = TicketID });
             }
 
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", ticketAttachment.TicketID);
-            ViewBag.SubmitterID = new SelectList(db.Users, "ID", "FirstName", ticketAttachment.SubmitterID);
-            return View(ticketAttachment);
+            return View("Error");
         }
         #endregion
 
@@ -110,6 +141,24 @@ namespace BugTracker.Controllers
             ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", ticketAttachment.TicketID);
             ViewBag.SubmitterID = new SelectList(db.Users, "ID", "FirstName", ticketAttachment.SubmitterID);
             return View(ticketAttachment);
+        }
+        #endregion
+
+        #region Download
+        [Authorize(Roles="Administrator,Developer")]
+        public ActionResult Download(int? id)
+        {
+            // check your inputs
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);   
+            }
+
+            var Attach = db.TicketAttachments.Find(id);
+            var contType = TicketAttachment.GetMimeType(Attach.OriginalName);
+            var file = File(Attach.AttachmentFilePath, contType, Attach.OriginalName);
+
+            return file;
         }
         #endregion
 
