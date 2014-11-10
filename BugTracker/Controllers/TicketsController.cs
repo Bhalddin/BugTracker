@@ -85,6 +85,7 @@ namespace BugTracker.Controllers
                         .Where(t => textSearchValue == ""
                                     || (textSearchField == "Title" && t.Title.Contains(textSearchValue))
                                     || (textSearchField == "Description" && t.Description.Contains(textSearchValue)));
+                        ///CONSIDER MAKING THIS MORE ROBUST HERE!
 
             // apply sorting only if we need to.
             // by default it should be ascending, ONLY when we are passed false should it be descending.

@@ -126,7 +126,7 @@ namespace BugTracker.Controllers
         }
         #endregion
 
-        #region Role Managment
+        #region Role Managment A.K.A. Assign and Unassign
         //
         //GET: /Account/ListRoles
         [Authorize(Roles = "Administrator")]
@@ -153,7 +153,7 @@ namespace BugTracker.Controllers
             if (roleId == null)
             {
                 return RedirectToAction("ListRoles");
-            }
+            }   
 
             // quick error checking
             ViewBag.Message = (string)TempData["ListError"];

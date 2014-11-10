@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Details";
     bool IsAdmin = User.IsInRole("Administrator");
-    bool IsAuth = User.IsInRole("Administrator") || User.IsInRole("Developer");
+    bool IsAuth = IsAdmin || User.IsInRole("Developer");
 }
 
 @helper IsAdmin()

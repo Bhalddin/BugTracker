@@ -31,9 +31,9 @@ namespace BugTracker.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string Resolution { get; set; }
-        public Nullable<int> TicketPriorityID { get; set; }
-        public Nullable<int> TicketStatusID { get; set; }
-        public Nullable<int> TicketTypeID { get; set; }
+        public int TicketPriorityID { get; set; }
+        public int TicketStatusID { get; set; }
+        public int TicketTypeID { get; set; }
         public Nullable<int> RelatedTicketID { get; set; }
         public System.DateTime DateLastUpdated { get; set; }
     

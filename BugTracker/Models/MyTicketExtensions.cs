@@ -10,15 +10,15 @@ namespace BugTracker.Models
 
         public Ticket(TicketViewModel ticketVM)
         {
-
+            // if I pass in a VM with no id, this this is a new ticket and should get defaults.
             if (ticketVM.ID != null)
             {
                 this.ID = (int)ticketVM.ID;
                 this.CreatedDate = ticketVM.CreatedDate;
                 this.DateLastUpdated = ticketVM.DateLastUpdated;
-                this.TicketPriorityID = ticketVM.TicketPriorityID;
-                this.TicketStatusID = ticketVM.TicketStatusID;
-                this.TicketTypeID = ticketVM.TicketTypeID;
+                this.TicketPriorityID = (int)ticketVM.TicketPriorityID;
+                this.TicketStatusID = (int)ticketVM.TicketStatusID;
+                this.TicketTypeID = (int)ticketVM.TicketTypeID;
             }
             else
             {
@@ -31,8 +31,6 @@ namespace BugTracker.Models
             }
 
             this.AssignedToID = ticketVM.AssignedToID;
-
-
 
             this.TicketSubmitterID = (int)ticketVM.TicketSubmitterID;
             this.ProjectID = (int)ticketVM.ProjectID;

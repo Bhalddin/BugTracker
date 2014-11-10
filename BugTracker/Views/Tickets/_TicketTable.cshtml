@@ -101,7 +101,7 @@
             }
             <th class="col5"><a href="@ASort("TicketTypeID")">Type @AddArrow("TicketTypeID")</a></th>
             <th class="col6"><span class="text-info">Description</span></th>
-            <th class="col7"><a href="@ASort("ID")">Related ticket @AddArrow("ID")</a></th>
+            @*<th class="col7"><a href="@ASort("ID")">Related ticket @AddArrow("ID")</a></th>*@
             <th class="col8"><a href="@ASort("Project.ProjectName")">Project @AddArrow("Project.ProjectName")</a></th>
             <th class="col9"><a href="@ASort("CreatedDate")">Date submitted @AddArrow("CreatedDate")</a></th>
             @if (IsAuth)
@@ -128,7 +128,7 @@
                 }
                 <td class="col5">@item.TicketType.Type</td>
                 <td class="col6">@item.Description</td>
-                <td class="col7">@item.RelatedTicketID</td>
+                @*<td class="col7">@item.RelatedTicketID</td>*@
                 <td class="col8">@item.Project.ProjectName</td>
                 <td class="col9">@item.CreatedDate.ToShortDateString()<br /><i>(@((DateTime.Now - item.CreatedDate).Days) days ago)</i></td>
                 @if (IsAuth)

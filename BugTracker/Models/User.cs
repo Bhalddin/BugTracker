@@ -18,6 +18,7 @@ namespace BugTracker.Models
         {
             this.Comments = new HashSet<Comment>();
             this.Notifications = new HashSet<Notification>();
+            this.Notifications1 = new HashSet<Notification>();
             this.TicketAttachments = new HashSet<TicketAttachment>();
             this.TicketHistories = new HashSet<TicketHistory>();
             this.Tickets = new HashSet<Ticket>();
@@ -33,6 +34,7 @@ namespace BugTracker.Models
     
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
+        public virtual ICollection<Notification> Notifications1 { get; set; }
         public virtual ICollection<TicketAttachment> TicketAttachments { get; set; }
         public virtual ICollection<TicketHistory> TicketHistories { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }

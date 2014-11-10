@@ -16,11 +16,14 @@ namespace BugTracker.Models
     {
         public int ID { get; set; }
         public int TicketID { get; set; }
+        public int FromID { get; set; }
         public int ToID { get; set; }
         public System.DateTime OnDate { get; set; }
         public string Notification1 { get; set; }
+        public bool BeenRead { get; set; }
     
         public virtual Ticket Ticket { get; set; }
         public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

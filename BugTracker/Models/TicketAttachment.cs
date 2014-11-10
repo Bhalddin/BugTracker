@@ -11,7 +11,6 @@ namespace BugTracker.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Text.RegularExpressions;
     
     public partial class TicketAttachment
     {
