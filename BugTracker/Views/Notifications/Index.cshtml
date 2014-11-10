@@ -4,27 +4,26 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<h2>Notifications</h2>
+
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.OnDate)
+            From
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Notification1)
+            To
+        </th>
+        <th>
+            Date Sent
+        </th>
+        <th>
+            Notification
         </th>
         <th>
             @Html.DisplayNameFor(model => model.BeenRead)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Ticket.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
         </th>
         <th></th>
     </tr>
@@ -32,26 +31,30 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+            @Html.DisplayFor(m => item.User1.ASPUserName)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.OnDate)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Notification1)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.User.ASPUserName)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.BeenRead)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Ticket.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-        </td>
-        <td>
+        @*<td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
             @Html.ActionLink("Details", "Details", new { id=item.ID }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
+        </td>*@
     </tr>
 }
 
 </table>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>

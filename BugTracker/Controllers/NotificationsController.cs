@@ -11,17 +11,34 @@ using BugTracker.Models;
 
 namespace BugTracker.Controllers
 {
-    [Authorize(Roles="Administrator,Developer")]
+    [Authorize(Roles = "Administrator,Developer")]
     public class NotificationsController : Controller
     {
         private BugTrackerEntities db = new BugTrackerEntities();
 
         #region Index
         // GET: Notifications
-        public async Task<ActionResult> Index()
+        public ActionResult Index(int TicketID)
         {
-            var notifications = db.Notifications.Include(n => n.Ticket).Include(n => n.User);
-            return View(await notifications.ToListAsync());
+            // check you inputs
+            if (TicketID == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var notifications = db.Notifications
+                                    .Include(n => n.Ticket)
+                                    .Include(n => n.User)
+                                    .Where(n => n.TicketID == TicketID)
+                                    .OrderBy(n => n.ID);
+
+            if (Request.IsAjaxRequest() || ControllerContext.IsChildAction)
+            {
+                ViewBag.TicketID = TicketID;
+                return PartialView("_Index", notifications.ToList());
+            }
+
+            return View(notifications.ToList());
         }
         #endregion
 
@@ -44,11 +61,17 @@ namespace BugTracker.Controllers
 
         #region Create
         // GET: Notifications/Create
-        public ActionResult Create()
+        public ActionResult Create(int TicketID)
         {
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title");
+            // Check your inputs
+            if (TicketID == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewBag.TicketID = TicketID;
             ViewBag.ToID = new SelectList(db.Users, "ID", "ASPUserName");
-            return View();
+            return View(new NotificationViewModel() );
         }
 
         // POST: Notifications/Create
@@ -56,22 +79,41 @@ namespace BugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "TicketID,ToID,,Notification1")] Notification notification)
+        public async Task<ActionResult> Create([Bind(Include = "TicketID,ToID,Notification1")] NotificationViewModel notificationVM)
         {
-
             // add date
-            
+            // add fromID
+            notificationVM.OnDate = DateTime.UtcNow;
+            notificationVM.FromID = db.Users.Single(u => u.ASPUserName == HttpContext.User.Identity.Name).ID;
+
+            // check your inputs.
             if (ModelState.IsValid)
             {
+                Notification notification = new Notification
+                {
+                    FromID = notificationVM.FromID,
+                    ToID = notificationVM.ToID,
+                    TicketID = notificationVM.TicketID,
+                    OnDate = notificationVM.OnDate,
+                    Notification1 = notificationVM.Notification1
+                };
+
                 db.Notifications.Add(notification);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Tickets", new { id = notification.TicketID });
             }
 
             // error saving somehow.
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", notification.TicketID);
-            ViewBag.ToID = new SelectList(db.Users, "ID", "ASPUserName", notification.ToID);
-            return View(notification);
+            ViewBag.TicketID = notificationVM.TicketID;
+            ViewBag.ToID = new SelectList(db.Users, "ID", "ASPUserName", notificationVM.ToID);
+
+            NotificationViewModel noteVM = new NotificationViewModel
+            {
+                ToID = notificationVM.ToID,
+                Notification1 = notificationVM.Notification1
+            };
+
+            return View(noteVM);
         }
         #endregion
 

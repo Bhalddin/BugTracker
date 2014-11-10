@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BugTracker.Models.Notification>
+
+<h2>Notifications</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Info
+        </th>
+        <th>
+            Notification
+        </th>
+        <th>
+            Been Read
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <b>From: </b>@Html.DisplayFor(m => item.User1.ASPUserName)<br />
+                <b>To: </b>@Html.DisplayFor(modelItem => item.User.ASPUserName)<br />
+                <b>On: </b>@item.OnDate.ToShortDateString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notification1)
+            </td>   
+            <td>
+                @Html.DisplayFor(modelItem => item.BeenRead)
+            </td>
+            @*<td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+                </td>*@
+        </tr>
+    }
+
+</table>
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { TicketID = ViewBag.TicketID }, new { @class = "btn btn-info" })
+</p>

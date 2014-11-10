@@ -221,10 +221,12 @@
     <Compile Include="Models\Notification.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\NotificationViewModel.cs" />
     <Compile Include="Models\Project.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProjectViewModel.cs" />
+    <Compile Include="Models\ProjectUserViewModel.cs" />
+    <Compile Include="Models\ProjectCreateViewModel.cs" />
     <Compile Include="Models\RolesViewModel.cs" />
     <Compile Include="Models\Ticket.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
@@ -382,6 +384,7 @@
     <Content Include="Views\Notifications\Edit.cshtml" />
     <Content Include="Views\Notifications\Index.cshtml" />
     <Content Include="Views\Projects\RemoveUsers.cshtml" />
+    <Content Include="Views\Notifications\_Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

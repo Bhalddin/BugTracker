@@ -1,66 +1,67 @@
-﻿@model BugTracker.Models.Notification
+﻿@model BugTracker.Models.NotificationViewModel
 
 @{
     ViewBag.Title = "Create";
+    Model.TicketID = ViewBag.TicketID;
 }
 
 <h2>Notification</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.TicketID)
         @*<div class="form-group">
-            @Html.LabelFor(model => model.TicketID, "TicketID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("TicketID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.TicketID, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                @Html.LabelFor(model => model.TicketID, "TicketID", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("TicketID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TicketID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.ToID, "To Person", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("ToID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("ToID", null, "-- Select Recipiant --", htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ToID, "", new { @class = "text-danger" })
             </div>
         </div>
 
         @*<div class="form-group">
-            @Html.LabelFor(model => model.OnDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.OnDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.OnDate, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                @Html.LabelFor(model => model.OnDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.OnDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.OnDate, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Notification1, "Notification", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <textarea class="form-control" name="Notification1"></textarea>
+                <textarea class="form-control" name="Notification1">@Model.Notification1</textarea>
                 @Html.ValidationMessageFor(model => model.Notification1, "", new { @class = "text-danger" })
             </div>
         </div>
 
         @*<div class="form-group">
-            @Html.LabelFor(model => model.BeenRead, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.BeenRead)
-                    @Html.ValidationMessageFor(model => model.BeenRead, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.BeenRead, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.BeenRead)
+                        @Html.ValidationMessageFor(model => model.BeenRead, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
-                <button class="btn btn-warning">Cancel</button>
+                @Html.ActionLink("Cancel", "Details", new { id = ViewBag.TicketID }, new { @class = "btn btn-warning" })
             </div>
-                
         </div>
     </div>
 }

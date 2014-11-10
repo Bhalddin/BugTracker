@@ -17,7 +17,7 @@
 <hr />
 <div class="row">
 
-    <div class="col-md-6">
+    <div class="col-md-5">
         <dl class="dl-horizontal">
 
             @if (IsAuth)
@@ -76,7 +76,7 @@
 
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-7">
         @if (IsAuth)
         {
 
@@ -93,7 +93,7 @@
 
             <details class="alert alert-info">
                 <summary class="text-center"><b>Notifications </b><span class="badge">0</span></summary>
-                @*@(Html.Action("Index", "Comments", new { id = Model.ID }))*@
+                @(Html.Action("Index", "Notifications", new { TicketID = Model.ID }))
             </details>
 
             <details class="alert alert-success">

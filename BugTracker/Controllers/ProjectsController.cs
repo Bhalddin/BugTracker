@@ -11,7 +11,7 @@ using BugTracker.Models;
 
 namespace BugTracker.Controllers
 {
-    [Authorize(Roles="Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class ProjectsController : Controller
     {
         private BugTrackerEntities db = new BugTrackerEntities();
@@ -53,14 +53,14 @@ namespace BugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ProjectName,ProjectDescription")] ProjectViewModel project, int? x)
+        public async Task<ActionResult> Create([Bind(Include = "ProjectName,ProjectDescription")] ProjectCreateViewModel projectCreateVM)
         {
             if (ModelState.IsValid)
             {
                 Project proj = new Project
                 {
-                    ProjectDescription = project.ProjectDescription,
-                    ProjectName = project.ProjectName
+                    ProjectDescription = projectCreateVM.ProjectDescription,
+                    ProjectName = projectCreateVM.ProjectName
                 };
 
                 db.Projects.Add(proj);
@@ -68,7 +68,7 @@ namespace BugTracker.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(project);
+            return View(projectCreateVM);
         }
         #endregion
 
@@ -121,11 +121,11 @@ namespace BugTracker.Controllers
                                 .Where(u => !u.Projects.Any(p => p.ID == projectID));
 
             // build VM
-            ProjectViewModel model = new ProjectViewModel
+            ProjectUserViewModel model = new ProjectUserViewModel
             {
                 ID = projectID,
                 ProjectName = db.Projects.Find(projectID).ProjectName,
-                Users = new MultiSelectList(userInProj, "ID", "ASPUserName")  
+                Users = new MultiSelectList(userInProj, "ID", "ASPUserName")
             };
 
             // return list.
@@ -134,25 +134,22 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddUsers(ProjectViewModel projectVM)
+        public ActionResult AddUsers([Bind(Include = "ID,SelectedUsers")] ProjectUserViewModel projectUserVM)
         {
-            // dummy params for the required in VM for the the Create page.
-            projectVM.ProjectName = "aaa";
-            projectVM.ProjectDescription = "aaa";
-
             // check your inputs
             if (ModelState.IsValid)
             {
                 // add each selected user to the project
                 //var proj = db.Projects.Where(p => p.ID == projectVM.ID).ToList();
-                var proj = new Project { ID = projectVM.ID };
+                var proj = new Project { ID = projectUserVM.ID };
                 db.Projects.Attach(proj);
 
-                foreach (int userName in projectVM.SelectedUsers)
+                foreach (int userName in projectUserVM.SelectedUsers)
                 {
                     // get User, add current project, save changes.
                     var user = db.Users.Include(u => u.Projects).Single(u => u.ID == userName);
 
+                    // add the project to the user.
                     user.Projects.Add(proj);
 
                     // save changes
@@ -169,7 +166,7 @@ namespace BugTracker.Controllers
         #endregion
 
         #region Remove User
-                // GET:  /Projects/RemoveUsers
+        // GET:  /Projects/RemoveUsers
         public ActionResult RemoveUsers(int projectID)
         {
             // check your inputs
@@ -184,7 +181,7 @@ namespace BugTracker.Controllers
                                 .Where(u => u.Projects.Any(p => p.ID == projectID));
 
             // build VM
-            ProjectViewModel model = new ProjectViewModel
+            ProjectUserViewModel model = new ProjectUserViewModel
             {
                 ID = projectID,
                 ProjectName = db.Projects.Find(projectID).ProjectName,
@@ -197,25 +194,22 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RemoveUsers(ProjectViewModel projectVM)
+        public ActionResult RemoveUsers([Bind(Include = "ID,SelectedUsers")] ProjectUserViewModel projectUserVM)
         {
-            // dummy params for the required in VM for the the Create page.
-            projectVM.ProjectName = "aaa";
-            projectVM.ProjectDescription = "aaa";
-
             // check your inputs
             if (ModelState.IsValid)
             {
                 // add each selected user to the project
                 //var proj = db.Projects.Where(p => p.ID == projectVM.ID).ToList();
-                var proj = new Project { ID = projectVM.ID };
+                var proj = new Project { ID = projectUserVM.ID };
                 db.Projects.Attach(proj);
 
-                foreach (int userName in projectVM.SelectedUsers)
+                foreach (int userName in projectUserVM.SelectedUsers)
                 {
-                    // get User, get his projects, add current project to his, save changes.
+                    // get User, add current project, save changes.
                     var user = db.Users.Include(u => u.Projects).Single(u => u.ID == userName);
 
+                    // add the project to the user.
                     user.Projects.Remove(proj);
 
                     // save changes
@@ -225,7 +219,6 @@ namespace BugTracker.Controllers
                 // return to Project Index
                 return RedirectToAction("Index");
             }
-
             // ViewModel was messed up, need to return with error message.
             return View("Error");
         }
