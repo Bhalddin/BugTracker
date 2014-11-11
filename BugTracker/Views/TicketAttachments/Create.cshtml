@@ -1,10 +1,10 @@
 ﻿@model BugTracker.Models.TicketAttachment
 
 @{
-    ViewBag.Title = "Upload an attachment";
+    ViewBag.Title = "Upload an Attachment";
 }
 
-<h2>Upload an attachment</h2>
+<h2>Upload an Attachment</h2>
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -13,28 +13,38 @@
     @Html.Hidden("TicketID", (int)ViewBag.TicketID)
 
     <div class="form-horizontal">
-        <h4>TicketAttachment</h4>
         <hr />
 
-        @* Upload an attachment *@
-        <div class="row">
-              @{ @Html.Action("Create", new { count = 0 }) }
-        </div>
-    </div>
+        @* Upload an attachment - using _AttachTemplate partial below. *@
+        <p>
+            <button id="attachButton" class="btn btn-info form-group col-md-offset-3">Upload an Attachment</button>
+        </p>
 
-    @* Submit and cancel buttons *@
-    <p>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-1">
-                <input type="submit" value="Save" class="btn btn-default" />
+        @* Submit and cancel buttons *@
+        <p>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-1">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+                <div class="col-md-8">
+                    <a class="btn btn-warning" href="/Tickets">Cancel</a>
+                </div>
             </div>
-            <div class="col-md-1">
-                <a class="btn btn-warning" href="/Tickets">Cancel</a>
-            </div>
-        </div>
-    </p>
+        </p>
+
+    </div>
 }
 
 @section Scripts{
-    <script src="~/Scripts/AddAttachment.js"></script>
+
+}
+
+@section Templates {
+
+    @Html.Partial("_AttachTemplate")
+
+    @* Start with a form ready *@
+    <script>
+        $(function () { document.querySelector("#attachButton").click(); });
+    </script>
 }

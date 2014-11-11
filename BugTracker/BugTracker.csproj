@@ -370,7 +370,6 @@
     <Content Include="Views\TicketAttachments\Details.cshtml" />
     <Content Include="Views\TicketAttachments\Edit.cshtml" />
     <Content Include="Views\TicketAttachments\Index.cshtml" />
-    <Content Include="Views\TicketAttachments\_AttachmentForm.cshtml" />
     <Content Include="Views\TicketAttachments\_Index.cshtml" />
     <Content Include="Views\Projects\Create.cshtml" />
     <Content Include="Views\Projects\Delete.cshtml" />
@@ -385,6 +384,7 @@
     <Content Include="Views\Notifications\Index.cshtml" />
     <Content Include="Views\Projects\RemoveUsers.cshtml" />
     <Content Include="Views\Notifications\_Index.cshtml" />
+    <Content Include="Views\Shared\_AttachTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -95,9 +95,15 @@ namespace BugTracker.Controllers
                 // save attachments to db.
                 foreach (string key in Request.Files)
                 {
+                    // check that file exists.
+                    var file = Request.Files[key];
+                    if (file == null || file.ContentLength == 0) continue;
+
                     string currentDesc = Request.Form[key];
                     string serverFolderPath = Server.MapPath("~/App_Data/Attachments/");
-                    TicketAttachment.SaveAsAttachment(Request.Files[key], serverFolderPath, db, TicketID, SubmitterID, currentDesc);
+                    
+                    // save file to server and database.
+                    TicketAttachment.SaveAsAttachment( file, serverFolderPath, db, TicketID, SubmitterID, currentDesc);
                 }
 
                 return RedirectToAction("Details", "Tickets", new { id = TicketID });
@@ -198,5 +204,6 @@ namespace BugTracker.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }
