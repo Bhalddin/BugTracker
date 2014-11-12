@@ -1,0 +1,25 @@
+
+MIGRATION: create db, seed the db, apply any schema changes
+	- you enable Migration.. PER DB, or PER CONTEXT!!!!, NOT just migrate ALL feature
+
+1. what happens when you 'ENABLE-migrations'?
+	- it looks through your project, and finds all the classes that derive from DbContext.
+	- you can only enable migrations one at a time though, so if there's 2 files, you must be explicit.
+	- BUT! to orginize your migrations, set the -MigrationFolder option to be a seperate folder in datacontext folder.
+	
+2. time to SETUP the configure migration file, there can only be 1 migration-configure file in a directory(folder)
+		- so for each db, create a folder next to it to hold it's migration configure file
+		- for the -configurationTypeName (which is the dbcontext classes you want backing db's to)
+			use the full namespace name, and you should set the -MigrationDirectory in a new folder as well.
+
+3. time to add(create) a migration(the method to use for migrations).
+	- want it to create the db if it isn't there.
+	- add-migration -configurationtypename LongNamespaceName.CONFIGURATION(the one we just made) "InitialCreate"
+	- this auto creates the mig. that creates the table
+
+4. time to run the migrations
+	- update-database will apply all the migrations that haven't been applied yet. 
+	- Now we did do this explicitly, BUT we could Set up Code in that initial Run File to AUto Update for us.
+
+
+-------------------------

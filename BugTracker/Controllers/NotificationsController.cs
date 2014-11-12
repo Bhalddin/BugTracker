@@ -70,8 +70,20 @@ namespace BugTracker.Controllers
             }
 
             ViewBag.TicketID = TicketID;
-            ViewBag.ToID = new SelectList(db.Users, "ID", "ASPUserName");
-            return View(new NotificationViewModel() );
+
+            // can pick select users that have roles b/c that means that they are a developer or admin.
+            var aspUsersInRoles = new ApplicationDbContext().Users
+                .Where(u => u.Roles.Count != 0)
+                .Select(u => u.UserName)
+                .ToList();
+
+            // remove the name of the current user.
+            aspUsersInRoles.Remove(HttpContext.User.Identity.Name);
+
+            var users = db.Users.Where(u => aspUsersInRoles.Any(asp => asp == u.ASPUserName));
+            ViewBag.ToID = new SelectList(users, "ID", "ASPUserName");
+
+            return View( new NotificationViewModel() );
         }
 
         // POST: Notifications/Create

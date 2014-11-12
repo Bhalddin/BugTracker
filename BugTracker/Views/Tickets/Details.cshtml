@@ -12,66 +12,93 @@
 }
 
 
-<h2><b>Ticket:</b> @Model.Title</h2>
+<h1>
+    <b>Ticket:</b> @Model.Title
+</h1>
 
-<hr />
+
 <div class="row">
 
     <div class="col-md-5">
-        <dl class="dl-horizontal">
+        <table id="detailsTable" class="table table-condensed">
+            <tbody>
+                @if (IsAuth)
+                {
+                    <tr>
+                        <td><b>Ticket Submitter:</b></td>
+                        <td>@Html.DisplayFor(model => model.User.ASPUserName)</td>
+                    </tr>
+                }
+                @if (IsAdmin)
+                {
+                    <tr>
+                        <td><b>Assigned developer:</b></td>
+                        <td>@Html.DisplayFor(model => model.User1.ASPUserName)</td>
+                    </tr>
+                }
+                <tr>
+                    <td><b>Date submitted:</b></td>
+                    <td>@Model.CreatedDate.ToShortDateString(    )</td>
+                </tr>
+                <tr>
+                    <td>
+                        <br />
+                        <b>Description:</b><br />
+                        <br />
+                    </td>
+                    <td>
+                        <br />
+                        @Html.DisplayFor(model => model.Description)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br />
+                        <b>Resolution:</b><br />
+                        <br />
+                    </td>
+                    <td>
+                        <br />
+                        @Html.DisplayFor(model => model.Resolution)
+                    </td>
+                </tr>
+                @if (IsAuth)
+                {
+                    <tr>
+                        <td><b>Date last updated:</b></td>
+                        <td>@Model.DateLastUpdated.ToShortDateString()</td>
+                    </tr>
+                }
+                <tr>
+                    <td><b>Project:</b></td>
+                    <td>@Html.DisplayFor(model => model.Project.ProjectName)</td>
+                </tr>
+                <tr>
+                    <td><b>Ticket type:</b></td>
+                    <td>@Html.DisplayFor(model => model.TicketType.Type)</td>
+                </tr>
+                @if (IsAuth)
+                {
+                    <tr>
+                        <td><b>Ticket status:</b></td>
+                        <td>@Html.DisplayFor(model => model.TicketStatus.Status)</td>
+                    </tr>
+                    <tr>
+                        <td><b>Priority level:</b></td>
+                        <td>@Html.DisplayFor(model => model.TicketPriority.Priority)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-            @if (IsAuth)
-            {
-                <dt>Ticket Submitter</dt>
-                <dd>@Html.DisplayFor(model => model.User.ASPUserName)</dd>
-            }
 
-            @if (IsAdmin)
-            {
-                <dt>Assigned developer</dt>
-                <dd>@Html.DisplayFor(model => model.User1.ASPUserName)</dd>
-            }
-
-            <dt>Date submitted</dt>
-            <dd>@Model.CreatedDate.ToShortDateString()</dd>
-
-            <dt>Description</dt>
-            <dd>@Html.DisplayFor(model => model.Description)</dd>
-
-            <dt>Resolution</dt>
-            <dd>@Html.DisplayFor(model => model.Resolution)</dd>
-
-            @if (IsAuth)
-            {
-                <dt>Date last updated</dt>
-                <dd>@Model.DateLastUpdated.ToShortDateString()</dd>
-            }
-
-            <dt>Project</dt>
-            <dd>@Html.DisplayFor(model => model.Project.ProjectName)</dd>
-
-            <dt>Ticket type</dt>
-            <dd>@Html.DisplayFor(model => model.TicketType.Type)</dd>
-
-            @if (IsAuth)
-            {
-                <dt>Ticket status</dt>
-                <dd>@Html.DisplayFor(model => model.TicketStatus.Status)</dd>
-
-                <dt>Priority level</dt>
-                <dd>@Html.DisplayFor(model => model.TicketPriority.Priority)</dd>
-            }
-        </dl>
-
-        @if (IsAdmin)
-        {
-            <p>
-                @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary" })
-            </p>
-        }
 
         <p>
             @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" })
+            @if (IsAdmin)
+            {
+                @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary text-right" })
+            }
         </p>
 
     </div>
@@ -81,7 +108,7 @@
         {
             <details class="alert alert-info">
                 <summary class="text-center"><b>Comments </b><span class="badge">0</span></summary>
-                @{ Html.Action("Index", "Comments", new { id = Model.ID }); }
+                @{ Html.RenderAction("Index", "Comments", new { id = Model.ID }); }
             </details>
 
             <details class="alert alert-success">
@@ -91,7 +118,7 @@
 
             <details class="alert alert-info">
                 <summary class="text-center"><b>Notifications </b><span class="badge">0</span></summary>
-                @{ Html.Action("Index", "Notifications", new { TicketID = Model.ID }); }
+                @{ Html.RenderAction("Index", "Notifications", new { TicketID = Model.ID }); }
             </details>
 
             <details class="alert alert-success">
@@ -102,4 +129,3 @@
 
     </div>
 </div>
-

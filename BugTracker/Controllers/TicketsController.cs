@@ -73,7 +73,6 @@ namespace BugTracker.Controllers
                                 .Include(t => t.User1);
 
 
-
             // add filtering to tickets.
             tickets = tickets
                         .Where(t => filters.TicketPriorityID == null || t.TicketPriorityID == filters.TicketPriorityID)

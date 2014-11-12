@@ -8,7 +8,7 @@ using Owin;
 using BugTracker.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Owin.Security.Providers.LinkedIn;
-
+using System.Linq;
 
 namespace BugTracker
 {
@@ -96,7 +96,7 @@ namespace BugTracker
             // Create Roles
             SeedRole("Administrator");
             SeedRole("Developer");
-            SeedRole("default");
+            //SeedRole("default");
 
             
             // function to easily and safely seed users.
@@ -111,15 +111,28 @@ namespace BugTracker
                         // create user
                         user = new ApplicationUser { UserName = name, Email = email };
                         var result = userManager.Create(user, pass);
-
-                        if (result.Succeeded && role != "")
-                            userManager.AddToRole(user.Id, role);
                     }
-                    else
+
+                    // if user isn't in the given role(if a role is given at all), add him.
+                    if (role != "" && !userManager.IsInRole(user.Id, role))
+                        userManager.AddToRole(user.Id, role);
+
+
+                    // --- now add them to user table if they arn't there ---
+                    var db = new BugTrackerEntities();
+                    var bugUser = db.Users.SingleOrDefault(u => u.ASPUserName == user.UserName);
+
+                    if (bugUser == null)
                     {
-                        // if user isn't in the given role, add him.
-                        if (!userManager.IsInRole(user.Id, role))
-                            userManager.AddToRole(user.Id, role);
+                        db.Users.Add(new User
+                        {
+                            ASPUserName = user.UserName,
+                            Email = user.Email,
+                            FirstName = user.UserName + "First",
+                            LastName = user.UserName + "Last"
+                        });
+
+                        db.SaveChanges();
                     }
                 };
 
@@ -128,8 +141,9 @@ namespace BugTracker
             SeedUser("AdminUser", "Administrator", "admin@admin.com", "Password");
             SeedUser("DevUser1", "Developer", "dev1@dev1.com", "Password");
             SeedUser("DevUser2", "Developer", "dev2@dev2.com", "Password");
-            SeedUser("User1", "default", "user1@user1.com", "Password");
-            SeedUser("User2", "default", "user2@user2.com", "Password");
+            SeedUser("User1", "", "user1@user1.com", "Password");
+            SeedUser("User2", "", "user2@user2.com", "Password");
+            SeedUser("User3", "", "user3@user3.com", "Password");
 
         }
     }

@@ -36,3 +36,10 @@ form textarea.form-control {
     max-width: 550px;
     height: 200px;
 }
+
+
+/* Fixing up the Tickets Details Table */
+
+/*#detailsTable tbody tr td:first-child {
+    text-align: right;
+}*/

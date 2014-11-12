@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BugTracker.Models
 {
+    #region AUTO-GENERATED VMs I'm not concerned with
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
@@ -61,9 +62,22 @@ namespace BugTracker.Models
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
+    #endregion
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
