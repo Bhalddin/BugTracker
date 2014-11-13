@@ -25,66 +25,68 @@
                 @if (IsAuth)
                 {
                     <tr>
-                        <td><b>Ticket Submitter:</b></td>
+                        <td><b>Ticket Submitter</b></td>
                         <td>@Html.DisplayFor(model => model.User.ASPUserName)</td>
                     </tr>
                 }
                 @if (IsAdmin)
                 {
                     <tr>
-                        <td><b>Assigned developer:</b></td>
+                        <td><b>Assigned developer</b></td>
                         <td>@Html.DisplayFor(model => model.User1.ASPUserName)</td>
                     </tr>
                 }
                 <tr>
-                    <td><b>Date submitted:</b></td>
+                    <td><b>Date submitted</b></td>
                     <td>@Model.CreatedDate.ToShortDateString(    )</td>
                 </tr>
                 <tr>
                     <td>
-                        <br />
-                        <b>Description:</b><br />
-                        <br />
+                        <p></p>
+                        <p><b>Description</b></p>
+                        <p></p>
                     </td>
                     <td>
-                        <br />
-                        @Html.DisplayFor(model => model.Description)
+                        <p></p>
+                        <p>@Html.DisplayFor(model => model.Description)</p>
+                        <p></p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <br />
-                        <b>Resolution:</b><br />
-                        <br />
+                        <p></p>
+                        <p><b>Resolution</b><br /></p>
+                        <p></p>
                     </td>
                     <td>
-                        <br />
-                        @Html.DisplayFor(model => model.Resolution)
+                        <p></p>
+                        <p>@Html.DisplayFor(model => model.Resolution)</p>
+                        <p></p>
                     </td>
                 </tr>
                 @if (IsAuth)
                 {
                     <tr>
-                        <td><b>Date last updated:</b></td>
+                        <td><b>Date last updated</b></td>
                         <td>@Model.DateLastUpdated.ToShortDateString()</td>
                     </tr>
                 }
                 <tr>
-                    <td><b>Project:</b></td>
+                    <td><b>Project</b></td>
                     <td>@Html.DisplayFor(model => model.Project.ProjectName)</td>
                 </tr>
                 <tr>
-                    <td><b>Ticket type:</b></td>
+                    <td><b>Ticket type</b></td>
                     <td>@Html.DisplayFor(model => model.TicketType.Type)</td>
                 </tr>
                 @if (IsAuth)
                 {
                     <tr>
-                        <td><b>Ticket status:</b></td>
+                        <td><b>Ticket status</b></td>
                         <td>@Html.DisplayFor(model => model.TicketStatus.Status)</td>
                     </tr>
                     <tr>
-                        <td><b>Priority level:</b></td>
+                        <td><b>Priority level</b></td>
                         <td>@Html.DisplayFor(model => model.TicketPriority.Priority)</td>
                     </tr>
                 }
@@ -94,7 +96,7 @@
 
 
         <p>
-            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" })
+            @Html.ActionLink("Back to Tickets", "Index", null, new { @class = "btn btn-info" })
             @if (IsAdmin)
             {
                 @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary text-right" })
@@ -107,23 +109,23 @@
         @if (IsAuth)
         {
             <details class="alert alert-info">
-                <summary class="text-center"><b>Comments </b><span class="badge">0</span></summary>
+                
                 @{ Html.RenderAction("Index", "Comments", new { id = Model.ID }); }
             </details>
 
             <details class="alert alert-success">
-                <summary class="text-center"><b>Attachments </b><span class="badge">0</span></summary>
+                
                 @{ Html.RenderAction("Index", "TicketAttachments", new { id = Model.ID }); }
             </details>
 
             <details class="alert alert-info">
-                <summary class="text-center"><b>Notifications </b><span class="badge">0</span></summary>
+                
                 @{ Html.RenderAction("Index", "Notifications", new { TicketID = Model.ID }); }
             </details>
 
             <details class="alert alert-success">
-                <summary class="text-center"><b>History </b><span class="badge">0</span></summary>
-                @*@(Html.Action("Index", "Comments", new { id = Model.ID }))*@
+
+                @{ Html.RenderAction("Index", "TicketHistory", new { id = Model.ID }); }
             </details>
         }
 

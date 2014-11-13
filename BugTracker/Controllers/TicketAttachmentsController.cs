@@ -35,6 +35,7 @@ namespace BugTracker.Controllers
             // if this is an ajax request or child action return a partial.
             if (Request.IsAjaxRequest() || ControllerContext.IsChildAction)
             {
+                ViewBag.BadgeCount = ticketAttachments.Count();
                 return PartialView("_Index", ticketAttachments.ToList());
             }
 

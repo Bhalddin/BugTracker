@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -10,7 +11,7 @@
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
         <li>
-            <a>Notifications <span class="badge bg-info">0</span></a>
+            <a>Notifications <span class="badge bg-info">@{ Html.RenderAction("NotifyBadge", "Notifications"); }</span></a>
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>

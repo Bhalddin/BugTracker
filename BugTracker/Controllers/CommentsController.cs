@@ -32,6 +32,8 @@ namespace BugTracker.Controllers
 
             if (ControllerContext.IsChildAction)
             {
+
+                ViewBag.BadgeCount = comments.Count();
                 return PartialView("_Index", comments);
             }
 
@@ -69,10 +71,10 @@ namespace BugTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var username = HttpContext.User.Identity.Name;
+            var userName = HttpContext.User.Identity.Name;
 
-            ViewBag.TicketID = new SelectList(db.Tickets.Where(t=>t.ID==id), "ID", "Title", id);
-            ViewBag.CommentorID = new SelectList(db.Users.Where(u => u.ASPUserName == username), "ID", "ASPUserName");
+            ViewBag.TicketID = id;
+            ViewBag.CommentorID = db.Users.Single(u => u.ASPUserName == userName).ID;
             return View();
         }
 

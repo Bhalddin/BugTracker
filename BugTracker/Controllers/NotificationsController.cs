@@ -35,6 +35,7 @@ namespace BugTracker.Controllers
             if (Request.IsAjaxRequest() || ControllerContext.IsChildAction)
             {
                 ViewBag.TicketID = TicketID;
+                ViewBag.BadgeCount = notifications.Count();
                 return PartialView("_Index", notifications.ToList());
             }
 
@@ -164,6 +165,26 @@ namespace BugTracker.Controllers
             ViewBag.ToID = new SelectList(db.Users, "ID", "FirstName", notification.ToID);
             return View(notification);
         }
+        #endregion
+
+        #region Personal and Note Badge
+
+        // returns the number of Notifications not read yet.
+        public string NotifyBadge()
+        {
+            var userName = HttpContext.User.Identity.Name;
+            var userId = db.Users.Single(u => u.ASPUserName == userName).ID;
+            int count = db.Notifications.Count(n => n.ToID == userId);
+            // add a "+" if it's greater than 1.
+            string badge = (count > 0) ? "+" + count : count.ToString();
+
+            return badge;
+        }
+
+        //public ActionResult Personal(int? id)
+        //{
+
+        //}
         #endregion
 
         #region Delete

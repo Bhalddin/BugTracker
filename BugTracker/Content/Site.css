@@ -33,13 +33,29 @@ table.text-center td {
 
 /* Style the description text area*/
 form textarea.form-control {
-    max-width: 550px;
-    height: 200px;
+    max-width: 450px;
+    height: 150px;
 }
 
 
 /* Fixing up the Tickets Details Table */
 
-/*#detailsTable tbody tr td:first-child {
-    text-align: right;
-}*/
+#detailsTable tbody tr td {
+    vertical-align: middle !important;
+}
+
+#detailsTable tbody tr td:first-child {
+
+}
+
+
+/* removing margins from the summaries when given an h class*/
+summary.h3 {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    vertical-align: middle !important;
+}
+
+summary .badge {
+    vertical-align: middle !important;
+}

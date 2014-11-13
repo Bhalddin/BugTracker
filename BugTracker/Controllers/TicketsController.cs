@@ -13,6 +13,7 @@ using PagedList;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.IO;
+using BugTracker.Utilities;
 
 namespace BugTracker.Controllers
 {
@@ -299,8 +300,16 @@ namespace BugTracker.Controllers
             // check your inputs
             if (ModelState.IsValid)
             {
-                db.Entry(ticket).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                //db.Entry(ticket).State = EntityState.Modified;
+                //await db.SaveChangesAsync();
+
+                var currentUser = HttpContext.User.Identity.Name;
+                var userID = db.Users.Single(u => u.ASPUserName == currentUser).ID;
+
+                // save and update history
+                HistoryUtilities.UpdateTicketAndHistory(ticket, userID, db);
+
+
                 return RedirectToAction("Details", new { id = ticket.ID });
             }
 

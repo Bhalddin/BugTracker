@@ -116,16 +116,20 @@ namespace BugTracker.Controllers
             }
 
             // We are ADDING users NOT already in the project, so find user not in project.
-            var userInProj = db.Users
-                                .Include(u => u.Projects)
-                                .Where(u => !u.Projects.Any(p => p.ID == projectID));
+            //var usersNotInProj = db.Users
+            //                    .Include(u => u.Projects)
+            //                    .Where(u => !u.Projects.Any(p => p.ID == projectID));
+
+            // much cleaner ways of selecting users in a project.
+            var usersInProj = db.Projects.Find(projectID).Users.Select(u => u.ID);
+            var usersNotInProj = db.Users.Where(u => !usersInProj.Contains(u.ID));
 
             // build VM
             ProjectUserViewModel model = new ProjectUserViewModel
             {
                 ID = projectID,
                 ProjectName = db.Projects.Find(projectID).ProjectName,
-                Users = new MultiSelectList(userInProj, "ID", "ASPUserName")
+                Users = new MultiSelectList(usersNotInProj, "ID", "ASPUserName")
             };
 
             // return list.
@@ -176,16 +180,19 @@ namespace BugTracker.Controllers
             }
 
             // We are REMOVING users ALREADY in the project, so find user in project.
-            var userInProj = db.Users
-                                .Include(u => u.Projects)
-                                .Where(u => u.Projects.Any(p => p.ID == projectID));
+            //var userInProj = db.Users
+            //                    .Include(u => u.Projects)
+            //                    .Where(u => u.Projects.Any(p => p.ID == projectID));
+
+            // much cleaner ways of selecting users in a project.
+            var usersInProj = db.Projects.Find(projectID).Users;
 
             // build VM
             ProjectUserViewModel model = new ProjectUserViewModel
             {
                 ID = projectID,
                 ProjectName = db.Projects.Find(projectID).ProjectName,
-                Users = new MultiSelectList(userInProj, "ID", "ASPUserName")
+                Users = new MultiSelectList(usersInProj, "ID", "ASPUserName")
             };
 
             // return list.

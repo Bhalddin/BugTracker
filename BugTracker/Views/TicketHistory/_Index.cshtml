@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BugTracker.Models.TicketHistory>
+
+<summary class="text-center h3">History <span class="badge">@ViewBag.BadgeCount</span></summary>
+
+<table class="table">
+    <tr>
+        <th>
+            Edit Date
+        </th>
+        <th>
+            Editor
+        </th>
+        <th>
+            Alteration
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.User.FirstName)
+        </th>*@
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @item.DateOfChange.ToShortDateString()
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.ASPUserName)
+        </td>
+        <td>
+            @Html.Raw(item.Ticket_Alteration)
+        </td>
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>*@
+    </tr>
+}
+
+</table>
