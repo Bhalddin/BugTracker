@@ -58,7 +58,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="date" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TicketID" Type="int" Nullable="false" />
           <Property Name="TicketEditorID" Type="int" Nullable="false" />
           <Property Name="DateOfChange" Type="datetime" Nullable="false" />
@@ -473,7 +473,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TicketID" Type="Int32" Nullable="false" />
           <Property Name="TicketEditorID" Type="Int32" Nullable="false" />
           <Property Name="DateOfChange" Type="DateTime" Nullable="false" Precision="3" />

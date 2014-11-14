@@ -85,7 +85,7 @@ namespace BugTracker.Controllers
                         .Where(t => textSearchValue == ""
                                     || (textSearchField == "Title" && t.Title.Contains(textSearchValue))
                                     || (textSearchField == "Description" && t.Description.Contains(textSearchValue)));
-                        ///CONSIDER MAKING THIS MORE ROBUST HERE!
+            ///CONSIDER MAKING THIS MORE ROBUST HERE!
 
             // apply sorting only if we need to.
             // by default it should be ascending, ONLY when we are passed false should it be descending.
@@ -292,7 +292,7 @@ namespace BugTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(TicketViewModel ticketVM)
+        public ActionResult Edit(TicketViewModel ticketVM)
         {
             // create ticket from ticketViewmodel
             Ticket ticket = new Ticket(ticketVM);
@@ -307,7 +307,7 @@ namespace BugTracker.Controllers
                 var userID = db.Users.Single(u => u.ASPUserName == currentUser).ID;
 
                 // save and update history
-                HistoryUtilities.UpdateTicketAndHistory(ticket, userID, db);
+                HistoryUtilities.UpdateTicketAndHistory(ticket, userID);
 
 
                 return RedirectToAction("Details", new { id = ticket.ID });
@@ -333,6 +333,84 @@ namespace BugTracker.Controllers
         }
         #endregion
 
+
+        #region Add Resolution
+        // action so that a developer can add a resolution to a ticket, even though they can't add anything else.
+        [Authorize(Roles = "Administrator,Developer")]
+        public ActionResult AddResolution(int? id)
+        {
+            // check your inputs
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // -- should only allow the developer that's assigned to the ticket to get here. --
+
+            var isAdmin = User.IsInRole("Administrator");
+            var workingDeveloper = false;
+
+            // the developer chould be unassigned, which is a case we should check for.
+            var ticket = db.Tickets.Find(id);
+            if (ticket.AssignedToID != null)
+            {
+                workingDeveloper = ticket.User1.ASPUserName == HttpContext.User.Identity.Name;
+            }
+
+            // only let an admin or the working developer create a resolution.
+            if (isAdmin || workingDeveloper)
+            {
+                // return page that lets you add a resolution.
+                ViewBag.TicketID = id;
+
+                return View();
+            }
+
+            // if the caller reaches this point then they are NOT AUTHORIZED!
+            return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+        }
+
+
+        // action to save the resolution to the db and to update the history.
+        [HttpPost]
+        [Authorize(Roles = "Administrator,Developer")]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddResolution(ResolutionViewModel resolutionVM)
+        {
+            if (ModelState.IsValid)
+            {
+                // get the backing ticket
+                var ticket = db.Tickets.AsNoTracking().Single(t => t.ID == resolutionVM.TicketID);
+
+                // if ticket already has a resolution then do nothing and redirect to details
+                var HasResolution = !(ticket.Resolution == null || ticket.Resolution == "");
+                if (HasResolution)
+                {
+                    return RedirectToAction("Details", new { id = resolutionVM.TicketID });
+                }
+
+                // get the user's id for the history
+                var userName = HttpContext.User.Identity.Name;
+                var userID = db.Users.Single(u => u.ASPUserName == userName).ID;
+
+                // this should add the resolutino and update the status to RESOLVED.
+                ticket.Resolution = resolutionVM.resolutionText;
+                ticket.TicketStatusID = db.TicketStatuses.Single(s => s.Status == "Resolved").ID;
+
+
+                // update ticket and history
+                HistoryUtilities.UpdateTicketAndHistory(ticket, userID);
+
+                // return to the details page of the ticket
+                return RedirectToAction("Details", new { id = resolutionVM.TicketID });
+            }
+
+            // model wasn't valid, return it for fixing.
+            ViewBag.TicketID = resolutionVM.TicketID;
+            return View(resolutionVM);
+
+        }
+        #endregion
 
         #region Delete
         // GET: Tickets/Delete/5

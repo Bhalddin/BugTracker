@@ -229,6 +229,7 @@
     </Compile>
     <Compile Include="Models\ProjectUserViewModel.cs" />
     <Compile Include="Models\ProjectCreateViewModel.cs" />
+    <Compile Include="Models\ResolutionViewModel.cs" />
     <Compile Include="Models\RolesViewModel.cs" />
     <Compile Include="Models\Ticket.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
@@ -393,6 +394,7 @@
     <Content Include="Views\TicketHistory\Details.cshtml" />
     <Content Include="Views\TicketHistory\Edit.cshtml" />
     <Content Include="Views\TicketHistory\_Index.cshtml" />
+    <Content Include="Views\Tickets\AddResolution.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

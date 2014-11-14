@@ -29,7 +29,7 @@
                         <td>@Html.DisplayFor(model => model.User.ASPUserName)</td>
                     </tr>
                 }
-                @if (IsAdmin)
+                @if (IsAuth)
                 {
                     <tr>
                         <td><b>Assigned developer</b></td>
@@ -38,7 +38,7 @@
                 }
                 <tr>
                     <td><b>Date submitted</b></td>
-                    <td>@Model.CreatedDate.ToShortDateString(    )</td>
+                    <td>@Model.CreatedDate.ToShortDateString()</td>
                 </tr>
                 <tr>
                     <td>
@@ -60,9 +60,17 @@
                     </td>
                     <td>
                         <p></p>
-                        <p>@Html.DisplayFor(model => model.Resolution)</p>
+                        <p>
+                            @* if this is the developer working on the ticket, they should have the ability to add the resolution. *@
+                            @if (User.Identity.Name == Model.User1.ASPUserName && (Model.Resolution == null || Model.Resolution == ""))
+                            {
+                                @Html.ActionLink("Submit a Resolution", "AddResolution", new { id = Model.ID }, new { @class = "btn btn-success" })
+                            }
+                            @Html.DisplayFor(model => model.Resolution)
+                        </p>
                         <p></p>
                     </td>
+
                 </tr>
                 @if (IsAuth)
                 {
@@ -109,17 +117,17 @@
         @if (IsAuth)
         {
             <details class="alert alert-info">
-                
+
                 @{ Html.RenderAction("Index", "Comments", new { id = Model.ID }); }
             </details>
 
             <details class="alert alert-success">
-                
+
                 @{ Html.RenderAction("Index", "TicketAttachments", new { id = Model.ID }); }
             </details>
 
             <details class="alert alert-info">
-                
+
                 @{ Html.RenderAction("Index", "Notifications", new { TicketID = Model.ID }); }
             </details>
 

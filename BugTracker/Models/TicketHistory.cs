@@ -14,7 +14,7 @@ namespace BugTracker.Models
     
     public partial class TicketHistory
     {
-        public System.DateTime ID { get; set; }
+        public int ID { get; set; }
         public int TicketID { get; set; }
         public int TicketEditorID { get; set; }
         public System.DateTime DateOfChange { get; set; }

@@ -1,0 +1,41 @@
+﻿@model BugTracker.Models.ResolutionViewModel
+
+@{
+    ViewBag.Title = "Add Resolution";
+}
+
+<h2>Submit the Resolution</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.Hidden("TicketID", (int)ViewBag.TicketID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.resolutionText, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.resolutionText, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.resolutionText, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @* submit *@
+                <input type="submit" value="Submit Resolution" class="btn btn-default" />
+                @* Cancel *@
+                @Html.ActionLink("Cancel", "Details", "Tickets", new { id = ViewBag.TicketID }, new { @class = "btn btn-warning" })
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

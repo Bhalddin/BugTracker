@@ -80,9 +80,6 @@
 }
 @* ------------------------------------------------------------------------------------------------------------------------- *@
 
-<p>
-    @*I SHOULD PROBABLY PUT A BREAD CRUMB RIGHT HERE!*@
-</p>
 
 @MyPager()
 
@@ -91,7 +88,7 @@
         <tr>
             <th class="col1"><span class="text-info">Title</span></th>
             <th class="col2"><a href="@ASort("TicketStatusID")">Status @AddArrow("TicketStatusID")</a></th>
-            @if (IsAdmin)
+            @if (IsAuth)
             {
                 <th class="col3"><a href="@ASort("User1.ASPUserName")">Assigned developer @AddArrow("User1.ASPUserName")</a></th>
             }
@@ -118,7 +115,7 @@
             <tr>
                 <td class="col1">@item.Title</td>
                 <td class="col2">@item.TicketStatus.Status</td>
-                @if (IsAdmin)
+                @if (IsAuth)
                 {
                     <td class="col3">@((item.User1 != null) ? item.User1.ASPUserName : "")</td>
                 }
