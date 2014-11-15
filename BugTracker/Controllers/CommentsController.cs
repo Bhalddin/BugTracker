@@ -11,7 +11,7 @@ using BugTracker.Models;
 
 namespace BugTracker.Controllers
 {
-    [Authorize(Roles="Administrator,Developer")]
+    [Authorize]
     public class CommentsController : Controller
     {
         private BugTrackerEntities db = new BugTrackerEntities();
@@ -28,11 +28,14 @@ namespace BugTracker.Controllers
 
             ViewBag.TicketID = id;
             ViewBag.TicketTitle = db.Tickets.Find(id).Title;
-            var comments = db.Comments.Include(c => c.Ticket).Include(c => c.User).Where(c=>c.TicketID == id).OrderBy(c => c.ID);
+            var comments = db.Comments
+                                .Include(c => c.Ticket)
+                                .Include(c => c.User)
+                                .Where(c=>c.TicketID == id)
+                                .OrderBy(c => c.ID);
 
             if (ControllerContext.IsChildAction)
             {
-
                 ViewBag.BadgeCount = comments.Count();
                 return PartialView("_Index", comments);
             }

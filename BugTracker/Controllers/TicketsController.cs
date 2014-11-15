@@ -23,13 +23,9 @@ namespace BugTracker.Controllers
     {
         private BugTrackerEntities db = new BugTrackerEntities();
 
-        // --- HELPER FUNCTIONS ---
-
-        // Check to only allow ajax and child actions.
-        //Func<HttpRequestBase, bool> NotPartialRequest = (_request) => !(_request.IsAjaxRequest() || ControllerContext.IsChildAction);
-
 
         #region Partials
+        [OutputCache(Duration=60, VaryByParam="*")]
         /// <summary>
         /// Returns a partialView, a table of filtered Tickets.
         /// </summary>
@@ -47,7 +43,7 @@ namespace BugTracker.Controllers
             // Only allow ajax and child actions.
             var notPartialRequest = !(Request.IsAjaxRequest() || ControllerContext.IsChildAction);
             if (notPartialRequest)
-                return View("Error");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
 
             // Save filter paramaters in viewbag.
@@ -61,7 +57,7 @@ namespace BugTracker.Controllers
             //(b/c our inputs are mostly numbers, which won't have spaces to convert,we don't have to check those inputs)
             orderAscending = orderAscending ?? "true"; // default is set to be true.
             sort = (sort == null || sort == "") ? "false" : sort;
-
+            string[] SearchArray = textSearchValue.Split();
 
             // get the tickets with all of their data.
             var tickets = db.Tickets
@@ -69,7 +65,7 @@ namespace BugTracker.Controllers
                                 .Include(t => t.TicketPriority)
                                 .Include(t => t.TicketStatus)
                                 .Include(t => t.TicketType)
-                                .Include(t => t.Ticket1)
+                                //.Include(t => t.Ticket1)
                                 .Include(t => t.User)
                                 .Include(t => t.User1);
 
@@ -83,9 +79,8 @@ namespace BugTracker.Controllers
                         .Where(t => filters.AssignedToID == null || t.AssignedToID == filters.AssignedToID)
                         .Where(t => t.CreatedDate.CompareTo(filters.CreatedDate) >= 0)
                         .Where(t => textSearchValue == ""
-                                    || (textSearchField == "Title" && t.Title.Contains(textSearchValue))
-                                    || (textSearchField == "Description" && t.Description.Contains(textSearchValue)));
-            ///CONSIDER MAKING THIS MORE ROBUST HERE!
+                                    || (textSearchField == "Title" && SearchArray.All(word => t.Title.Contains(word)))
+                                    || (textSearchField == "Description" && SearchArray.All(word => t.Description.Contains(word))));
 
             // apply sorting only if we need to.
             // by default it should be ascending, ONLY when we are passed false should it be descending.
@@ -109,7 +104,7 @@ namespace BugTracker.Controllers
         }
 
 
-
+        [OutputCache(Duration = 3600)]
         /// <summary>
         /// Return partialView, select elements that are filtered according to other inputs.
         /// </summary>
@@ -193,7 +188,7 @@ namespace BugTracker.Controllers
         {
             ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName");
             ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type");
-            ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description");
+            //ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description");
 
             ViewBag.TicketTitle = "";
             ViewBag.Description = "";
@@ -230,14 +225,10 @@ namespace BugTracker.Controllers
                 return RedirectToAction("Index");
             }
 
-            // FIX WHEN YOU HAVE TIME.
+
             ViewBag.ProjectID = new SelectList(db.Projects, "ID", "ProjectName", ticketVM.ProjectID);
-            ViewBag.TicketPriorityID = new SelectList(db.TicketPriorities, "ID", "Priority", ticketVM.TicketPriorityID);
-            ViewBag.TicketStatusID = new SelectList(db.TicketStatuses, "StatusID", "Status", ticketVM.TicketStatusID);
             ViewBag.TicketTypeID = new SelectList(db.TicketTypes, "ID", "Type", ticketVM.TicketTypeID);
-            ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description", ticketVM.RelatedTicketID);
-            ViewBag.TicketSubmitterID = new SelectList(db.Users, "ID", "FirstName", ticketVM.TicketSubmitterID);
-            ViewBag.AssignedToID = new SelectList(db.Users, "ID", "FirstName", ticketVM.AssignedToID);
+            //ViewBag.RelatedTicketID = new SelectList(db.Tickets, "ID", "Description", ticketVM.RelatedTicketID);
 
             ViewBag.TicketTitle = ticketVM.Title;
             ViewBag.Description = ticketVM.Description;
@@ -307,7 +298,7 @@ namespace BugTracker.Controllers
                 var userID = db.Users.Single(u => u.ASPUserName == currentUser).ID;
 
                 // save and update history
-                HistoryUtilities.UpdateTicketAndHistory(ticket, userID);
+                HistoryUtilities.UpdateTicketAndLog(ticket, userID);
 
 
                 return RedirectToAction("Details", new { id = ticket.ID });
@@ -399,7 +390,7 @@ namespace BugTracker.Controllers
 
 
                 // update ticket and history
-                HistoryUtilities.UpdateTicketAndHistory(ticket, userID);
+                HistoryUtilities.UpdateTicketAndLog(ticket, userID);
 
                 // return to the details page of the ticket
                 return RedirectToAction("Details", new { id = resolutionVM.TicketID });
@@ -411,6 +402,7 @@ namespace BugTracker.Controllers
 
         }
         #endregion
+
 
         #region Delete
         // GET: Tickets/Delete/5
@@ -440,21 +432,6 @@ namespace BugTracker.Controllers
         }
 
         #endregion
-
-
-        public ActionResult Comments(int? id)
-        {
-            //check your inputs
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            ViewBag.TicketID = id;
-            var comments = db.Comments.Where(c => c.TicketID == id);
-
-            return View(comments.ToList());
-        }
 
 
         protected override void Dispose(bool disposing)

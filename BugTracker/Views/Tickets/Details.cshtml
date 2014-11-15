@@ -61,11 +61,16 @@
                     <td>
                         <p></p>
                         <p>
-                            @* if this is the developer working on the ticket, they should have the ability to add the resolution. *@
-                            @if (User.Identity.Name == Model.User1.ASPUserName && (Model.Resolution == null || Model.Resolution == ""))
-                            {
-                                @Html.ActionLink("Submit a Resolution", "AddResolution", new { id = Model.ID }, new { @class = "btn btn-success" })
+                            @{
+                                // if this is the developer working on the ticket, they should have the ability to add the resolution.
+                                var noResolution = (Model.Resolution == null || Model.Resolution == "");
+                                var isAssignedDev = User.Identity.Name == Model.User1.ASPUserName;
+                                if ((IsAdmin || isAssignedDev) && noResolution)
+                                {
+                                    @Html.ActionLink("Submit a Resolution", "AddResolution", new { id = Model.ID }, new { @class = "btn btn-success" })
+                                }
                             }
+
                             @Html.DisplayFor(model => model.Resolution)
                         </p>
                         <p></p>

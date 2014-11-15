@@ -9,6 +9,7 @@ namespace BugTracker.Controllers
     public class HomeController : Controller
     {
         [RequireHttps]
+        [OutputCache(Duration = 360)]
         public ActionResult Index()
         {
 
