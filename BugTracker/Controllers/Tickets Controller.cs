@@ -189,12 +189,14 @@ namespace BugTracker.Controllers
 
             // get tickets that they have submitted
             var theirTickets = db.Tickets
+                                    .Include(t => t.TicketStatus)
                                     .Where(t => t.AssignedToID == userID)
                                     .OrderByDescending(t => t.ID);
             //.ToPagedList(1, 100); // need to think more about whether to page or not.
 
             // Tickets with Waiting Notifications.
             ViewBag.WaitingTickets = db.Notifications
+                                        .Include(n => n.Ticket.TicketStatus)
                                         .Where(n => !n.BeenRead && n.ToID == userID)
                                         .Select(n => n.Ticket)
                                         .Distinct();
@@ -212,6 +214,7 @@ namespace BugTracker.Controllers
 
             // Tickets with Waiting Notifications.
             var awaitingTickets = db.Notifications
+                                        .Include(n => n.Ticket.TicketStatus)
                                         .Where(n => !n.BeenRead && n.ToID == userID)
                                         .Select(n => n.Ticket)
                                         .Distinct();

@@ -31,9 +31,10 @@
         @*<th>
                 @Html.DisplayNameFor(model => model.TicketPriority.Priority)
             </th>*@
-        <th>
+        @* figure this out Later *************** *@
+        @*<th>
             @Html.DisplayNameFor(model => model.TicketStatus.Status)
-        </th>
+        </th>*@
         @*<th>
                 @Html.DisplayNameFor(model => model.TicketType.Type)
             </th>*@
@@ -67,9 +68,10 @@
             @*<td>
                     @Html.DisplayFor(modelItem => item.TicketPriority.Priority)
                 </td>*@
-            <td>
+            @* figure this out Later *************** *@
+            @*<td>
                 @Html.DisplayFor(modelItem => item.TicketStatus.Status)
-            </td>
+            </td>*@
             @*<td>
                     @Html.DisplayFor(modelItem => item.TicketType.Type)
                 </td>*@
@@ -79,8 +81,8 @@
             @*<td>
                     @Html.DisplayFor(modelItem => item.User1.FirstName)
                 </td>*@
-            <td>
-                @Html.ActionLink("Go to Ticket", "Details", new { id = item.ID }, new { @class = "btn btn-default" })
+            <td class="btn-s">
+                @Html.ActionLink("Go to Ticket", "Details", new { id = item.ID }, new { @class = "btn btn-sm btn-warning" })
             </td>
         </tr>
     }

@@ -36,6 +36,7 @@ namespace BugTracker.Models
             this.ProjectID = (int)ticketVM.ProjectID;
             this.Title = ticketVM.Title;
             this.Description = ticketVM.Description;
+            this.Resolution = ticketVM.Resolution;
             this.RelatedTicketID = ticketVM.RelatedTicketID;
         }
 

@@ -134,13 +134,12 @@
                     <td class="col11">@item.TicketPriority.Priority</td>
                 }
                 <td>
-                    <div class="btn-group-vertical">
-                        @if (IsAdmin)
-                        {
-                            @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-default ignore" })
-                        }
+
                         @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary ignore" })
-                    </div>
+                    @if (IsAdmin)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-info ignore" })
+                    }
                 </td>
             </tr>
         }
