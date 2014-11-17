@@ -23,7 +23,7 @@
     </span>
     <input class="btn btn-primary" type="submit" value="Search!" />
 
-</form>
+</form> 
 
 @* The advanced filters *@
 <div id="advSearchForm" class="text-center" style="display: none">
@@ -33,11 +33,14 @@
             @Html.Action("TicketFilterForm")
         </div>
     </div>
+
     <br />
+
     @* Radios to select which colums are being displayed. *@
     <div class="row">
         <details class="text-center">
             <summary class="text-center btn btn-success">Column Selector</summary>
+            <br />
             <div class="alert alert-success">
                 <table id="col-selector" class="table table-condensed text-center">
                     <thead>

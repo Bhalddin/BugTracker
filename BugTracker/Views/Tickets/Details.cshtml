@@ -12,120 +12,113 @@
 }
 
 
-<h1>
-    <b>Ticket:</b> @Model.Title
-</h1>
-
+<br />
 
 <div class="row">
 
     <div class="col-md-5">
-        <table id="detailsTable" class="table table-condensed">
-            <tbody>
-                @if (IsAuth)
-                {
+        <div class="panel panel-default">
+            <div class="panel-heading h3">
+                <b>Ticket:</b> @Model.Title
+            </div>
+
+            <table id="detailsTable" class="table table-condensed">
+                <tbody>
+                    @if (IsAuth)
+                    {
+                        <tr>
+                            <td><b>Ticket Submitter</b></td>
+                            <td>@Html.DisplayFor(model => model.User.ASPUserName)</td>
+                        </tr>
+                    }
+                    @if (IsAuth)
+                    {
+                        <tr>
+                            <td><b>Assigned developer</b></td>
+                            <td>@Html.DisplayFor(model => model.User1.ASPUserName)</td>
+                        </tr>
+                    }
                     <tr>
-                        <td><b>Ticket Submitter</b></td>
-                        <td>@Html.DisplayFor(model => model.User.ASPUserName)</td>
+                        <td><b>Date submitted</b></td>
+                        <td>@Model.CreatedDate.ToShortDateString()</td>
                     </tr>
-                }
-                @if (IsAuth)
-                {
                     <tr>
-                        <td><b>Assigned developer</b></td>
-                        <td>@Html.DisplayFor(model => model.User1.ASPUserName)</td>
+                        <td>
+                            <p></p>
+                            <p><b>Description</b></p>
+                            <p></p>
+                        </td>
+                        <td>
+                            <p></p>
+                            <p>@Html.DisplayFor(model => model.Description)</p>
+                            <p></p>
+                        </td>
                     </tr>
-                }
-                <tr>
-                    <td><b>Date submitted</b></td>
-                    <td>@Model.CreatedDate.ToShortDateString()</td>
-                </tr>
-                <tr>
-                    <td>
-                        <p></p>
-                        <p><b>Description</b></p>
-                        <p></p>
-                    </td>
-                    <td>
-                        <p></p>
-                        <p>@Html.DisplayFor(model => model.Description)</p>
-                        <p></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p></p>
-                        <p><b>Resolution</b><br /></p>
-                        <p></p>
-                    </td>
-                    <td>
-                        <p></p>
-                        <p>
-                            @{
-                                // if this is the developer working on the ticket, they should have the ability to add the resolution.
-                                var noResolution = (Model.Resolution == null || Model.Resolution == "");
-                                var isAssignedDev = User.Identity.Name == Model.User1.ASPUserName;
-                                if ((IsAdmin || isAssignedDev) && noResolution)
-                                {
-                                    @Html.ActionLink("Submit a Resolution", "AddResolution", new { id = Model.ID }, new { @class = "btn btn-success" })
+                    <tr>
+                        <td>
+                            <p></p>
+                            <p><b>Resolution</b><br /></p>
+                            <p></p>
+                        </td>
+                        <td>
+                            <p></p>
+                            <p>
+                                @{
+                                    // if this is the developer working on the ticket, they should have the ability to add the resolution.
+                                    var noResolution = (Model.Resolution == null || Model.Resolution == "");
+                                    var isAssignedDev = (Model.User1 == null) ? false : User.Identity.Name == Model.User1.ASPUserName;
+                                    if ((IsAdmin || isAssignedDev) && noResolution)
+                                    {
+                                        @Html.ActionLink("Submit a Resolution", "AddResolution", new { id = Model.ID }, new { @class = "btn btn-warning" })
+                                    }
                                 }
-                            }
 
-                            @Html.DisplayFor(model => model.Resolution)
-                        </p>
-                        <p></p>
-                    </td>
+                                @Html.DisplayFor(model => model.Resolution)
+                            </p>
+                            <p></p>
+                        </td>
 
-                </tr>
-                @if (IsAuth)
-                {
-                    <tr>
-                        <td><b>Date last updated</b></td>
-                        <td>@Model.DateLastUpdated.ToShortDateString()</td>
                     </tr>
-                }
-                <tr>
-                    <td><b>Project</b></td>
-                    <td>@Html.DisplayFor(model => model.Project.ProjectName)</td>
-                </tr>
-                <tr>
-                    <td><b>Ticket type</b></td>
-                    <td>@Html.DisplayFor(model => model.TicketType.Type)</td>
-                </tr>
-                @if (IsAuth)
-                {
+                    @if (IsAuth)
+                    {
+                        <tr>
+                            <td><b>Date last updated</b></td>
+                            <td>@Model.DateLastUpdated.ToShortDateString()</td>
+                        </tr>
+                    }
                     <tr>
-                        <td><b>Ticket status</b></td>
-                        <td>@Html.DisplayFor(model => model.TicketStatus.Status)</td>
+                        <td><b>Project</b></td>
+                        <td>@Html.DisplayFor(model => model.Project.ProjectName)</td>
                     </tr>
                     <tr>
-                        <td><b>Priority level</b></td>
-                        <td>@Html.DisplayFor(model => model.TicketPriority.Priority)</td>
+                        <td><b>Ticket type</b></td>
+                        <td>@Html.DisplayFor(model => model.TicketType.Type)</td>
                     </tr>
-                }
-            </tbody>
-        </table>
-
-
-
-        <p>
-            @Html.ActionLink("Back to Tickets", "Index", null, new { @class = "btn btn-info" })
-            @if (IsAdmin)
-            {
-                @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary text-right" })
-            }
-        </p>
-
+                    @if (IsAuth)
+                    {
+                        <tr>
+                            <td><b>Ticket status</b></td>
+                            <td>@Html.DisplayFor(model => model.TicketStatus.Status)</td>
+                        </tr>
+                        <tr>
+                            <td><b>Priority level</b></td>
+                            <td>@Html.DisplayFor(model => model.TicketPriority.Priority)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="col-md-7">
+
+        <details class="alert alert-info">
+
+            @{ Html.RenderAction("Index", "Comments", new { id = Model.ID }); }
+        </details>
+        
         @if (IsAuth)
         {
-            <details class="alert alert-info">
-
-                @{ Html.RenderAction("Index", "Comments", new { id = Model.ID }); }
-            </details>
-
             <details class="alert alert-success">
 
                 @{ Html.RenderAction("Index", "TicketAttachments", new { id = Model.ID }); }
@@ -144,3 +137,23 @@
 
     </div>
 </div>
+
+<div class="row">
+    <hr />
+
+    @* nav buttons *@
+    <p class="container">
+        @Html.ActionLink("Back to Tickets", "Index", null, new { @class = "btn btn-info" })
+        @if (IsAdmin)
+        {
+            @Html.ActionLink("Edit Ticket", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary text-right" })
+        }
+    </p>
+
+</div>
+
+@section Scripts{
+    @* jquery already in the layout page right above this section *@
+    @* render scripts for notification _index. *@
+    <script src="~/Scripts/Notification_Index.js"></script>
+}

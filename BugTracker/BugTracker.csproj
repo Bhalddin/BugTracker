@@ -182,15 +182,15 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\CommentsController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\NotificationsController.cs" />
-    <Compile Include="Controllers\ProjectsController.cs" />
-    <Compile Include="Controllers\TicketAttachmentsController.cs" />
-    <Compile Include="Controllers\TicketHistoryController.cs" />
-    <Compile Include="Controllers\TicketsController.cs" />
+    <Compile Include="Controllers\Account Controller.cs" />
+    <Compile Include="Controllers\Comments Controller.cs" />
+    <Compile Include="Controllers\Home Controller.cs" />
+    <Compile Include="Controllers\Manage Controller.cs" />
+    <Compile Include="Controllers\Notifications Controller.cs" />
+    <Compile Include="Controllers\Projects Controller.cs" />
+    <Compile Include="Controllers\TicketAttachments Controller.cs" />
+    <Compile Include="Controllers\TicketHistory Controller.cs" />
+    <Compile Include="Controllers\Tickets Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -213,24 +213,24 @@
     <Compile Include="Models\Comment.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\HistoryViewModel.cs" />
-    <Compile Include="Models\MyAttachmentExtensions.cs" />
+    <Compile Include="Models\History View Model.cs" />
+    <Compile Include="Models\My Attachment Extensions.cs" />
     <Compile Include="Models\attachmentVM.cs" />
-    <Compile Include="Models\CommentViewModel.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\MyTicketExtensions.cs" />
+    <Compile Include="Models\Comment View Model.cs" />
+    <Compile Include="Models\Identity Models.cs" />
+    <Compile Include="Models\Manage View Models.cs" />
+    <Compile Include="Models\My Ticket Extensions.cs" />
     <Compile Include="Models\Notification.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\NotificationViewModel.cs" />
+    <Compile Include="Models\Notification View Model.cs" />
     <Compile Include="Models\Project.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProjectUserViewModel.cs" />
-    <Compile Include="Models\ProjectCreateViewModel.cs" />
-    <Compile Include="Models\ResolutionViewModel.cs" />
-    <Compile Include="Models\RolesViewModel.cs" />
+    <Compile Include="Models\ProjectUser View Model.cs" />
+    <Compile Include="Models\Project Create View Model.cs" />
+    <Compile Include="Models\Resolution View Model.cs" />
+    <Compile Include="Models\Roles View Model.cs" />
     <Compile Include="Models\Ticket.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
@@ -249,13 +249,15 @@
     <Compile Include="Models\TicketType.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TicketViewModel.cs" />
+    <Compile Include="Models\Ticket View Model.cs" />
     <Compile Include="Models\User.cs">
       <DependentUpon>BugTrackerModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Utilities\HistoryUtilities.cs" />
+    <Compile Include="Utilities\History Utilities.cs" />
+    <Compile Include="Utilities\Notification Utilities.cs" />
+    <Compile Include="Utilities\Ticket Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -297,6 +299,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\AddAttachment.js" />
+    <Content Include="Scripts\Notification_Index.js" />
     <Content Include="Scripts\TicketIndex.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
@@ -395,6 +398,10 @@
     <Content Include="Views\TicketHistory\Edit.cshtml" />
     <Content Include="Views\TicketHistory\_Index.cshtml" />
     <Content Include="Views\Tickets\AddResolution.cshtml" />
+    <Content Include="Views\Tickets\SubmittedTickets.cshtml" />
+    <Content Include="Views\Tickets\_PersonalTicketTable.cshtml" />
+    <Content Include="Views\Tickets\WorkingTickets.cshtml" />
+    <Content Include="Views\Tickets\NewNotifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -8,6 +8,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
+using BugTracker.Utilities;
+
 
 namespace BugTracker.Controllers
 {
@@ -40,23 +42,6 @@ namespace BugTracker.Controllers
             }
 
             return View(notifications.ToList());
-        }
-        #endregion
-
-        #region Details
-        // GET: Notifications/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Notification notification = await db.Notifications.FindAsync(id);
-            if (notification == null)
-            {
-                return HttpNotFound();
-            }
-            return View(notification);
         }
         #endregion
 
@@ -130,90 +115,117 @@ namespace BugTracker.Controllers
         }
         #endregion
 
-        #region Edit
-        // GET: Notifications/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        #region UpdateReadStatus
+
+        public async Task<ActionResult> UpdateReadStatus(int id = 0)
         {
-            if (id == null)
-            {
+            // check your inputs
+            // only ajax should call this.
+            if ( id == 0 || !Request.IsAjaxRequest())
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Notification notification = await db.Notifications.FindAsync(id);
-            if (notification == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", notification.TicketID);
-            ViewBag.ToID = new SelectList(db.Users, "ID", "FirstName", notification.ToID);
-            return View(notification);
+
+            // get the notification.
+            var note = await db.Notifications.FindAsync(id);
+
+            // this user should only be the recipiant of the note!
+            if (note.ToID != User.GetID())
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            
+            // update notification's beenRead to true.
+            note.BeenRead = true;
+            db.Entry(note).State = EntityState.Modified;
+            
+            // if all good return a ok status.
+            if (await db.SaveChangesAsync() == 1)
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+
+            // save failed. return error
+            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
         }
 
-        // POST: Notifications/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,TicketID,ToID,OnDate,Notification1,BeenRead")] Notification notification)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(notification).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", notification.TicketID);
-            ViewBag.ToID = new SelectList(db.Users, "ID", "FirstName", notification.ToID);
-            return View(notification);
-        }
         #endregion
 
-        #region Personal and Note Badge
-
-        // returns the number of Notifications not read yet.
-        public string NotifyBadge()
-        {
-            var userName = HttpContext.User.Identity.Name;
-            var userId = db.Users.Single(u => u.ASPUserName == userName).ID;
-            int count = db.Notifications.Count(n => n.ToID == userId);
-            // add a "+" if it's greater than 1.
-            string badge = (count > 0) ? "+" + count : count.ToString();
-
-            return badge;
-        }
-
-        //public ActionResult Personal(int? id)
+        //#region Details
+        //// GET: Notifications/Details/5
+        //public async Task<ActionResult> Details(int? id)
         //{
-
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Notification notification = await db.Notifications.FindAsync(id);
+        //    if (notification == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(notification);
         //}
-        #endregion
+        //#endregion
 
-        #region Delete
-        // GET: Notifications/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Notification notification = await db.Notifications.FindAsync(id);
-            if (notification == null)
-            {
-                return HttpNotFound();
-            }
-            return View(notification);
-        }
+        //#region Edit
+        //// GET: Notifications/Edit/5
+        //public async Task<ActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Notification notification = await db.Notifications.FindAsync(id);
+        //    if (notification == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", notification.TicketID);
+        //    ViewBag.ToID = new SelectList(db.Users, "ID", "FirstName", notification.ToID);
+        //    return View(notification);
+        //}
 
-        // POST: Notifications/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Notification notification = await db.Notifications.FindAsync(id);
-            db.Notifications.Remove(notification);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        #endregion
+        //// POST: Notifications/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Edit([Bind(Include = "ID,TicketID,ToID,OnDate,Notification1,BeenRead")] Notification notification)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(notification).State = EntityState.Modified;
+        //        await db.SaveChangesAsync();
+        //        return RedirectToAction("Index");
+        //    }
+        //    ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", notification.TicketID);
+        //    ViewBag.ToID = new SelectList(db.Users, "ID", "FirstName", notification.ToID);
+        //    return View(notification);
+        //}
+        //#endregion
+
+        //#region Delete
+        //// GET: Notifications/Delete/5
+        //public async Task<ActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Notification notification = await db.Notifications.FindAsync(id);
+        //    if (notification == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(notification);
+        //}
+
+        //// POST: Notifications/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> DeleteConfirmed(int id)
+        //{
+        //    Notification notification = await db.Notifications.FindAsync(id);
+        //    db.Notifications.Remove(notification);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
+        //#endregion
 
         protected override void Dispose(bool disposing)
         {

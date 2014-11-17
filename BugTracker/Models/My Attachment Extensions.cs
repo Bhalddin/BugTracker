@@ -48,7 +48,7 @@ namespace BugTracker.Models
             // it is safer to use the hash of the file and name it according to that, so different files with the same name will be saves seperatly.
 
             using (var md5 = MD5.Create())
-            {
+            {   
                 string fileHash = BitConverter.ToString(md5.ComputeHash(attachment.InputStream)).Replace("-", "").ToLower();
                 string fileExtension = Path.GetExtension(attachment.FileName);
 

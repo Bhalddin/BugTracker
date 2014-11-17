@@ -44,26 +44,6 @@ namespace BugTracker.Controllers
         }
         #endregion
 
-        #region Details
-        // GET: Comments/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Comment comment = await db.Comments.FindAsync(id);
-
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(comment);
-        }
-        #endregion
-
         #region Create
         // GET: Comments/Create
         public ActionResult Create(int? id)
@@ -106,70 +86,92 @@ namespace BugTracker.Controllers
         }
         #endregion
 
-        #region Edit
-        // GET: Comments/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Comment comment = await db.Comments.FindAsync(id);
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", comment.TicketID);
-            ViewBag.CommentorID = new SelectList(db.Users, "ID", "FirstName", comment.CommentorID);
-            return View(comment);
-        }
+        //#region Details
+        //// GET: Comments/Details/5
+        //public async Task<ActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
 
-        // POST: Comments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,TicketID,CommentorID,CommentDate,Comment1")] Comment comment)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(comment).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", comment.TicketID);
-            ViewBag.CommentorID = new SelectList(db.Users, "ID", "FirstName", comment.CommentorID);
-            return View(comment);
-        }
-        #endregion
+        //    Comment comment = await db.Comments.FindAsync(id);
 
-        #region Delete
-        // GET: Comments/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Comment comment = await db.Comments.FindAsync(id);
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(comment);
-        }
+        //    if (comment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
 
-        // POST: Comments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Comment comment = await db.Comments.FindAsync(id);
-            db.Comments.Remove(comment);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        #endregion
+        //    return View(comment);
+        //}
+        //#endregion
+
+
+
+        //#region Edit
+        //// GET: Comments/Edit/5
+        //public async Task<ActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Comment comment = await db.Comments.FindAsync(id);
+        //    if (comment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", comment.TicketID);
+        //    ViewBag.CommentorID = new SelectList(db.Users, "ID", "FirstName", comment.CommentorID);
+        //    return View(comment);
+        //}
+
+        //// POST: Comments/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Edit([Bind(Include = "ID,TicketID,CommentorID,CommentDate,Comment1")] Comment comment)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(comment).State = EntityState.Modified;
+        //        await db.SaveChangesAsync();
+        //        return RedirectToAction("Index");
+        //    }
+        //    ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", comment.TicketID);
+        //    ViewBag.CommentorID = new SelectList(db.Users, "ID", "FirstName", comment.CommentorID);
+        //    return View(comment);
+        //}
+        //#endregion
+
+        //#region Delete
+        //// GET: Comments/Delete/5
+        //public async Task<ActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Comment comment = await db.Comments.FindAsync(id);
+        //    if (comment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(comment);
+        //}
+
+        //// POST: Comments/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> DeleteConfirmed(int id)
+        //{
+        //    Comment comment = await db.Comments.FindAsync(id);
+        //    db.Comments.Remove(comment);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
+        //#endregion
 
         protected override void Dispose(bool disposing)
         {

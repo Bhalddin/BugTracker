@@ -25,7 +25,7 @@ namespace BugTracker.Controllers
 
 
         #region Partials
-        [OutputCache(Duration=60, VaryByParam="*")]
+        //[OutputCache(Duration=60, VaryByParam="*")] // Slight difference by User, so I need to cache by user somehow as well.
         /// <summary>
         /// Returns a partialView, a table of filtered Tickets.
         /// </summary>
@@ -65,7 +65,7 @@ namespace BugTracker.Controllers
                                 .Include(t => t.TicketPriority)
                                 .Include(t => t.TicketStatus)
                                 .Include(t => t.TicketType)
-                                //.Include(t => t.Ticket1)
+                //.Include(t => t.Ticket1)
                                 .Include(t => t.User)
                                 .Include(t => t.User1);
 
@@ -76,6 +76,7 @@ namespace BugTracker.Controllers
                         .Where(t => filters.TicketStatusID == null || t.TicketStatusID == filters.TicketStatusID)
                         .Where(t => filters.TicketTypeID == null || t.TicketTypeID == filters.TicketTypeID)
                         .Where(t => filters.ProjectID == null || t.ProjectID == filters.ProjectID)
+                        .Where(t => filters.TicketSubmitterID == null || t.TicketSubmitterID == filters.TicketSubmitterID)
                         .Where(t => filters.AssignedToID == null || t.AssignedToID == filters.AssignedToID)
                         .Where(t => t.CreatedDate.CompareTo(filters.CreatedDate) >= 0)
                         .Where(t => textSearchValue == ""
@@ -104,12 +105,12 @@ namespace BugTracker.Controllers
         }
 
 
-        [OutputCache(Duration = 3600)]
+        //[OutputCache(Duration = 3600)]
         /// <summary>
         /// Return partialView, select elements that are filtered according to other inputs.
         /// </summary>
         /// <returns></returns>
-        public ActionResult TicketFilterForm(int? statusId, int? typeId, int? priorityId, int? devId, int? projectId)
+        public ActionResult TicketFilterForm(int? statusId, int? typeId, int? priorityId,int? submitterId, int? devId, int? projectId)
         {
 
             // Check to only allow ajax and child actions.
@@ -119,20 +120,23 @@ namespace BugTracker.Controllers
                 return View("Error");
             }
 
-            // Check your inputs.
-
-            // query the db for the filtered version of the tickets
+            // Creating all of the Select Dropdowns.
             ViewBag.Statuses = new SelectList(db.TicketStatuses, "ID", "Status", statusId);
             ViewBag.Types = new SelectList(db.TicketTypes, "ID", "Type", typeId);
             ViewBag.Priorities = new SelectList(db.TicketPriorities, "ID", "Priority", priorityId);
             ViewBag.Projects = new SelectList(db.Projects, "ID", "ProjectName", projectId);
 
+            // getting only the Developers
             var aspUserDb = new ApplicationDbContext();
-            var developerRole = aspUserDb.Roles.Single(r => r.Name == "Developer");
-            var listOfDevNames = aspUserDb.Users.Where(u => u.Roles.Any(r => r.RoleId == developerRole.Id)).Select(u => u.UserName).ToList();
-            var listOfDevelopers = db.Users.Where(u => listOfDevNames.Any(n => n == u.ASPUserName));
+            string developerRoleID = aspUserDb.Roles.Single(r => r.Name == "Developer").Id;
+            var listOfDevNames = aspUserDb.Users.Where(u => u.Roles.Any(r => r.RoleId == developerRoleID)).Select(u => u.UserName).ToList();
+            var listOfDevelopers = db.Users.Where(u => listOfDevNames.Any(n => n == u.ASPUserName)).OrderByDescending(u => u.ASPUserName);
 
             ViewBag.AssignedDevs = new SelectList(listOfDevelopers, "ID", "ASPUserName", devId);
+
+            // and finally all users for the submit list.
+            ViewBag.TicketSubmitters = 
+                new SelectList(db.Users.Select(u => new {u.ID, u.ASPUserName}).OrderByDescending(u => u.ASPUserName), "ID", "ASPUserName", submitterId);
 
             return PartialView("_TicketFilterForm");
         }
@@ -140,20 +144,89 @@ namespace BugTracker.Controllers
         #endregion
 
 
-        #region Index
+        #region Index -  A.K.A. the Ticket Search page
         // GET: Tickets
         public ActionResult Index()
         {
+            // list of fields to perform a custom text search on.
             List<SelectListItem> textSearchFields = new List<SelectListItem> {
                 new SelectListItem{Text="Title",Value="Title"},
                 new SelectListItem{Text="Description",Value="Description"},
             };
 
-            // needed for the text search box.
+            // Select list FOR the custom text search box.
             ViewBag.TextSearchFields = new SelectList(textSearchFields, "Value", "Text", "Title");
 
             return View();
         }
+        #endregion
+
+
+        #region personal Ticket page
+        // return a page to view all of your tickets.
+        // this page is asy
+        public ActionResult SubmittedTickets()
+        {
+            // get the user id
+            int userID = User.GetID();
+
+            // get tickets that they have submitted
+            var theirTickets = db.Tickets
+                                    .Where(t => t.TicketSubmitterID == userID)
+                                    .OrderByDescending(t => t.ID);
+            //.ToPagedList(1, 100); // need to think more about whether to page or not.
+
+            // return a list view of their tickets.
+            return View(theirTickets);
+        }
+
+
+        // return a page to view all of your tickets.
+        public ActionResult WorkingTickets()
+        {
+            // get the user id
+            int userID = User.GetID();
+
+            // get tickets that they have submitted
+            var theirTickets = db.Tickets
+                                    .Where(t => t.AssignedToID == userID)
+                                    .OrderByDescending(t => t.ID);
+            //.ToPagedList(1, 100); // need to think more about whether to page or not.
+
+            // Tickets with Waiting Notifications.
+            ViewBag.WaitingTickets = db.Notifications
+                                        .Where(n => !n.BeenRead && n.ToID == userID)
+                                        .Select(n => n.Ticket)
+                                        .Distinct();
+            
+
+            // return a list view of their tickets.
+            return View( theirTickets);
+        }
+
+        // action to return a list of Tickets with waiting notifications
+        public ActionResult NewNotifications()
+        {
+            // get the user id
+            int userID = User.GetID();
+
+            // Tickets with Waiting Notifications.
+            var awaitingTickets = db.Notifications
+                                        .Where(n => !n.BeenRead && n.ToID == userID)
+                                        .Select(n => n.Ticket)
+                                        .Distinct();
+
+            // if this is a child action, return a partial
+            if (ControllerContext.IsChildAction)
+            {
+                return PartialView("_PersonalTicketTable", awaitingTickets);
+            }
+
+            return View(awaitingTickets);
+        }
+
+
+
         #endregion
 
 
@@ -166,16 +239,34 @@ namespace BugTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Ticket ticket = await db.Tickets
-                .Include(t => t.TicketStatus)
-                .Include(t => t.TicketType)
-                .Include(t => t.TicketPriority)
-                .SingleOrDefaultAsync(t => t.ID == id);
+            Ticket ticket;
 
+            // if this Details action is a child action, then we will have a problem b/c it's async.
+            // and as far as i see a child action can't? be async.
+            // but it becomes syncronous if we just remove the await sections.
+            if (!ControllerContext.IsChildAction)
+            {
+                ticket = await db.Tickets
+                                    .Include(t => t.TicketStatus)
+                                    .Include(t => t.TicketType)
+                                    .Include(t => t.TicketPriority)
+                                    .SingleOrDefaultAsync(t => t.ID == id);
+            }
+            else
+            {
+                ticket = db.Tickets
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType)
+                    .Include(t => t.TicketPriority)
+                    .Single(t => t.ID == id);
+            }
+
+            // if ticket not return bad request
             if (ticket == null)
             {
                 return HttpNotFound();
             }
+
             return View(ticket);
         }
 
@@ -217,9 +308,13 @@ namespace BugTracker.Controllers
                 // Ticket is made, now is time to add attachments to the database.
                 foreach (string key in Request.Files)
                 {
-                    string currentDesc = Request.Form[key];
-                    string serverFolderPath = Server.MapPath("~/App_Data/Attachments/");
-                    TicketAttachment.SaveAsAttachment(Request.Files[key], serverFolderPath, db, ticket.ID, ticket.TicketSubmitterID, currentDesc);
+                    // make sure that key is not to an empty file
+                    if (Request.Files[key].ContentLength > 0)
+                    {
+                        string currentDesc = Request.Form[key];
+                        string serverFolderPath = Server.MapPath("~/App_Data/Attachments/");
+                        TicketAttachment.SaveAsAttachment(Request.Files[key], serverFolderPath, db, ticket.ID, ticket.TicketSubmitterID, currentDesc);
+                    }
                 }
 
                 return RedirectToAction("Index");
@@ -404,34 +499,34 @@ namespace BugTracker.Controllers
         #endregion
 
 
-        #region Delete
-        // GET: Tickets/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Ticket ticket = await db.Tickets.FindAsync(id);
-            if (ticket == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ticket);
-        }
+        //#region Delete
+        //// GET: Tickets/Delete/5
+        //public async Task<ActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Ticket ticket = await db.Tickets.FindAsync(id);
+        //    if (ticket == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(ticket);
+        //}
 
-        // POST: Tickets/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Ticket ticket = await db.Tickets.FindAsync(id);
-            db.Tickets.Remove(ticket);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        //// POST: Tickets/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> DeleteConfirmed(int id)
+        //{
+        //    Ticket ticket = await db.Tickets.FindAsync(id);
+        //    db.Tickets.Remove(ticket);
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
-        #endregion
+        //#endregion
 
 
         protected override void Dispose(bool disposing)

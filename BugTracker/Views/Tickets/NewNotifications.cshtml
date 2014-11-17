@@ -1,0 +1,16 @@
+﻿@model IEnumerable<BugTracker.Models.Ticket>
+
+@{
+    ViewBag.Title = "NewNotifications";
+}
+
+<br />
+
+<div class="panel panel-danger">
+
+    <div class="panel-heading h2">New Notifications</div>
+
+    @* Tickets with waiting notifications *@
+    @{ Html.RenderPartial("_PersonalTicketTable", Model); }
+
+</div>

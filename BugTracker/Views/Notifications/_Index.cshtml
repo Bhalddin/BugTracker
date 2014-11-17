@@ -27,19 +27,24 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Notification1)
             </td>   
-            <td>
-                @Html.DisplayFor(modelItem => item.BeenRead)
+            <td class="text-center">
+@{
+    var shouldCheck = (item.BeenRead) ? "checked" : "";
+    var shouldDisable = (item.BeenRead || item.User.ASPUserName != User.Identity.Name) ? "disabled" : "";
+}
+                <input class="check-box" data-id=@item.ID type="checkbox" @shouldCheck @shouldDisable>
             </td>
+
             @*<td>
                     @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
                     @Html.ActionLink("Details", "Details", new { id=item.ID }) |
                     @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-                </td>*@
+              </td>*@
         </tr>
     }
 
 </table>
 
 <p>
-    @Html.ActionLink("Create New", "Create", new { TicketID = ViewBag.TicketID }, new { @class = "btn btn-info" })
+    @Html.ActionLink("Send new Notification", "Create", new { TicketID = ViewBag.TicketID }, new { @class = "btn btn-info" })
 </p>

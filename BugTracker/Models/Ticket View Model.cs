@@ -10,12 +10,10 @@ namespace BugTracker.Models
     public class TicketViewModel
     {
 
-        // Make ID fields REQUIRED! the form will create the view for these, so they will look good.
-
         #region id fields
         // NOT NULLS on the database.
         // Required is used here to check User input.
-        [Required(ErrorMessage = "Must select a project the bug relates to.")]
+        [Required(ErrorMessage = "Must select a project.")]
         public Nullable<int> ProjectID { get; set; }
 
         [Required(ErrorMessage = "Must select a ticket type")]
@@ -89,14 +87,6 @@ namespace BugTracker.Models
         #endregion
 
 
-
-        // func to help me chose the correct value for my toSearchObj function.
-        //Func<string, string, int, int?, int?> Chose =
-        //    (_prop, _check, _value, _default) =>
-        //        (_prop == _check) ? _value :
-        //        (_default != 0) ? _default : null;
-
-
         // func to help me chose the correct value for my toSearchObj function.
         private int? Chose(string _prop, string _check, int _value, int? _default)
         {
@@ -105,7 +95,14 @@ namespace BugTracker.Models
                    (_default != 0) ? _default : null;
         }
 
-        // Method to create an anonymous object to be passed as the search values in a query string.
+        /// <summary>
+        /// // Method to create an anonymous object to be passed as the search values in a query string.
+        /// </summary>
+        /// <param name="prop">property to update</param>
+        /// <param name="value">new value for the property</param>
+        /// <param name="sort">field to perform sorting on</param>
+        /// <param name="orderA">(optional) bool to sign to order ascending</param>
+        /// <returns></returns>
         public object ToSearchObj(string prop, int value, string sort, string orderA)
         {
             // create an anonymous object. If a value is null it won't be passed back in the query string, which is what we want

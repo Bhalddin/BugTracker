@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BugTracker.Models.Ticket>
+
+@{
+    ViewBag.Title = "SubmittedTickets";
+    bool isAuth = User.IsInRole("Administrator") || User.IsInRole("Developer");
+}
+
+<br />
+
+
+<div class="panel panel-danger">
+
+    <div class="panel-heading h2">New Notifications</div>
+
+    @* Tickets with waiting notifications *@
+    @{ Html.RenderAction("NewNotifications"); }
+
+</div>
+
+
+<div class="panel panel-warning">
+
+    <div class="panel-heading h2">Tickets Assigned to</div>
+
+    @* tickets working on *@
+    @{ Html.RenderPartial("_PersonalTicketTable", Model); }
+
+</div>
+
+
+@*@foreach (var ticket in Model)
+    {
+        <div class="container">
+            @Html.Action("Details", new { id = ticket.ID })
+        </div>
+    }*@

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<BugTracker.Models.Ticket>
+
+@{
+    ViewBag.Title = "SubmittedTickets";
+    bool isAuth = User.IsInRole("Administrator") || User.IsInRole("Developer");
+}
+
+<br />
+
+<div class="panel panel-info">
+
+    <div class="panel-heading h2">Submitted Tickets</div>
+
+    @* the tickets *@
+    @{ Html.RenderPartial("_PersonalTicketTable", Model); }
+
+</div>
+
+@*@foreach (var ticket in Model)
+    {
+        <div class="container">
+            @Html.Action("Details", new { id = ticket.ID })
+        </div>
+    }*@

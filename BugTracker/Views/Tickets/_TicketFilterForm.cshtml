@@ -43,6 +43,13 @@
 @if (IsAuth)
 {
     <div class="form-group">
+        <label class="control-label col-md-3">By Submitter</label>
+        <div class="col-md-9">
+            @Html.DropDownList("TicketSubmitterID", ViewBag.TicketSubmitters as SelectList, "", new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
         <label class="control-label col-md-3">By developer</label>
         <div class="col-md-9">
             @Html.DropDownList("AssignedToID", ViewBag.AssignedDevs as SelectList, "", new { @class = "form-control" })

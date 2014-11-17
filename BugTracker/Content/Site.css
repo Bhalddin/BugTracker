@@ -59,3 +59,17 @@ summary.h3 {
 summary .badge {
     vertical-align: middle !important;
 }
+
+
+/* Fix the margin on the panels when you also apply an h class to it.*/
+.h2.panel-heading {
+    margin-top: auto;
+}
+
+.h3.panel-heading {
+    margin-top: auto;
+}
+
+p.clearBoth {
+    clear: both;
+}

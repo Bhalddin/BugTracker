@@ -21,16 +21,38 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li> 
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Tickets Menu</a>
                         <ul class="dropdown-menu dropdown-menu-left">
                             <li>@Html.ActionLink("Search tickets", "Index", "Tickets")</li>
                             <li>@Html.ActionLink("Create new ticket", "Create", "Tickets")</li>
+                            @{
+                                // So we are putting this logic here in the View so that it is across ALL of the pages.
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    <li role="presentation" class="divider"><br /></li>
+                                    <li>
+                                        <a href="/Tickets/SubmittedTickets">
+                                            My Tickets <span class="badge">@User.MySubmittedTicketCount()</span>
+                                        </a>
+                                    </li>
+
+                                    if (User.IsInRole("Developer"))
+                                    {
+                                        <li>
+                                            <a href="/Tickets/WorkingTickets">
+                                                Tickets Working on <span class="badge">@User.MyWorkingTicketCount()</span>
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            }
                             <li></li>
                         </ul>
+
                     </li>
                     @Html.Partial("AdminLinks")
                 </ul>
@@ -49,7 +71,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
 
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
     @RenderSection("Templates", required: false)
 
 </body>

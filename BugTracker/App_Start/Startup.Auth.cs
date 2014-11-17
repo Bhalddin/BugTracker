@@ -56,19 +56,20 @@ namespace BugTracker
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
             //   consumerSecret: "");
-            app.UseLinkedInAuthentication("772bf9jm6hnj2a", "gyLmcfeFXPvYEOwi");
 
+            // ** unComment below if you want to enable Oath Later...
 
-            app.UseFacebookAuthentication(
-               appId: "797028353691072",
-               appSecret: "8288e1bc75b991b56f96fadf56ca0c31");
+            //app.UseLinkedInAuthentication("772bf9jm6hnj2a", "gyLmcfeFXPvYEOwi");
 
+            //app.UseFacebookAuthentication(
+            //   appId: "797028353691072",
+            //   appSecret: "8288e1bc75b991b56f96fadf56ca0c31");
 
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            {
-                ClientId = "449310710709-gvhl0c5qfvkcc1utmqdjt4prkv1jbbus.apps.googleusercontent.com",
-                ClientSecret = "nqVJY9W6Cb5cU2hqTiJLkOfj"
-            });
+            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            //{
+            //    ClientId = "449310710709-gvhl0c5qfvkcc1utmqdjt4prkv1jbbus.apps.googleusercontent.com",
+            //    ClientSecret = "nqVJY9W6Cb5cU2hqTiJLkOfj"
+            //});
 
 
             // seed the admin role and user. 

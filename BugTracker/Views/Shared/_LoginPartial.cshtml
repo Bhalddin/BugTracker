@@ -6,15 +6,24 @@
     {
         @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li>
-            <a>Notifications <span class="badge bg-info">@{ Html.RenderAction("NotifyBadge", "Notifications"); }</span></a>
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+
+            @{
+                var isAuth = User.IsInRole("Administrator") || User.IsInRole("Developer");
+                if (isAuth)
+                {
+                    <li>
+                        <a href="/Tickets/NewNotifications">
+                            Notifications <span class="badge bg-info">@User.NotifyBadgeCount()</span>
+                        </a>
+                    </li>
+                }
+            }
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
     }
 }
 else
