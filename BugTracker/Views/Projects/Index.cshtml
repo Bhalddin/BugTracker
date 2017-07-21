@@ -29,12 +29,12 @@
             </td>
             <td>
                 <div class="btn-group-sm btn-group-vertical">
-                    @Html.ActionLink("Add People", "AddUsers", "Projects", new { projectID = item.ID }, new { @class = "btn btn-default" })
-                    @Html.ActionLink("Remove People", "RemoveUsers", "Projects", new { projectID = item.ID }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Add People", "AddUsers", "Projects", new { projectID = item.ID }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Remove People", "RemoveUsers", "Projects", new { projectID = item.ID }, new { @class = "btn btn-primary" })
                 </div>
                 <div class="btn-group-sm btn-group-vertical">
-                    @Html.ActionLink("Edit Project", "Edit", new { id = item.ID }, new { @class = "btn btn-default" })
-                    @Html.ActionLink("Delete Project", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Edit Project", "Edit", new { id = item.ID }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete Project", "Delete", new { id = item.ID }, new { @class = "btn btn-primary" })
                 </div>
             </td>
         </tr>
@@ -43,5 +43,5 @@
 </table>
 
 <p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+    @Html.ActionLink("Create New Project", "Create", null, new { @class = "btn btn-success" })
 </p>
