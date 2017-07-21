@@ -65,7 +65,7 @@ namespace BugTracker.Controllers
                                 .Include(t => t.TicketPriority)
                                 .Include(t => t.TicketStatus)
                                 .Include(t => t.TicketType)
-                //.Include(t => t.Ticket1)
+                                //.Include(t => t.Ticket1)
                                 .Include(t => t.User)
                                 .Include(t => t.User1);
 
@@ -110,7 +110,7 @@ namespace BugTracker.Controllers
         /// Return partialView, select elements that are filtered according to other inputs.
         /// </summary>
         /// <returns></returns>
-        public ActionResult TicketFilterForm(int? statusId, int? typeId, int? priorityId,int? submitterId, int? devId, int? projectId)
+        public ActionResult TicketFilterForm(int? statusId, int? typeId, int? priorityId, int? submitterId, int? devId, int? projectId)
         {
 
             // Check to only allow ajax and child actions.
@@ -135,8 +135,8 @@ namespace BugTracker.Controllers
             ViewBag.AssignedDevs = new SelectList(listOfDevelopers, "ID", "ASPUserName", devId);
 
             // and finally all users for the submit list.
-            ViewBag.TicketSubmitters = 
-                new SelectList(db.Users.Select(u => new {u.ID, u.ASPUserName}).OrderByDescending(u => u.ASPUserName), "ID", "ASPUserName", submitterId);
+            ViewBag.TicketSubmitters =
+                new SelectList(db.Users.Select(u => new { u.ID, u.ASPUserName }).OrderByDescending(u => u.ASPUserName), "ID", "ASPUserName", submitterId);
 
             return PartialView("_TicketFilterForm");
         }
@@ -200,10 +200,10 @@ namespace BugTracker.Controllers
                                         .Where(n => !n.BeenRead && n.ToID == userID)
                                         .Select(n => n.Ticket)
                                         .Distinct();
-            
+
 
             // return a list view of their tickets.
-            return View( theirTickets);
+            return View(theirTickets);
         }
 
         // action to return a list of Tickets with waiting notifications
@@ -500,36 +500,6 @@ namespace BugTracker.Controllers
 
         }
         #endregion
-
-
-        //#region Delete
-        //// GET: Tickets/Delete/5
-        //public async Task<ActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Ticket ticket = await db.Tickets.FindAsync(id);
-        //    if (ticket == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(ticket);
-        //}
-
-        //// POST: Tickets/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> DeleteConfirmed(int id)
-        //{
-        //    Ticket ticket = await db.Tickets.FindAsync(id);
-        //    db.Tickets.Remove(ticket);
-        //    await db.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
-
-        //#endregion
 
 
         protected override void Dispose(bool disposing)

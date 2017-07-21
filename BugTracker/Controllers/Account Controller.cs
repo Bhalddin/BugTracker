@@ -153,7 +153,7 @@ namespace BugTracker.Controllers
             if (roleId == null)
             {
                 return RedirectToAction("ListRoles");
-            }   
+            }
 
             // quick error checking
             ViewBag.Message = (string)TempData["ListError"];
@@ -340,7 +340,7 @@ namespace BugTracker.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [Authorize(Roles="Administrator")]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {

@@ -10,7 +10,7 @@ using BugTracker.Models;
 
 namespace BugTracker.Controllers
 {
-    [Authorize(Roles="Administrator,Developer")]
+    [Authorize(Roles = "Administrator,Developer")]
     public class TicketHistoryController : Controller
     {
         private BugTrackerEntities db = new BugTrackerEntities();
@@ -89,86 +89,6 @@ namespace BugTracker.Controllers
         }
         #endregion
 
-
-        //#region stuff
-        //// GET: TicketHistory/Details/5
-        //public ActionResult Details(DateTime id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    TicketHistory ticketHistory = db.TicketHistories.Find(id);
-        //    if (ticketHistory == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(ticketHistory);
-        //}
-        //#endregion
-
-        //#region stuff
-        //// GET: TicketHistory/Edit/5
-        //public ActionResult Edit(DateTime id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    TicketHistory ticketHistory = db.TicketHistories.Find(id);
-        //    if (ticketHistory == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", ticketHistory.TicketID);
-        //    ViewBag.TicketEditorID = new SelectList(db.Users, "ID", "FirstName", ticketHistory.TicketEditorID);
-        //    return View(ticketHistory);
-        //}
-
-        //// POST: TicketHistory/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "ID,TicketID,TicketEditorID,DateOfChange,Ticket_Alteration")] TicketHistory ticketHistory)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(ticketHistory).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", ticketHistory.TicketID);
-        //    ViewBag.TicketEditorID = new SelectList(db.Users, "ID", "FirstName", ticketHistory.TicketEditorID);
-        //    return View(ticketHistory);
-        //}
-
-        //// GET: TicketHistory/Delete/5
-        //public ActionResult Delete(DateTime id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    TicketHistory ticketHistory = db.TicketHistories.Find(id);
-        //    if (ticketHistory == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(ticketHistory);
-        //}
-
-        //// POST: TicketHistory/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(DateTime id)
-        //{
-        //    TicketHistory ticketHistory = db.TicketHistories.Find(id);
-        //    db.TicketHistories.Remove(ticketHistory);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
-        //#endregion
 
         protected override void Dispose(bool disposing)
         {

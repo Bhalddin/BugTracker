@@ -168,7 +168,7 @@ namespace BugTracker.Controllers
             //                    .Where(u => u.Projects.Any(p => p.ID == projectID));
 
             // much cleaner ways of selecting users in a project.
-            var usersInProj = db.Projects.Find(projectID).Users.Select(u => new { u.ID, u.ASPUserName});
+            var usersInProj = db.Projects.Find(projectID).Users.Select(u => new { u.ID, u.ASPUserName });
 
             // build VM
             ProjectUserViewModel model = new ProjectUserViewModel
@@ -214,52 +214,6 @@ namespace BugTracker.Controllers
         }
         #endregion
 
-        //#region Details
-        //// GET: Projects/Details/5
-        //public async Task<ActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-
-        //    Project project = await db.Projects.FindAsync(id);
-
-        //    if (project == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(project);
-        //}
-        //#endregion
-
-        //#region Delete
-        //// GET: Projects/Delete/5
-        //public async Task<ActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Project project = await db.Projects.FindAsync(id);
-        //    if (project == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(project);
-        //}
-
-        //// POST: Projects/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> DeleteConfirmed(int id)
-        //{
-        //    Project project = await db.Projects.FindAsync(id);
-        //    db.Projects.Remove(project);
-        //    await db.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
-        //#endregion
 
         protected override void Dispose(bool disposing)
         {

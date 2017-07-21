@@ -69,7 +69,7 @@ namespace BugTracker.Controllers
             var users = db.Users.Where(u => aspUsersInRoles.Any(asp => asp == u.ASPUserName));
             ViewBag.ToID = new SelectList(users, "ID", "ASPUserName");
 
-            return View( new NotificationViewModel() );
+            return View(new NotificationViewModel());
         }
 
         // POST: Notifications/Create
@@ -121,7 +121,7 @@ namespace BugTracker.Controllers
         {
             // check your inputs
             // only ajax should call this.
-            if ( id == 0 || !Request.IsAjaxRequest())
+            if (id == 0 || !Request.IsAjaxRequest())
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             // get the notification.
@@ -130,11 +130,11 @@ namespace BugTracker.Controllers
             // this user should only be the recipiant of the note!
             if (note.ToID != User.GetID())
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            
+
             // update notification's beenRead to true.
             note.BeenRead = true;
             db.Entry(note).State = EntityState.Modified;
-            
+
             // if all good return a ok status.
             if (await db.SaveChangesAsync() == 1)
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
@@ -145,87 +145,6 @@ namespace BugTracker.Controllers
 
         #endregion
 
-        //#region Details
-        //// GET: Notifications/Details/5
-        //public async Task<ActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Notification notification = await db.Notifications.FindAsync(id);
-        //    if (notification == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(notification);
-        //}
-        //#endregion
-
-        //#region Edit
-        //// GET: Notifications/Edit/5
-        //public async Task<ActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Notification notification = await db.Notifications.FindAsync(id);
-        //    if (notification == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", notification.TicketID);
-        //    ViewBag.ToID = new SelectList(db.Users, "ID", "FirstName", notification.ToID);
-        //    return View(notification);
-        //}
-
-        //// POST: Notifications/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Edit([Bind(Include = "ID,TicketID,ToID,OnDate,Notification1,BeenRead")] Notification notification)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(notification).State = EntityState.Modified;
-        //        await db.SaveChangesAsync();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.TicketID = new SelectList(db.Tickets, "ID", "Title", notification.TicketID);
-        //    ViewBag.ToID = new SelectList(db.Users, "ID", "FirstName", notification.ToID);
-        //    return View(notification);
-        //}
-        //#endregion
-
-        //#region Delete
-        //// GET: Notifications/Delete/5
-        //public async Task<ActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Notification notification = await db.Notifications.FindAsync(id);
-        //    if (notification == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(notification);
-        //}
-
-        //// POST: Notifications/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> DeleteConfirmed(int id)
-        //{
-        //    Notification notification = await db.Notifications.FindAsync(id);
-        //    db.Notifications.Remove(notification);
-        //    await db.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
-        //#endregion
 
         protected override void Dispose(bool disposing)
         {
